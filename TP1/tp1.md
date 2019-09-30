@@ -1,3 +1,10 @@
+**Course:** Issues with Big Data  
+**Course (fr.):** _Enjeux des données massives_  
+**Year:** 2019/2020  
+**School:** ENSAI  
+**Authors:** Rémi Pépin & Arthur Katossky, on previous work by Arthur Katossky & Damien Crémilleux  
+**Licence:** CC BY-SA 2.0  
+
 # TP introduction à Apache Spark
 
 Spark ( https://spark.apache.org/) est un framework open source de calcul distribué, il est aujourd'hui l'un des systèmes les plus populaires de ce domaine.
