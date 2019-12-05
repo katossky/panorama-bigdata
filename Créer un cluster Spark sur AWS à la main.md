@@ -10,7 +10,7 @@
   - [ ] 1-2 : Dans la barre de recherche, cherchez "EC2" et cliquez dessus
   - [ ] 1-3 : Dans le panneaux de gauche cherchez "Paires de clef" dans le section "Réseau et sécurité" et cliquez dessus.
 
-  ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step1.3 Paires de clés EC2 Management Console.png)
+  ![](\img\step1.3 Paires de clés EC2 Management Console.png)
 
   - [ ] 1-4 : Cliquez sur "Créer une paire de clés"
   - [ ] 1-5 : Donnez lui le nom "spark_cluster_TP" et cliquez sur "créer"
@@ -32,7 +32,7 @@
 
   - [ ] 2-1 : Retournez sur votre navigateur web, et cliquez dans le volet à gauche sur "Instances" dans la section "Instances". Vous arriverez une un écran similaire, mais vous n'aurez pas d'instances déjà existantes normalement
 
-  ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step2 .1Instances EC2 Management Console.png)
+  ![](\img\step2 .1Instances EC2 Management Console.png)
 
   - [ ] 2-2 : Cliquez sur "Lancer une instance"
 
@@ -65,7 +65,7 @@
 
     Vous trouverez ses informations dans la fenêtre du bas une fois votre instance sélectionnée 
 
-  ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step2.4 Instances EC2 Management Console.png)
+  ![](\img\step2.4 Instances EC2 Management Console.png)
 
   
 
@@ -110,7 +110,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
 
   - [ ] 3-1 : Dans l'onglet de gauche cliquez sur "Groupes de sécurité" dans l'onglet "Réseau et sécurité"
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step3.1 Groupes de sécurité EC2 Management Console.png)
+    ![](\img\step3.1 Groupes de sécurité EC2 Management Console.png)
 
     Normalement vous ne devez avoir qu'un seul groupe de sécurité appelé "launch-wizard-1"
 
@@ -121,7 +121,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - Tout le trafic / Tous / Source "Mon IP" / proxy de l'Ensai
     - Tout le trafic / Tous / XX.XX..0.0/16 / cluster spark. (avec XX.XX les deux premiers éléments de l'IP privée de votre master)
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step3.2 Groupes de sécurité EC2 Management Console.png)
+    ![](\img\step3.2 Groupes de sécurité EC2 Management Console.png)
 
   - [ ] 3-4 Enregistrez et retournez sur l'écran de vos instances EC2
 
@@ -141,7 +141,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
 
   - [ ] 4-5 : Allez chercher votre clef privée .ppk
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step3.5 putty.png)
+    ![](\img\step3.5 putty.png)
 
   - [ ] 4-6 : Menu de gauche : "Behaviour"
 
@@ -180,7 +180,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     java --version
       ```
   
-      ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step4.1 java.png)
+      ![](\img\step4.1 java.png)
 
   - [ ] 5-3 Installez scala :
 
@@ -198,7 +198,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     scala -version
       ```
 
-      ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step4.3 scala.png)
+      ![](\img\step4.3 scala.png)
   
   - [ ]  Voici un script synthétique 
 
@@ -238,7 +238,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     cat ~/.ssh/id_rsa.pub
     ````
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\5-3 rsa key.png)
+    ![](\img\5-3 rsa key.png)
 
 - [ ] 6-2 : Sur les workers
 
@@ -260,7 +260,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
 
   Tapez yes. Vous devez arrivez sur un terminal de ce genre
 
-  ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step7 ssh entre instances.png)
+  ![](\img\step7 ssh entre instances.png)
 
   Tapez 
 
@@ -323,7 +323,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     
     Puis saisissez l'IP privé du serveur worker. Si vous voulez avoir plusieurs worker il suffit d'écrire les différentes IP sur différentes lignes. Par exemple :
     
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step8.3 slaves.png)
+    ![](\img\step8.3 slaves.png)
 
 ## Tester votre cluster
 
@@ -335,11 +335,11 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     ./sbin/start-all.sh
     ````
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step8.1 start-all.png)
+    ![](\img\step8.1 start-all.png)
 
   - [ ] 9-2 : Connectez-vous à l'interface graphique de Spark via l'adresse http://XXXX:8080 avec XXXX l'IP publique de votre master.
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\spark gui.png)
+    ![](\img\spark gui.png)
 
     (Voici un exemple d'IHM de spark avec 3 workers)
 
@@ -351,9 +351,9 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
 
     avec XXXX l'IP public de votre serveur master.
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\spark gui avec une app.png)
+    ![](\img\spark gui avec une app.png)
 
-    ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step9 pyspark.png)
+    ![](\img\step9 pyspark.png)
 
 - [ ] Bravo ! Vous venez de créer un cluster spark !
 
@@ -365,7 +365,7 @@ Maintenant que vous avez configuré un master et un worker il est possible de fa
 
 - [ ] Puis cliquez sur Action/Image/Créer l'image
 
-  ![](C:\Users\VEDA\Documents\2A\big data\panorama-bigdata\img\step bonus crer une image.png)
+  ![](\img\step bonus crer une image.png)
 
 - [ ] Pour le nom d'image : "spark-worker", pour la description : "L'image d'un worker spark"
 
