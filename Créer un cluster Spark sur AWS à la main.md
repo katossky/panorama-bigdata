@@ -10,7 +10,7 @@
   - [ ] 1-2 : Dans la barre de recherche, cherchez "EC2" et cliquez dessus
   - [ ] 1-3 : Dans le panneaux de gauche cherchez "Paires de clef" dans le section "Réseau et sécurité" et cliquez dessus.
 
-  ![](\img\step1.3 Paires de clés EC2 Management Console.png)
+  ![Clef ssh ec2](img/step1.3 Paires de clés EC2 Management Console.png)
 
   - [ ] 1-4 : Cliquez sur "Créer une paire de clés"
   - [ ] 1-5 : Donnez lui le nom "spark_cluster_TP" et cliquez sur "créer"
@@ -32,7 +32,7 @@
 
   - [ ] 2-1 : Retournez sur votre navigateur web, et cliquez dans le volet à gauche sur "Instances" dans la section "Instances". Vous arriverez une un écran similaire, mais vous n'aurez pas d'instances déjà existantes normalement
 
-  ![](\img\step2 .1Instances EC2 Management Console.png)
+  ![Instances EC2](img/step2 .1Instances EC2 Management Console.png)
 
   - [ ] 2-2 : Cliquez sur "Lancer une instance"
 
@@ -65,7 +65,7 @@
 
     Vous trouverez ses informations dans la fenêtre du bas une fois votre instance sélectionnée 
 
-  ![](\img\step2.4 Instances EC2 Management Console.png)
+  ![Console de gestion instance EC2](img/step2.4 Instances EC2 Management Console.png)
 
   
 
@@ -110,7 +110,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
 
   - [ ] 3-1 : Dans l'onglet de gauche cliquez sur "Groupes de sécurité" dans l'onglet "Réseau et sécurité"
 
-    ![](\img\step3.1 Groupes de sécurité EC2 Management Console.png)
+    ![Groupes de sécurité](img/step3.1 Groupes de sécurité EC2 Management Console.png)
 
     Normalement vous ne devez avoir qu'un seul groupe de sécurité appelé "launch-wizard-1"
 
@@ -121,7 +121,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - Tout le trafic / Tous / Source "Mon IP" / proxy de l'Ensai
     - Tout le trafic / Tous / XX.XX..0.0/16 / cluster spark. (avec XX.XX les deux premiers éléments de l'IP privée de votre master)
 
-    ![](\img\step3.2 Groupes de sécurité EC2 Management Console.png)
+    ![Règles de sécurité](img/step3.2 Groupes de sécurité EC2 Management Console.png)
 
   - [ ] 3-4 Enregistrez et retournez sur l'écran de vos instances EC2
 
@@ -141,7 +141,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
 
   - [ ] 4-5 : Allez chercher votre clef privée .ppk
 
-    ![](\img\step3.5 putty.png)
+    ![Putty clef ssh](img/step3.5 putty.png)
 
   - [ ] 4-6 : Menu de gauche : "Behaviour"
 
@@ -180,7 +180,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     java --version
       ```
   
-      ![](\img\step4.1 java.png)
+      ![version de java](img/step4.1 java.png)
 
   - [ ] 5-3 Installez scala :
 
@@ -198,7 +198,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     scala -version
       ```
 
-      ![](\img\step4.3 scala.png)
+      ![version scala](img/step4.3 scala.png)
   
   - [ ]  Voici un script synthétique 
 
@@ -238,7 +238,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     cat ~/.ssh/id_rsa.pub
     ````
 
-    ![](\img\5-3 rsa key.png)
+    ![clef rsa master](img/5-3 rsa key.png)
 
 - [ ] 6-2 : Sur les workers
 
@@ -260,7 +260,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
 
   Tapez yes. Vous devez arrivez sur un terminal de ce genre
 
-  ![](\img\step7 ssh entre instances.png)
+  ![ssh entre instances](img/step7 ssh entre instances.png)
 
   Tapez 
 
@@ -323,7 +323,7 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     
     Puis saisissez l'IP privé du serveur worker. Si vous voulez avoir plusieurs worker il suffit d'écrire les différentes IP sur différentes lignes. Par exemple :
     
-    ![](\img\step8.3 slaves.png)
+    ![fichier slaves](img/step8.3 slaves.png)
 
 ## Tester votre cluster
 
@@ -335,11 +335,11 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
     ./sbin/start-all.sh
     ````
 
-    ![](\img\step8.1 start-all.png)
+    ![résultat start-all](img/step8.1 start-all.png)
 
   - [ ] 9-2 : Connectez-vous à l'interface graphique de Spark via l'adresse http://XXXX:8080 avec XXXX l'IP publique de votre master.
 
-    ![](\img\spark gui.png)
+    ![interface graphique Spark](img/spark gui.png)
 
     (Voici un exemple d'IHM de spark avec 3 workers)
 
@@ -351,9 +351,9 @@ Nous allons maintenant configurer les connexion SSH entre vos machines pour que 
 
     avec XXXX l'IP public de votre serveur master.
 
-    ![](\img\spark gui avec une app.png)
+    ![interface graphique Spark](img/spark gui avec une app.png)
 
-    ![](\img\step9 pyspark.png)
+    ![pyspark](img/step9 pyspark.png)
 
 - [ ] Bravo ! Vous venez de créer un cluster spark !
 
@@ -365,7 +365,7 @@ Maintenant que vous avez configuré un master et un worker il est possible de fa
 
 - [ ] Puis cliquez sur Action/Image/Créer l'image
 
-  ![](\img\step bonus crer une image.png)
+  ![cloner une image](img/step bonus crer une image.png)
 
 - [ ] Pour le nom d'image : "spark-worker", pour la description : "L'image d'un worker spark"
 
