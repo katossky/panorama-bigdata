@@ -168,7 +168,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - [ ] 5-2-1 : Installez java via le gestionnaire de package
 
     ```shell
-  sudo apt update
+    sudo apt update
     sudo apt install openjdk-11-jre-headless
     ```
   
@@ -177,7 +177,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - [ ] 5-2-3 : Vérifiez la version de java
 
       ```shell
-    java --version
+      java --version
       ```
   
       ![version de java](img/setup_a_la_main/step4.1_java.png)
@@ -187,7 +187,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - [ ] 5-3-1 : Installez scala avec le gestionnaire de package
 
       ```shell
-    sudo apt install scala
+      sudo apt install scala
       ```
 
     - [ ] 5-3-2 : Quand on vous le demande appuyez sur Y puis Enter
@@ -195,7 +195,7 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
     - [ ] 5-3-3 :  Vérifiez l'installation de scala
 
       ```shell
-    scala -version
+      scala -version
       ```
 
       ![version scala](img/setup_a_la_main/step4.3_scala.png)
@@ -203,9 +203,9 @@ Pour des raisons de sécurité amazon verrouille fortement les connexions à vos
   - [ ]  Voici un script synthétique 
 
     ```shell
-  sudo apt update
+    sudo apt update
     sudo apt install openjdk-11-jre-headless
-  Y
+    Y
     sudo apt install scala
     Y
     ```

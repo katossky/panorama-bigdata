@@ -16,12 +16,12 @@
     - [ ] Sélectionnez comme application Spark
   - [ ] Configuration du matériel
     - [ ] Type d'instance : m5.xlarge (4 cores avec une fréquence max de 3,1 GHz d'un Intel Xeon Platinum série 8000 avec 16Go de Ram). Prix total de 0.272$/h par instance
-    - [ ] 3 Instances
+    - [ ] 3 Instances (ou plus selon vos envies et votre budget)
   - [ ] Sécurité et accès
-    - [ ] Sélectionnez une clef SSH que vous avez déjà généré ou allez en générer une autre
+    - [ ] Sélectionnez une clef SSH que vous avez déjà générée ou allez en générer une autre
     - [ ] Laissez le Rôle EMR et le Profil d'instance par défaut
   - [ ] Démarrer le cluster. Le démarrage peut prendre quelques minutes
-  - [ ] Braco vous avez démarrer un cluster Spark en moins de 15min !
+  - [ ] Bravo vous avez démarrer un cluster Spark en moins de 15min !
   - [ ] ![](img/setup-emr/mon_cluster_emr.png)
 
   ## Accéder  l'interface de suivi du cluster
