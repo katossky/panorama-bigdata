@@ -173,7 +173,7 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 - [ ] Connecter vous à l'interface web de Rstudio server avec l'adresse suivante https://master-node-public-DNS:8787 puis connectez vous avec l'utilisation rstudio-user et le mot de passe que vous avez choisi.
 
-- [ ] Vous pouvez commencer à coder. Voici un script exemple : [lien](exemple/script_exemple_R)
+- [ ] Vous pouvez commencer à coder. Voici un script exemple : [lien](exemple/script_exemple_R.R)
 
 ## Liens utiles
 
