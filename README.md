@@ -37,7 +37,9 @@ Proposition de @katossky:
 
 ## Bibliographie
 
-*à définir*
+- Karau, H., Konwinski, A., Wendell, P. and Zaharia, M. (2019). *LEARNING SPARK*: O'REILLY MEDIA.
+- Documentation officielle amazon EMR : https://docs.aws.amazon.com/fr_fr/emr/latest/ReleaseGuide/emr-release-components.html
+- Doc Rstudio pour EMR : https://spark.rstudio.com/examples/yarn-cluster-emr/#set-up-the-cluster
 
 ## Prochaines étapes
 

@@ -139,9 +139,47 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 
 
+### Se connecter avec Rstudio et sparklyR
+
+- [ ] Se connecter en SSH à votre cluster EMR
+
+- [ ] Installer Rstudio server
+
+  ````shell
+  sudo yum install libcurl-devel openssl-devel # used for devtools
+  wget -P /tmp https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-0.99.1266-x86_64.rpm
+  sudo yum install --nogpgcheck /tmp/rstudio-server-rhel-0.99.1266-x86_64.rpm
+  ````
+
+  ![yum install](img/setup-emr/rstudio_yum_install.png)
+
+  ![r server install](img/setup-emr/rstudio_server_install.png)
+
+- [ ] Créer un user pour Rstudio
+
+  ````shell
+  # Make User
+  sudo useradd -m rstudio-user
+  sudo passwd rstudio-user
+  ````
+
+- [ ] Créer un dossier dans HDFS pour votre user
+
+  ````shell
+  # Create new directory in hdfs
+  hadoop fs -mkdir /user/rstudio-user
+  hadoop fs -chmod 777 /user/rstudio-user
+  ````
+
+- [ ] Connecter vous à l'interface web de Rstudio server avec l'adresse suivante https://master-node-public-DNS:8787 puis connectez vous avec l'utilisation rstudio-user et le mot de passe que vous avez choisi.
+
+- [ ] Vous pouvez commencer à coder. Voici un script exemple : [lien](exemple/script_exemple_R)
+
 ## Liens utiles
 
 - [Documentation officielle spark EMR](https://docs.aws.amazon.com/fr_fr/emr/latest/ReleaseGuide/emr-spark.html)
 - [Getting Started with PySpark on AWS EMR](https://towardsdatascience.com/getting-started-with-pyspark-on-amazon-emr-c85154b6b921)
 
 - [Creating PySpark DataFrame from CSV in AWS S3 in EMR  ](https://gist.github.com/jakechen/6955f2de51212163312b6430555b8e0b)
+
+- [Connection avec Rstudio](https://spark.rstudio.com/examples/yarn-cluster-emr/#set-up-the-cluster)
