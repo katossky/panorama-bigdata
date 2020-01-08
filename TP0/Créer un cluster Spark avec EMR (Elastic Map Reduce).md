@@ -5,7 +5,7 @@
 - [ ] Connectez-vous à Amazon AWS
 - [ ] Sélectionnez le service EMR 
 
-![Console EMR](img/setup-emr/console_emr.png)
+![Console EMR](../img/setup-emr/console_emr.png)
 
 - [ ] Cliquez sur le bouton "Créer un cluster"
 
@@ -22,7 +22,7 @@
     - [ ] Laissez le Rôle EMR et le Profil d'instance par défaut
   - [ ] Démarrer le cluster. Le démarrage peut prendre quelques minutes
   - [ ] Bravo vous avez démarré un cluster Spark en moins de 15min !
-  - [ ] ![Détail cluster](img/setup-emr/mon_cluster_emr.png)
+  - [ ] ![Détail cluster](../img/setup-emr/mon_cluster_emr.png)
 
   ## Accéder à l'interface de suivi du cluster
 
@@ -54,7 +54,7 @@
 
   - [ ] Sélectionnez les options Dynamic et Auto.
 
-    ![Putty tunnels configuration](img/setup-emr/putty_tunnels.png)
+    ![Putty tunnels configuration](../img/setup-emr/putty_tunnels.png)
 
   - [ ] Laissez le champ Destination vide, puis cliquez sur Add.
 
@@ -62,7 +62,7 @@
 
   - [ ] Cliquez sur Yes pour ignorer l'alerte de sécurité.
 
-    ![Connection ssh putty emr accueil](img/setup-emr/ssh_emr.png)
+    ![Connection ssh putty emr accueil](../img/setup-emr/ssh_emr.png)
     
   - [ ] Une fois connectez en ssh à votre cluster vous pouvez lancer spark-shell ou pySpark avec
   
@@ -73,7 +73,7 @@
   
     *Si vous préférez écrire votre code en python, il est nécessaire de lancer spark-shell avant pour charger toutes les bibliothèques java nécessaires.*
   
-    ![Accueil Pyspark](img/setup-emr/pyspark_emr.png)
+    ![Accueil Pyspark](../img/setup-emr/pyspark_emr.png)
   
   - [ ] Vous pouvez désormais écrire du code spark en interactif. Par exemple voici un petit script python qui compte le nombre de lignes dans un fichier public stocké sur s3.
   
@@ -85,7 +85,7 @@
     73385698
     ````
   
-    ![Résultat pyspark](img/setup-emr/pyspark_script.png)
+    ![Résultat pyspark](../img/setup-emr/pyspark_script.png)
   
     Voici le même script scala en plus condensé
   
@@ -99,7 +99,7 @@
 
 Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désormais accéder aux interfaces de suivi du cluster.
 
-![Liens connexion interfaces cluster](img/setup-emr/interfaces_de_suivi.png)
+![Liens connexion interfaces cluster](../img/setup-emr/interfaces_de_suivi.png)
 
 ### Lancer un job avec un script
 
@@ -107,7 +107,7 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 - [ ] Sur l'interface de votre cluster sélectionnez l'onglet "Etape"
 
-  ![Ecran étape cluster](img/emr/step_screen.png)
+  ![Ecran étape cluster](../img/emr/step_screen.png)
 
 - [ ] Ajouter une étape
 
@@ -117,23 +117,23 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
   - [ ] Emplacement de l'application : allez chercher sur s3 le script uploadé plus tôt
   - [ ] "Ajouter"
 
-  ![Ecran ajout d'une étape](img/emr/new_step.png)
+  ![Ecran ajout d'une étape](../img/emr/new_step.png)
 
 - [ ] Vous allez voir votre script apparaitre dans les étapes de votre cluster. Son exécution peut prendre quelques minutes.
 
-  ![Ecran après ajout d'une étape](img/emr/new_step_running.png)
+  ![Ecran après ajout d'une étape](../img/emr/new_step_running.png)
 
 - [ ] Pour voir le résultat retournez dans la l'onglet "Récapitulatif" puis cliquez sur "Gestionnaire de ressource"
 
 - [ ] Sur l'interface d'Hadoop sélectionnez votre application, puis en bas de la nouvelle page cliquez sur Logs
 
-  ![Ecran de gestion hadoop](img/emr/hadoop_screen.png)
+  ![Ecran de gestion hadoop](../img/emr/hadoop_screen.png)
 
-​	![Choix des logs](img/emr/choose_log.png)
+​	![Choix des logs](../img/emr/choose_log.png)
 
 - [ ] En bas de la page de log vous trouverez votre résultat
 
-![Log finale](img/emr/log_finale.png)
+![Log finale](../img/emr/log_finale.png)
 
 
 
@@ -149,9 +149,9 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
   sudo yum install --nogpgcheck /tmp/rstudio-server-rhel-0.99.1266-x86_64.rpm
   ````
 
-  ![yum install](img/setup-emr/rstudio_yum_install.png)
+  ![yum install](../img/setup-emr/rstudio_yum_install.png)
 
-  ![r server install](img/setup-emr/rstudio_server_install.png)
+  ![r server install](../img/setup-emr/rstudio_server_install.png)
 
 - [ ] Créez un user pour Rstudio
 
