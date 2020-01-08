@@ -1,0 +1,285 @@
+---
+author: Arthur Katossky & Rémi Pépin
+output: html_document
+---
+
+# Large-scale machine-learning
+
+## Motivation
+
+Some very popular machine-learning algorithms do not scale well.
+
+Exact solutions do not scale: matrix inversion (for instance) is a problem with an algorithmic complexity of $O(n^3)$ ([source](https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations)).
+
+Approximate solutions do not scale either: Lately, Google's pre-computation of BERT (a neural network for natural language processing) thanks to gradient-descent took 4 days on a mesmerizing 64-TPU cluster.
+
+One would thus consider how these computation procedures may be accellerated. Using algorithmic tricks? Using more memory? Parallelize on more cores? Relaxing precision?
+
+Those are not trivial problems, and things as simple as computing a median can prove challenging to speed up.
+
+## Goal
+
+In this course, we will review the bases of computer science that may be required for accelerating statistical estimation processes.
+
+The detailed goals are the following:
+- ability to chose between concurrent solutions for dealing with large data sources (sampled vs. exhaustive, sequential vs. parallel, in memory vs. on disk, whole data vs. in chunks, local vs. cloud...)
+- understanding of the map-reduce principle and practical experience with Spark on HDFS
+- overview of the cloud computing ecosystem and practical experience with one infrastructure provider (AWS)
+- understanding of the physical, ethical and financial limitations of data-intensive processes
+
+## Outline & schedule
+
+The course's content this year is the same as 2nd-year students' "Introduction to Big Data". 1 out of the 3 tutorials (How to accelerate a neural network?) is specific to this course.
+
+There will be 9h course + 1h30 presentation of cloud computing solutions:
+
+- **Course 0:** Introduction to cloud computing (1h30)
+- **Course 1:** Big Data in a nutshell (3h, January 13)
+- **Course 2:** Computing parallelization principles (3h, January 17)
+- **Course 3:** Parallelized computing on distributed data (2 × 1h30, January 28, February 6)
+
+There will be 9h tutorials + 1h30 hands-on session with AWS:
+
+- **Tutorial 0:** Hands on AWS (1h30)
+- **Tutorial 1:** How to optimize a statistical algorithm? (3h, January, 20)
+- **Tutorial 2:** How to speed up the computation of a statistical summary? (3h, February, 6)
+- **Tutorial 3:** How to accelerate a neural network? (3h, February, 7)
+
+## Evaluation
+
+- Multiple-choice questionnaire at the beginning of every tutorial
+- 1 short tutorial report (tutorial 2)
+- Desk examination (most probably multiple-choice questionnaire)
+
+## Material
+
+Course and tutorials material will be available on Moodle.
+
+<!-- recommndation resources -->
+
+# Introduction
+
+<!-- intro sur la quantié de données produites -->
+
+## What is "Big Data"? What is it not?
+
+Big Data broadly refers to data that cannot be managed by commonly-used software. (It is inherenly relative to **who** and is using it. What is a common software for someone may not be for someone else. Think relational databases for someone used to use spreadsheet software.)
+
+The term started to be used in the 1990's and is a ill-defined notion, constantly moving as the performance of machines and software continue to increase.
+
+For instance Excel, Microsoft's widely used tablesheet programme, can only cope with a limited number of lines and columns:
+
+```
+   16 384 lines and    256 columns until  7.0 (1995)
+   65 536 lines and    256 columns until 11.0 (2003)
+1 048 576 lines and 16 384 columns from  12.0 (2007)
+```
+
+```{r, echo=FALSE}
+breaks <- 10^(1:10)
+tibble(
+  measurement = "Excel (number of cells)",
+  year        = c(1999,2003,2007),
+  lines       = c(16384,65536,1048576),
+  columns     = c(256,256,16384)
+) %>%
+  ggplot() +
+  geom_line(aes(x=year,y=lines*columns, group="measurement")) +
+  scale_y_log10(name=NULL, breaks=breaks,labels =scales:::label_number()) +
+  scale_x_continuous(name=NULL, breaks=1999:2010, minor_breaks = NULL)
+```
+
+Neither is it only a question of size. Since we talk about Excel, it is clear that many different kind of data cannot be stored (or can difficultly be stored) in Excel, for instance:
+
+<!-- ask audience -->
+
+- relationnal data
+- images, long texts
+- unstructured data
+- rapidly varying data
+
+You will often find the reference to the 3 "V's of Big Data"
+
+- **V**olume (massive, taking place)
+- **V**elocity (fast, updated constantly)
+- **V**ariety (tabular, structured, unstructured, of unknown nature, mixed)
+
+Each of these aspects generates specific challenges. But we are often confronted to two or three of them simultaneously!
+
+A last (but important) dimension is cost. Data can be said to become "big" whenever storing data or computing statistics become so resource-intensive that their price become non negligeable. Imagine when you consider to buy an extra computer only for to perform a given opertion. Marketers broadly speak of **V**alue as a "4th V", but it is rahter to refers to the purported "value" "hidden" in one's data.
+
+Before we dig into the details and discuss exemples of Big Data, a detour to how a typical desktop computer works is needed.
+
+# Computer science survival kit
+
+A computer can be abstracted by three key components:
+
+- processing (FR: processeurs)
+- memory (FR: mémoire vive)
+- storage (FR: stockage)
+
+## Processors
+
+The processor is the unit responsible for performing the actual computing.
+
+A processor can be called a "core", a "chip"... and can be differentiated into CPU (central processing units), GPU (graphical processing units) and recently TPU (tensor processing units).[^1]
+
+[1]: Formally, the chip is the physical device, and a chip may enclose one or more logical processors, called cores, in its electronic circuits. Multiple CPU cores on the same die share circuit elements, use less energy, exchange information faster (individual signals can be shorter, degrade slower and do not need to be repeated as often).
+
+
+A processor performence is measured in how many operations it can perform per second, typically measured in FLOP (floating-point operations per second).
+
+What is important to know for us:
+
+- the elementary computation (addition, multiplication...) happens through a **physical** process
+- in order to perform higher-level operations (the source code), instructions must be converted to more basal units of computation (the machine code)
+- the low-level instructions are stored sequentially in a stack or thread
+- processors draw from the stack ; multiple processors may all draw from the same stack (multi-tread architecture), or on the contrary have each their own (single-thread)
+- processors can be hard-wired to specialize into doing some types of computation, this is the case of GPUs and TPUs
+
+**Processing is a limitting factor.** It is costly (it uses energy). One unit can only perform so much operations per second. There is no easy way to combine multiple
+
+<!-- graph of the -->
+
+## Memory
+
+Memory is the unit where the computer temporarily stores the instructions and the data on which to perform computation.
+
+It is also broadly called "cache" or "RAM"[^2].
+
+Memory efficiency is measured by how much information it can contain and how fast in can be read from or written to.
+
+What is important to know for us:
+- memory is fast, with access time typically measured in nanoseconds
+- memory is volatile, meaning that it is lost in case of power interruption
+- the easiest way to perform a computation is to move all data in memory — where it becomes accessible to the CPU
+
+**Memory is a limitting factor.** We can readily perform computation only on a chunk of data that can fit into memory. RAM is very costly: it is still expensive to buy RAM but it is also expensive at use time since it needs electricity to persist data.
+
+<!-- graph of the veolution of memory size -->
+
+[2]: Formally, there is intermediate memory between RAM and the processor: the CPU register is closest to the processor, then comes the CPU cache, on which the computer moves data and instructions that need to for efficiency reasons. "Caching" in general refers to the act of copying a piece of information closer to the place it will be used, such as when storing a local copy of website while navigating over the Internet. RAM (random access memory) is the most-used type of memory.
+
+## Storage
+
+Storage is the unit for long-term storage of information.
+
+It is also called "(disk) space" or "(hard) disk".
+
+Contrary to memory, the disk's non-volatile nature make it suitable to conserving information over long periods. Its first measure of efficiency is thus its size, how long it can retain information without error and how fast you can read from and write on it.
+
+What is important to know for us:
+- storage is faillible: errors do occur and information slowly degrades
+- storage is slow, typically measured in milliseconds [^3]
+- computation cannot be performed directly from disk, it has to be temporarily copied into memory (or "cached")
+
+[3]: writing and reading on a disk requires the disk to turn and the reading head to move ; on the top of that, files are split into chunks that are stored at different places and the computer needs a registry to record where what is where
+
+**Storage is a limitting factor.** On a given computer, we can only store so much. Today's price of disk space does make it less limitting economically. But if data exceeds the size of the disk, data must be split between several disks, which compicates programming (**distributed storage**).
+
+<!-- graph of storage price ; average storage capacity ; graph of information degradation over time -->
+
+## Interpreting vs. compiling
+
+When running a programme written in R or Python, the **source code** is translated into **machine code**.
+
+There is schematically 2 ways to do that:
+
+When **interpreting** the source code, instructions from source code are converted **one by one** into machine code. Say you have an error in your code at line 10. Your programme would execute the first 9 lines then halt with an error.
+
+When **compiling** the source code, instruction from source code are converted **as a whole** into machine code, while performing many optimisation procedures under the hood (ex: multiplying by 2 is just adding an extra 0 to the right in binary ; also you may want to take advantage of the processor pipeline, i.e. the fact that reading the next task from memory can be made to happen *in the same time* than execution of the preceding task). This means that your code with an error would just fail compiling and that "the beginning" (which does not even make sense anymore) will never be executed. Compilation takes time, but it may be worth it if the same programme is run regularly.
+
+Real-world computing is not black and white. For instance most interpreters do perform optimisations on the fly, even though not as thorough as compilers. A common intermediate pattern is **compilation to bytecode**, a platform agnostic language that gets interpreted at run time, or even further compiled to machine code.
+
+# Issues with Big Data
+
+
+##
+Problems:
+- too big to fit in RAM
+- too big to fit on disk
+- computation is too slow
+- data arrive continuously and too fast
+- too costly!
+
+
+
+
+
+## Exemples of actual Big Data
+
+Sources: server logs ; censors / trackers ; written content ; social networks ; 
+Fields: science ; finance ; marketing ; government
+
+Fields concerned with Big Data...
+Sources producing big data: science (CERN), sattelite imagery, server logs, social networks, written...
+The V's of big data. What are we concerned with?
+
+
+
+## What big data is **not**?
+
+Doing very simple things on large data set. Computing a median (an exemple we will use because it is moderately complicated) takes about a few seconds with billions of 
+
+```{r}
+
+```
+
+
+<!-- COURS 1
+
+
+
+Statistical issues:
+- statistical power
+- false discovery rate & multiple tests
+
+Big data uses mathematical analysis, optimization, inductive statistics and concepts from nonlinear system identification[24] to infer laws (regressions, nonlinear relationships, and causal effects) from large sets of data with low information density[25] to reveal relationships and dependencies, or to perform predictions of outcomes and behaviors
+
+Ethical issues:
+- too much information -> everyone is identifiable
+- environmental resource consumption of storing / computing
+
+
+How to fix them?
+- diagnostic: profiling
+- avoid read / write or other forms of communication (caveat. you lose everything on a failure)
+- do less (e.g. less tests, less formatting, caveat. inputs have to be realiably standardized)
+- going lower level (= more task-specific computation, incl. compiling)
+- algorithmic optimisation
+- sampling
+- parellizing computation
+- distributing data
+
+Costs:
+- storing less (sampling!)
+- computing less (sampling!)
+- going from RAM to disk
+- using smaller computing units
+- time cost: count the time you spend optimizing something!
+
+Only the last 2 are usually labeled "big data" even though they should be last-resort options.
+
+2-3 exemples
+
+-->
+
+
+<!---
+
+Pour les TP:
+
+parse_date_time() parses an input vector into POSIXct date-time object. It differs from base::strptime() in two respects. First, it allows specification of the order in which the formats occur without the need to include separators and % prefix. Such a formating argument is refered to as "order". Second, it allows the user to specify several format-orders to handle heterogeneous date-time character representations.
+
+**parse_date_time2() is a fast C parser of numeric orders.**
+
+**fast_strptime() is a fast C parser of numeric formats only that accepts explicit format arguments, just as base::strptime().**
+
+
+-->
+
+<!-- on ethics
+
+https://twitter.com/ewanbirney/status/1206861632271454208
+
+-->
