@@ -1,0 +1,74 @@
+---
+title: "CM2"
+author: "Arthur katossky & Rémi Pépin"
+date: "14/01/2020"
+output: html_document
+---
+
+# Large-scale machine-learning
+
+## Parallelization
+
+Set of **hardware** and **software** technics enabling the similtaneous execution of sequences of independent instructions on multiple computational unit
+
+Why parallelize ?
+- Sequential execution too long
+- Optimize ressources
+- Data too big
+- Data arrive continuously
+- ...
+
+-> Parallelization **can** solve a lot a the big data chanllenges. But it's not magic !
+
+## Parallization architecture
+
+- Shared memory
+- Distribute memory
+- Hybrid architecture
+
+## Shared memory
+
+The most common one. You can find it in your computer, smartphone, gaming console, etc.
+
+Multiple computational units (CPU cores) - 1 memory unit (Ram)
+
+Pros : 
+- The easiest architecture
+- Low transfer time between computational unit and memory
+- It's your OS scheduler which organizes the threads
+
+Cons :
+- Synchronization issues
+- Data to big to fit in memory ?
+
+## Distribute memory
+
+Multiple computational units which have their own memory. Mostly use in distributed computing. Each task are execute on a machine with it's own CPU and memory.
+
+Pros : 
+- Multiple medium end computer with an appropriate architecture are much more cost effective than a super computer
+- Fault tolerant
+
+
+Cons :
+- Can be hard to implement (today there are turnkey solutions)
+- Lot of data fransfer between computational unit
+- The scheduler have a lot work
+
+## Hybride architecture
+
+In fact, lot of distribute memory architecture use computer as computational units, which can parallelize their own process with the share memory architecture.
+
+## Parallelization : the magic solution ?
+
+## Race condition
+
+## Race condition solution
+
+## Deadlock issue
+
+
+
+## When parallelization kill people
+
+Parallelization can be a way to reduce computational time, but it can create some serious and hard to detect bug. One of the most famous and deadly one is the bug of the **Therac-25**. It's a radiation therapy machine whtich allow to switch between two modes (one with a low-power bean, and one with an high-power one) but **without any hardware limitation, only software**. And if the technicien applied some input in a specific 8 seconds time period a race condition occurred and the machine switch from the low-power to the hight-power bean and no error is displayed. This software error killed five people at least ...
