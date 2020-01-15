@@ -1,4 +1,5 @@
 ---
+title: Computing parallelization principles
 author: Arthur Katossky & Rémi Pépin
 output:
   xaringan::moon_reader:
@@ -8,71 +9,96 @@ output:
       scroll: false
 ---
 
+<!--
+TO DO LIST:
 
-<!-- COURS 2
+[X] Course Outline
+[ ] MapReduce principles
+[ ] Physical exemple with a book
+[ ] Exemple MapReduce: Moyenne
+[ ] Exemple MapReduce: Median
+[ ] MapReduce trade-off
+[ ] Embarassingly parallel problems
+[ ] CPUs, GPUs, TPUs
 
-[QCM]
+-->
 
-Parallelisation = multi-threading
-> local vs. distributed execution
-> shared vs. distributed memory
+# 0. Outline
 
-We focus here on local parallisation ; next course is on distributed.
-
-Limits of parallelisation:
-- communication time / orchestration
-- race conditions, deadlocks and other resource sharing issues
-
-Map Reduce
-Ex: avec le gros livre coupé en plusieurs + exemple 
-
-Trade-off of the task size (small => locally short but a lot of communication / orchestration, and vice-versa).
-
-
-
-
-Focus on GPU (graphic processing unit) and TPU (tensor processing unit)
-
-2-3 exemples
-
-## How to parallelize in practice? (cours de Matthieu)
-
-Ex1: Going from a naive R implementation to
-1. Parallelisation with `R` (locally)
-2. Using GPU with R
-3. Optimization in R (if possible)
-4. Going lower level 1 (C)
-5. Going lower level 2 (shell)
-
-## When to paralleize easily? (Embarassingly parallel problems)
-
-Ex2a: repeat the same procedure k times (ex: brute force ; k-fold validation)
-
-Ex2b: inside many algorithms, some parts consist in repeating a procedure k times
-
-## Is it always possible to parallelize?
-
-Ex3a: Concieving an parallizable computation (median)
-
--> comment un humain calcule une médiane ?
--> comment on caclul la médiane de façon classique?
--> est-ce que ça se distribue? si non comment fait-on pour y remédier?
--> algo distribué
--> regarder le trade-off cas emprique sur R
-
-Ex3b: Gradient descent
-
-Ex3c: Something not possible to parallelize ? -->
-
-
-
-
-
-
-
-# Large-scale machine-learning
+0. Outline, quizz
+1. Introduction
+2. Parallelisation theory
+3. CPUs, GPUs, TPUs
+4. Map Reduce principle
+5. How to parallelise in practice?
 
 ---
+
+# 0. Quizz
+
+Go on Moodle > Apprentissage statistique à grand échelle > Quizz
+
+You have 5 minutes to answer 3 questions.
+
+---
+
+# 1. Introduction
+
+---
+
+## How many figures are there in Mankiew's _Macroéconomie_?
+
+The book has ~650 pages.
+
+- **Group 1:** 1 student counts in the whole book
+- **Group 2:** 7 students:
+    - one cuts the book in 6 chunks of ~ 100 pages (the master) ;
+    - the others (the slaves) count each their chunk as soon as they receive it and tell the result back to the master
+    - the master counts back
+- **Group 3:** 21 students, same principle but with 20 chunks of ~30 pages and 20 slaves
+
+---
+
+## How many figures are there in Mankiew's _Macroéconomie_?
+
+**What can we get from this exercice?**
+
+- Counting is an operation that can be parallelised
+- On can get speed up from parallelisation of the task, but only up to a certain point
+- There are 2 operations performed: the addition at the slave level, the addition at the master level
+- Order of operations (tasks) does not matter
+- The slave tasks can be rerun if one slave dies out (the master must keep a copy of the task, though)
+- If the master dies out, the slaves can elect a new master and send the results to him (the slave must keep a copy of the results, though)
+- Communication actualy takes a lot of time
+
+???
+
+Think of a ballot.
+
+---
+
+## Is there any duplicate of figure in Mankiew's _Macroéconomie_?
+
+(Let's imagine we can copy the book.)
+
+**Can we still parallelise?**
+
+--
+- Yes we can! (The master reads the book. Each time he finds an image, he copies the rest of the book and asks a slave if there is a copy of this image in it.)
+
+--
+- However, the first task will still be quite long, especially if the book is long!
+
+--
+- If (and that's a big if) we have $n$ processors, parallelisation shortens down the time spent, which is now $O(n)$. The over all complexity is still $O(n^2)$.
+
+---
+
+# 2. Parallelisation theory
+
+---
+
+
 ## Parallelization
 
 Set of **hardware** and **software** technics enabling the similtaneous execution of sequences of independent instructions on multiple computation unit
@@ -131,7 +157,6 @@ Pros :
 - Multiple medium-end computers with an appropriate architecture are much more cost effective than a super computer
 - Fault tolerance : each computation unit are independent from each other. If one fail, the scheduler just run the task on a other one.
 
-
 Cons :
 - Can be hard to implement (today there are turnkey solutions)
 - Lot of data transfer between computation units
@@ -157,8 +182,6 @@ Exemples of parallelization limitation
   - Deadlock
 - Energy consumption
 - Complex architecture
-
-
 
 ---
 ## Race condition
@@ -300,3 +323,190 @@ Increase the code complexity because need to deal with
 - Deadlock
 - Task fault
 
+---
+
+
+
+
+https://stackoverflow.com/questions/806569/whats-the-opposite-of-embarrassingly-parallel
+
+
+**What can we get from this exercice?**
+
+
+
+https://en.wikipedia.org/wiki/Amdahl%27s_law
+<!-- COURS 2
+
+[QCM]
+
+Map Reduce
+Ex: avec le gros livre coupé en plusieurs + exemple 
+
+Trade-off of the task size (small => locally short but a lot of communication / orchestration, and vice-versa).
+
+
+
+
+Focus on GPU (graphic processing unit) and TPU (tensor processing unit)
+
+2-3 exemples
+
+## How to parallelize in practice? (cours de Matthieu)
+
+Ex1: Going from a naive R implementation to
+1. Parallelisation with `R` (locally)
+2. Using GPU with R
+3. Optimization in R (if possible)
+4. Going lower level 1 (C)
+5. Going lower level 2 (shell)
+
+## When to paralleize easily? (Embarassingly parallel problems)
+
+Ex2a: repeat the same procedure k times (ex: brute force ; k-fold validation)
+
+Ex2b: inside many algorithms, some parts consist in repeating a procedure k times
+
+## Is it always possible to parallelize?
+
+Ex3a: Concieving an parallizable computation (median)
+
+-> comment un humain calcule une médiane ?
+-> comment on caclul la médiane de façon classique?
+-> est-ce que ça se distribue? si non comment fait-on pour y remédier?
+-> algo distribué
+-> regarder le trade-off cas emprique sur R
+
+Ex3b: Gradient descent
+
+Ex3c: Something not possible to parallelize ? -->
+
+
+
+
+
+
+
+
+---
+# 3. CPUs, GPUs, TPUs
+
+???
+
+Sources:
+https://iq.opengenus.org/cpu-vs-gpu-vs-tpu/
+http://villemin.gerard.free.fr/Multimed/CPUGPU.htm
+
+---
+
+## CPUs, GPUs, TPUs
+
+Parallelisation does not happen only _between_ cores of a processing unit, or between processing units themselves. It can also happen _inside_ a processing unit, which is how _graphical processing units_ are so usefull.
+
+---
+
+## CPUs
+
+**CPU are inherently sequential** (or at least so is each of its _core_)
+
+The speed up in CPUs until now is not explained by parallelism:
+- the cadencing of operations (faster and faster)
+- the increased proximity between transistors
+- the increased number of transistors
+- the improvement of the pipeline (the next instruction is read and data is loaded while an operation is currently performed)
+
+---
+
+
+
+
+---
+
+## GPUs
+
+Historically:
+
+1. texture mapping and rendering polygons
+2. rotation and translation of vertices into different coordinate systems
+3. **programmable** shaders
+4. oversampling and interpolation techniques for anti-aliasing
+
+All these operations involve matrix operations, and are performed in a highly parallel fashion.
+
+NVIDIA now produces general purpose programmable GPUs that are now also used for non-graphical calculation involving matrix operations or embarassing-parallel problems.
+
+---
+
+## GPUs
+
+The (very low-level) language used to programme GPUs is called CUDA.
+
+They have they own memory. (This is a limit.)
+
+The memory, which is shared between all the individual processors, each processor (core) being intself constituted of sub-cores. They are thus sometimes called "multi-multicore". However,  all the sub-cores must perform exactly similar tasks. Their threads are "locked" into "blocks". Each iteration is called a "lockstep".
+
+Typically `if` operations won't perform well on GPUs because of this, whereas matrix operations will be fast.
+
+<!-- Graph of GPU limits. -->
+
+
+---
+
+## GPUs
+
+**Exemple**
+
+```{r}
+library(gpuR)
+library(tictoc)
+
+detectGPUs() # 1
+
+for(i in seq(1:7)) {
+ N = 512*i
+ 
+ tic(paste("CPU: creating two", N, "x", N, "matrice"))
+ A = matrix(rnorm(N^2), nrow=N)
+ B = matrix(rnorm(N^2), nrow=N)
+ toc()
+ tic(paste("CPU: multiplying them"))
+ C = A %*% B
+ toc()
+ 
+ tic(paste("GPU: copying", N, "x", N, "matrice to memory"))
+ gpuA = gpuMatrix(A, type="double")
+ gpuB = gpuMatrix(B, type="double")
+ toc()
+ tic(paste("GPU: multiplying them"))
+ gpuC = gpuA %*% gpuB
+ toc()
+}
+```
+
+
+
+x then do ifelse do nothing` operations 
+
+.footnote[**Source:** Wikipédia (lien)]
+
+???
+
+An other restriction is that there is not any synchronisation between blocks.
+
+Shttps://blog.revolutionanalytics.com/2015/01/parallel-programming-with-gpus-and-r.html
+http://www.r-tutor.com/gpu-computing
+
+
+---
+
+## TPUs
+
+---
+
+## Exemple
+
+
+
+???
+
+CPUs are inherently sequential
