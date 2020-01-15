@@ -1,0 +1,239 @@
+---
+author: Arthur Katossky & Rémi Pépin
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/presentation.css"]
+    nature:
+      ratio: 16:10
+      scroll: false
+---
+# Large-scale machine-learning
+
+---
+## Parallelization
+
+Set of **hardware** and **software** technics enabling the similtaneous execution of sequences of independent instructions on multiple computation unit
+
+--
+
+Why parallelize ?
+--
+
+- Sequential execution too long
+--
+
+- Optimize ressources
+--
+
+- Data too big
+--
+
+- Data arrive continuously
+
+
+--
+-> Parallelization **can** solve a lot a the big data chanllenges. But it's not magic !
+
+---
+## Parallization architecture
+
+- Shared memory
+- Distribute memory
+- Hybrid architecture
+
+---
+
+## Shared memory
+
+The most common one. You can find it in your computer, smartphone, gaming console, etc.
+
+Multiple computation units (CPU cores) - 1 memory unit (Ram)
+
+Pros : 
+- The easiest architecture
+- Low transfer time between computation unit and memory
+- No memory transfer between memory unit
+- It's your OS scheduler which organizes the threads
+
+Cons :
+- Synchronization issues
+- Data to big to fit in memory ?
+
+---
+## Distribute memory
+
+Multiple computation units which have their own memory. Mostly use in distributed computing. Each task are executed on a machine with it's own CPU and memory.
+
+Pros : 
+- Multiple medium-end computers with an appropriate architecture are much more cost effective than a super computer
+- Fault tolerance : each computation unit are independent from each other. If one fail, the scheduler just run the task on a other one.
+
+
+Cons :
+- Can be hard to implement (today there are turnkey solutions)
+- Lot of data transfer between computation units
+- The scheduler have a lot work
+
+---
+## Hybride architecture
+
+In fact, lot of distribute memory architecture use computer as computation units, which can parallelize their own process with the share memory architecture.
+
+---
+## Parallelization : the magic solution ?
+
+Of course not ! There is no magic solution, only good solutions for specific problems.
+
+--
+
+Exemples of parallelization limitation
+- Communication time between computation units can be important
+- Orchestration can be hard and the bottle neck
+- Non determinist process
+  - Race condition
+  - Deadlock
+- Energy consumption
+- Complex architecture
+
+
+
+---
+## Race condition
+
+A race condition arises in software when a computer program, to operate properly, depends on the sequence or timing of the program's processes or threads.
+
+--
+Basic exemple with python :
+
+- 2 threads which increment the same variable by one
+- 500 000 incrementation for each thread
+- so the final result should be 1 000 000
+
+
+???
+Go to code
+
+---
+## Race condition explaination
+
+Multiple execution cases :
+
+.pull-left[
+| Thread1    | Thread2    |    | Value |
+|------------|------------|----|-------|
+|            |            |    | 0     |
+| Read value |            | <- | 0     |
+| Increase    |            |    | 0     |
+| Write back |            | -> | 1     |
+|            | Read value | <- | 1     |
+|            | Increase    |    | 1     |
+|            | Write back | -> | 2     |
+
+]
+
+.pull-right[
+| Thread1    | Thread2    |    | Value |
+|------------|------------|----|-------|
+|            |            |    | 0     |
+| Read value |            | <- | 0     |
+|            | Read value | <- | 0     |
+| Increase   |            |    | 0     |
+|            | Increase   |    | 0     |
+| Write back |            | -> | 1     |
+|            | Write back | -> | 1     |
+]
+
+--
+
+Threads can overide theirs results each other !
+
+---
+## Race condition solution (1/2)
+
+The solution is to lock ressources. When a thread acces a ressource no other thread can access it (read or write) before the first thread release it
+
+| Thread1               | Thread2               |    | Value      |
+|-----------------------|-----------------------|----|------------|
+|                       |                       |    | 0          |
+| Read and lock value   |                       | <- | 0 (locked) |
+|                       | Read and lock         | <- | 0 (locked) |
+|                       | Read fail             |    | 0 (locked) |
+| Increase              |                       |    | 0 (locked) |
+| Write back and release |                       | -> | 1          |
+|                       | Read and lock         | <- | 1(locked)  |
+|                       | Increase              |    | 1(locked)  |
+|                       | Write back and release | -> | 2  |
+
+---
+## Race condition solution (2/2)
+
+Problems :
+
+--
+- Slow down the process
+- The process can encounter a deadlock error and never end !
+
+---
+## Dinning philosopher problem
+
+Five silent philosophers sit at a round table with bowls of spaghetti. Forks are placed between each pair of adjacent philosophers.
+
+Each philosopher must alternately think and eat. However, a philosopher can only eat spaghetti when they have both left and right forks. Each fork can be held by only one philosopher and so a philosopher can use the fork only if it is not being used by another philosopher. After an individual philosopher finishes eating, they need to put down both forks so that the forks become available to others. A philosopher can only take the fork on their right or the one on their left as they become available and they cannot start eating before getting both forks.
+
+Eating is not limited by the remaining amounts of spaghetti or stomach space; an infinite supply and an infinite demand are assumed. 
+
+---
+## Dinning philosopher problem
+Naive solution :
+
+- think until the left fork is available; when it is, pick it up;
+- think until the right fork is available; when it is, pick it up;
+- when both forks are held, eat for a fixed amount of time;
+- then, put the right fork down;
+- then, put the left fork down;
+- repeat from the beginning.
+
+--
+
+Problem : if each philosopher have a fork in hand, they will wait for the other one and die of starvation :X
+
+--
+
+That's a deadlock !
+
+
+---
+## Deadlock
+
+A deadlock is a state in which each member of a group is waiting for another member, including itself, to take action, such as sending a message or more commonly releasing a lock
+
+--
+
+There is multiple way to avoid/handle deadlock. Here is two exemples
+
+- Have greedy (wait for ressources) and generous process (release lock when ressources are missing).
+- Arbitary stop some process and release ressources. But you will have to run thoses process back.
+
+---
+## When parallelization kill people
+
+Parallelization can be a way to reduce computation time, but it can create some serious and hard to detect bug. One of the most famous and deadly one is the bug of the **Therac-25**. It's a radiation therapy machine whtich allow to switch between two modes (one with a low-power bean, and one with an high-power one) but **without any hardware limitation, only software**. And if the technicien applied some input in a specific 8 seconds time period a race condition occurred and the machine switch from the low-power to the hight-power bean and no error is displayed. This software error killed five people at least ...
+
+---
+## Parallelization in a nutshell
+
+Good way to reduce computation time.
+
+--
+**But** don't reduce the computation complexity, and the number of computation. In fact it tend to increase it !
+
+--
+Very powerfull for compute a lot of **independent** tasks
+
+--
+
+Increase the code complexity because need to deal with
+- Race condition
+- Deadlock
+- Task fault
+
