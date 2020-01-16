@@ -1751,14 +1751,42 @@ summary {
 <!-- rnb-text-begin -->
 <div id="tp1" class="section level1">
 <h1>TP1</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmBgYCJ9 -->
+<pre class="r"><code>library(dplyr)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuXG5BdHRhY2hlbWVudCBkdSBwYWNrYWdlIDog46S847ixZHBseXLjpLzjuLJcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDjpLzjuLFwYWNrYWdlOnN0YXRz46S847iyOlxuXG4gICAgZmlsdGVyLCBsYWdcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDjpLzjuLFwYWNrYWdlOmJhc2XjpLzjuLI6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuIn0= -->
+<pre><code>Registered S3 method overwritten by &#39;dplyr&#39;:
+  method           from
+  print.rowwise_df     
+
+Attachement du package : 㤼㸱dplyr㤼㸲
+
+The following objects are masked from 㤼㸱package:stats㤼㸲:
+
+    filter, lag
+
+The following objects are masked from 㤼㸱package:base㤼㸲:
+
+    intersect, setdiff, setequal, union</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <div id="récupération-des-données" class="section level2">
 <h2>Récupération des données</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnN0YWxsLnBhY2thZ2VzKFwiUlBvc3RncmVTUUxcIilcbnJlcXVpcmUoXCJSUG9zdGdyZVNRTFwiKVxuIFxuIyBjcmVhdGUgYSBjb25uZWN0aW9uXG5wdyA8LSBcIllvakNxTHIzQ25sdzZvbnV6SFUzXCJcbiBcbiMgbG9hZHMgdGhlIFBvc3RncmVTUUwgZHJpdmVyXG5kcnYgPC0gZGJEcml2ZXIoXCJQb3N0Z3JlU1FMXCIpXG4jIGNyZWF0ZXMgYSBjb25uZWN0aW9uIHRvIHRoZSBwb3N0Z3JlcyBkYXRhYmFzZVxuIyBub3RlIHRoYXQgXCJjb25cIiB3aWxsIGJlIHVzZWQgbGF0ZXIgaW4gZWFjaCBjb25uZWN0aW9uIHRvIHRoZSBkYXRhYmFzZVxuY29uIDwtIGRiQ29ubmVjdChkcnYsIGRibmFtZSA9IFwicG9zdGdyZXNcIixcbiAgICAgICAgICAgICAgICAgaG9zdCA9IFwiZGF0YWJhc2UtMS5jNWJxc2d2OXRuZWEuZXUtd2VzdC0zLnJkcy5hbWF6b25hd3MuY29tXCIsIHBvcnQgPSA1NDMyLFxuICAgICAgICAgICAgICAgICB1c2VyID0gXCJwb3N0Z3Jlc1wiLCBwYXNzd29yZCA9IHB3KVxucm0ocHcpICMgcmVtb3ZlcyB0aGUgcGFzc3dvcmRcblxuZGJFeGlzdHNUYWJsZShjb24sIFwiZmxpZ2h0XCIpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnN0YWxsLnBhY2thZ2VzKFwiUlBvc3RncmVTUUxcIilcbnJlcXVpcmUoXCJSUG9zdGdyZVNRTFwiKVxuYGBgIn0= -->
 <pre class="r"><code># install.packages(&quot;RPostgreSQL&quot;)
-require(&quot;RPostgreSQL&quot;)
- 
+require(&quot;RPostgreSQL&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlOlxucGFja2FnZSDigJhSUG9zdGdyZVNRTOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNi4yIFxuIn0= -->
+<pre><code>Warning message:
+package ‘RPostgreSQL’ was built under R version 3.6.2 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIFxuIyBjcmVhdGUgYSBjb25uZWN0aW9uXG5wdyA8LSBcIllvakNxTHIzQ25sdzZvbnV6SFUzXCJcbiBcbiMgbG9hZHMgdGhlIFBvc3RncmVTUUwgZHJpdmVyXG5kcnYgPC0gZGJEcml2ZXIoXCJQb3N0Z3JlU1FMXCIpXG4jIGNyZWF0ZXMgYSBjb25uZWN0aW9uIHRvIHRoZSBwb3N0Z3JlcyBkYXRhYmFzZVxuIyBub3RlIHRoYXQgXCJjb25cIiB3aWxsIGJlIHVzZWQgbGF0ZXIgaW4gZWFjaCBjb25uZWN0aW9uIHRvIHRoZSBkYXRhYmFzZVxuY29uIDwtIGRiQ29ubmVjdChkcnYsIGRibmFtZSA9IFwicG9zdGdyZXNcIixcbiAgICAgICAgICAgICAgICAgaG9zdCA9IFwiZGF0YWJhc2UtMS5jNWJxc2d2OXRuZWEuZXUtd2VzdC0zLnJkcy5hbWF6b25hd3MuY29tXCIsIHBvcnQgPSA1NDMyLFxuICAgICAgICAgICAgICAgICB1c2VyID0gXCJwb3N0Z3Jlc1wiLCBwYXNzd29yZCA9IHB3KVxucm0ocHcpICMgcmVtb3ZlcyB0aGUgcGFzc3dvcmRcblxuZGJFeGlzdHNUYWJsZShjb24sIFwiZmxpZ2h0XCIpXG5gYGAifQ== -->
+<pre class="r"><code> 
 # create a connection
 pw &lt;- &quot;YojCqLr3Cnlw6onuzHU3&quot;
  
@@ -1781,8 +1809,8 @@ dbExistsTable(con, &quot;flight&quot;)</code></pre>
 <p>On récupère les données</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZfZmxpZ2h0IDwtIGRiR2V0UXVlcnkoY29uLCBcIlNFTEVDVCAqIEZST00gZmxpZ2h0IGxpbWl0IDEwMDBcIilcbmBgYCJ9 -->
-<pre class="r"><code>df_flight &lt;- dbGetQuery(con, &quot;SELECT * FROM flight limit 1000&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZfZmxpZ2h0IDwtIGRiR2V0UXVlcnkoY29uLCBcIlNFTEVDVCAqIEZST00gZmxpZ2h0IGxpbWl0IDEwMFwiKVxuYGBgIn0= -->
+<pre class="r"><code>df_flight &lt;- dbGetQuery(con, &quot;SELECT * FROM flight limit 100&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1808,18 +1836,62 @@ for (i in 1:nrow(df_flight)) {
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="nombre-de-siège-moyen-sur-3-mois-glissant" class="section level2">
-<h2>Nombre de siège moyen sur 3 mois glissant</h2>
+<div id="nombre-de-siège-moyen-sur-7-jours-glissants" class="section level2">
+<h2>Nombre de siège moyen sur 7 jours glissants</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZfbWVhbiA9IGRhdGEuZnJhbWUoeWVhcj1pbnRlZ2VyKCksXG4gICAgICAgICAgICAgICAgIG1vbnRoPWludGVnZXIoKSwgXG4gICAgICAgICAgICAgICAgIGNvdW50PWludGVnZXIoKSlcblxuZGZfZmxpZ2h0IDwtIGRmX2ZsaWdodCAlPiUgXG4gICAgICAgICAgICAgICAgICAgICAgICBncm91cF9ieSAoeWVhciwgbW9udGgpICU+JVxuICAgICAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSggeWVhciwgbW9udGgpIFxuYGBgIn0= -->
-<pre class="r"><code>df_mean = data.frame(year=integer(),
-                 month=integer(), 
-                 count=integer())
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZfbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIgPSBkYXRhLmZyYW1lKHllYXI9aW50ZWdlcigpLFxuICAgICAgICAgICAgICAgICBtb250aD1pbnRlZ2VyKCksXG4gICAgICAgICAgICAgICAgIGRheT1pbnRlZ2VyKCksXG4gICAgICAgICAgICAgICAgIG1veWVubmVfNT1pbnRlZ2VyKCksXG4gICAgICAgICAgICAgICAgIG1veWVubmVfMTA9aW50ZWdlcigpKVxuXG5cbiMgY2FsY3VsZSBkZSBsYSBzb21tZSBkdSBub21icmUgZGUgcGFzc2FnZXJzIHBhciBqb3VyXG5kZl9zdW1fcGFzc2VuZ2VyIDwtIGRmX2ZsaWdodCAlPiUgXG4gICAgICAgICAgICAgICAgICAgICAgICBncm91cF9ieSAoeWVhciwgbW9udGgsIGRheSkgJT4lXG4gICAgICAgICAgICAgICAgICAgICAgICBzdW1tYXJpc2UgKHRvdGFsX3Bhc3NhZ2VyID0gc3VtKHBhc3NlbmdlcnMpKSAlPiVcbiAgICAgICAgICAgICAgICAgICAgICAgIGFycmFuZ2UoeWVhciwgbW9udGgsIGRheSlcblxuIyBPbiBjb21tZW5jZSBhdSA1acOobWUgam91clxuZm9yIChpIGluIDU6bnJvdyhkZl9zdW1fcGFzc2VuZ2VyKSkge1xuICBub21icmVfcGFzc2FnZXJfZ2xpc3NhbnQgPC0gMFxuICBmb3IoaiBpbiAoaS00KTppKSB7XG4gICAgZmxpZ2h0IDwtIGRmX3N1bV9wYXNzZW5nZXJbaixdXG4gICAgbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50IDwtIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudCArIGZsaWdodCR0b3RhbF9wYXNzYWdlclxuICB9XG4gIG1veWVubmVfZ2xpc3NhbnRlX3Bhc3NhZ2VyIDwtIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudC81XG4gIG5ld19yb3cgPC0gZGF0YS5mcmFtZSh5ZWFyPWRmX3N1bV9wYXNzZW5nZXJbaSxdJHllYXIsXG4gICAgICAgICAgICAgICAgIG1vbnRoPWRmX3N1bV9wYXNzZW5nZXJbaSxdJG1vbnRoLFxuICAgICAgICAgICAgICAgICBkYXk9ZGZfc3VtX3Bhc3NlbmdlcltpLF0kZGF5LFxuICAgICAgICAgICAgICAgICBtb3llbm5lXzU9bW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIsXG4gICAgICAgICAgICAgICAgIG1veWVubmVfMTA9TkEpXG4gZGZfbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIgPC0gZGZfbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIgJT4lcmJpbmQobmV3X3Jvdylcbn1cblxucHJpbnQoZGZfbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIpXG5gYGAifQ== -->
+<pre class="r"><code>df_moyenne_glissante_passager = data.frame(year=integer(),
+                 month=integer(),
+                 day=integer(),
+                 moyenne_5=integer(),
+                 moyenne_10=integer())
 
-df_flight &lt;- df_flight %&gt;% 
-                        group_by (year, month) %&gt;%
-                        arrange( year, month) </code></pre>
+
+# calcule de la somme du nombre de passagers par jour
+df_sum_passenger &lt;- df_flight %&gt;% 
+                        group_by (year, month, day) %&gt;%
+                        summarise (total_passager = sum(passengers)) %&gt;%
+                        arrange(year, month, day)
+
+# On commence au 5ième jour
+for (i in 5:nrow(df_sum_passenger)) {
+  nombre_passager_glissant &lt;- 0
+  for(j in (i-4):i) {
+    flight &lt;- df_sum_passenger[j,]
+    nombre_passager_glissant &lt;- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager &lt;- nombre_passager_glissant/5
+  new_row &lt;- data.frame(year=df_sum_passenger[i,]$year,
+                 month=df_sum_passenger[i,]$month,
+                 day=df_sum_passenger[i,]$day,
+                 moyenne_5=moyenne_glissante_passager,
+                 moyenne_10=NA)
+ df_moyenne_glissante_passager &lt;- df_moyenne_glissante_passager %&gt;%rbind(new_row)
+}
+
+print(df_moyenne_glissante_passager)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NSwibnJvdyI6MjN9LCJyZGYiOiJINHNJQUFBQUFBQUFCdFZUelU3Q1FCRGV0clJJUlZGUjhlOFZJQUp5OE5aRTQ5RVlUaGdQWnFVRnFtV0xiWW5XbjBRVGo3NkFYdlFCdkhueUhmUTFmQUh2NkN5elM3UjNEMHp5ZFhiK3V0L010UFh0UnRWc21JUVFqV2lHUWpRZGpzVFkyaXRYYWhWQ1VpcFlDa21SRE5mbmtKV0hBOCtaQmhTc3B6dWVUc1pOai9ndm9URnVHbVNLOHllNEN3T1FCa3dBK0tMNE9pY0JXWkhIZTgwQlpnQ3pnRGtBMytNOFlBR3dDT0J2WGdhc0FGWUJhNk1aTmI2cVhLeDl3V0gzczhYRjJuam44bUh0dkdLOC9zRGwwVHF3TUkvZVk1eG1oZDdFdUYzRmZQY1o4OW9pL3pqRytLbTRyL3VDZFRMdTV0Ri9HNksrRXY3ckZ2SzVmTVA2QzN5UG1FUGhCaDcvaGNRUG9qUGFkVUl4YUYwNFU3RkRBNW5ROVZuVUVZWm0wMWdjTTEwL2RoaHpEbXZDWVVwSGVUMXhSeWJ3ejByeUhyNWNGWW53aitFdm1hWkhRMGxHT2syYlJyVFVDcUFlckVHaUpPMzNJdGRuVUtUSzMveDNzUklrSExrKzQwenNZclBUWnlmRnNoaTVnb1NHN0JSa05qcnJlS1g2blppUzRiQzJ5eHpKM2FOSGppZU1hZWg0MkhDcEY3Z3NrcDJBTnl4RmZrUmxudG4wUGVrWjlrWUdQN1VSOU5uZUJBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["month"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["day"],"name":[3],"type":["int"],"align":["right"]},{"label":["moyenne_5"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["moyenne_10"],"name":[5],"type":["lgl"],"align":["right"]}],"data":[{"1":"2017","2":"6","3":"5","4":"99.8","5":"NA"},{"1":"2017","2":"6","3":"6","4":"100.0","5":"NA"},{"1":"2017","2":"6","3":"7","4":"61.8","5":"NA"},{"1":"2017","2":"6","3":"8","4":"20.8","5":"NA"},{"1":"2017","2":"6","3":"9","4":"45.4","5":"NA"},{"1":"2017","2":"6","3":"10","4":"74.4","5":"NA"},{"1":"2017","2":"6","3":"11","4":"109.0","5":"NA"},{"1":"2017","2":"6","3":"12","4":"140.4","5":"NA"},{"1":"2017","2":"6","3":"13","4":"136.4","5":"NA"},{"1":"2017","2":"6","3":"14","4":"137.8","5":"NA"},{"1":"2017","2":"6","3":"15","4":"161.6","5":"NA"},{"1":"2017","2":"6","3":"16","4":"205.0","5":"NA"},{"1":"2017","2":"6","3":"17","4":"186.0","5":"NA"},{"1":"2017","2":"6","3":"18","4":"211.8","5":"NA"},{"1":"2017","2":"6","3":"19","4":"287.2","5":"NA"},{"1":"2017","2":"6","3":"20","4":"237.4","5":"NA"},{"1":"2017","2":"6","3":"21","4":"186.0","5":"NA"},{"1":"2017","2":"6","3":"22","4":"200.6","5":"NA"},{"1":"2017","2":"6","3":"24","4":"558.4","5":"NA"},{"1":"2017","2":"6","3":"25","4":"452.0","5":"NA"},{"1":"2017","2":"6","3":"26","4":"470.4","5":"NA"},{"1":"2017","2":"6","3":"27","4":"443.6","5":"NA"},{"1":"2017","2":"6","3":"28","4":"423.6","5":"NA"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[23]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBPbiBjb21tZW5jZSBhdSAxMGnDqG1lIGpvdXJcbmZvciAoaSBpbiAxMDpucm93KGRmX3N1bV9wYXNzZW5nZXIpKSB7XG4gIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudCA8LSAwXG4gIGZvcihqIGluIChpLTkpOmkpIHtcbiAgICBmbGlnaHQgPC0gZGZfc3VtX3Bhc3NlbmdlcltqLF1cbiAgICBub21icmVfcGFzc2FnZXJfZ2xpc3NhbnQgPC0gbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50ICsgZmxpZ2h0JHRvdGFsX3Bhc3NhZ2VyXG4gIH1cbiAgbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIgPC0gbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50LzEwXG4gZGZfbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXJbaS00LFwibW95ZW5uZV8xMFwiXSA8LW1veWVubmVfZ2xpc3NhbnRlX3Bhc3NhZ2VyXG4gIFxufVxuXG5gYGAifQ== -->
+<pre class="r"><code># On commence au 10ième jour
+for (i in 10:nrow(df_sum_passenger)) {
+  nombre_passager_glissant &lt;- 0
+  for(j in (i-9):i) {
+    flight &lt;- df_sum_passenger[j,]
+    nombre_passager_glissant &lt;- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager &lt;- nombre_passager_glissant/10
+ df_moyenne_glissante_passager[i-4,&quot;moyenne_10&quot;] &lt;-moyenne_glissante_passager
+  
+}
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1827,7 +1899,7 @@ df_flight &lt;- df_flight %&gt;%
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFRQMSANCg0KDQojIyBSw6ljdXDDqXJhdGlvbiBkZXMgZG9ubsOpZXMNCmBgYHtyfQ0KIyBpbnN0YWxsLnBhY2thZ2VzKCJSUG9zdGdyZVNRTCIpDQpyZXF1aXJlKCJSUG9zdGdyZVNRTCIpDQogDQojIGNyZWF0ZSBhIGNvbm5lY3Rpb24NCnB3IDwtICJZb2pDcUxyM0NubHc2b251ekhVMyINCiANCiMgbG9hZHMgdGhlIFBvc3RncmVTUUwgZHJpdmVyDQpkcnYgPC0gZGJEcml2ZXIoIlBvc3RncmVTUUwiKQ0KIyBjcmVhdGVzIGEgY29ubmVjdGlvbiB0byB0aGUgcG9zdGdyZXMgZGF0YWJhc2UNCiMgbm90ZSB0aGF0ICJjb24iIHdpbGwgYmUgdXNlZCBsYXRlciBpbiBlYWNoIGNvbm5lY3Rpb24gdG8gdGhlIGRhdGFiYXNlDQpjb24gPC0gZGJDb25uZWN0KGRydiwgZGJuYW1lID0gInBvc3RncmVzIiwNCiAgICAgICAgICAgICAgICAgaG9zdCA9ICJkYXRhYmFzZS0xLmM1YnFzZ3Y5dG5lYS5ldS13ZXN0LTMucmRzLmFtYXpvbmF3cy5jb20iLCBwb3J0ID0gNTQzMiwNCiAgICAgICAgICAgICAgICAgdXNlciA9ICJwb3N0Z3JlcyIsIHBhc3N3b3JkID0gcHcpDQpybShwdykgIyByZW1vdmVzIHRoZSBwYXNzd29yZA0KDQpkYkV4aXN0c1RhYmxlKGNvbiwgImZsaWdodCIpDQpgYGANCg0KDQpPbiByw6ljdXDDqHJlIGxlcyBkb25uw6llcw0KYGBge3J9DQpkZl9mbGlnaHQgPC0gZGJHZXRRdWVyeShjb24sICJTRUxFQ1QgKiBGUk9NIGZsaWdodCBsaW1pdCAxMDAwMCIpDQpgYGANCg0KDQojIyBDYWxjdWwgZHUgbm9tYnJlIGRlIHZvbHMgcGFyIG1vaXMNCg0KYGBge3J9DQpkZl9jb3VudCA9IGRhdGEuZnJhbWUoeWVhcj1pbnRlZ2VyKCksDQogICAgICAgICAgICAgICAgIG1vbnRoPWludGVnZXIoKSwgDQogICAgICAgICAgICAgICAgIGNvdW50PWludGVnZXIoKSkNCg0KZm9yIChpIGluIDE6bnJvdyhkZl9mbGlnaHQpKSB7DQogIGZsaWdodCA8LSBkZl9mbGlnaHRbaSxdDQogIGlmKGZsaWdodCRtb250aCAgJWluJSBmaWx0ZXIoZGZfY291bnQsIHllYXIgPT0gZmxpZ2h0JHllYXIpJG1vbnRoKSB7DQogICAgICBkZl9jb3VudCRjb3VudFtkZl9jb3VudCR5ZWFyPT1mbGlnaHQkeWVhciAmIGRmX2NvdW50JG1vbnRoPT1mbGlnaHQkbW9udGggXSA9IGRmX2NvdW50JGNvdW50W2RmX2NvdW50JHllYXI9PWZsaWdodCR5ZWFyICYgZGZfY291bnQkbW9udGg9PWZsaWdodCRtb250aCBdICsxDQogICAgfWVsc2Ugew0KICAgICAgIGRmX2NvdW50W25yb3coZGZfY291bnQpICsgMSxdPSBjKGZsaWdodCR5ZWFyLGZsaWdodCRtb250aCwgMSkNCiAgICB9DQp9DQpgYGANCg0KDQoNCg0KIyMgTm9tYnJlIGRlIHNpw6hnZSBtb3llbiBzdXIgMyBtb2lzIGdsaXNzYW50DQoNCmBgYHtyfQ0KZGZfbWVhbiA9IGRhdGEuZnJhbWUoeWVhcj1pbnRlZ2VyKCksDQogICAgICAgICAgICAgICAgIG1vbnRoPWludGVnZXIoKSwgDQogICAgICAgICAgICAgICAgIGNvdW50PWludGVnZXIoKSkNCg0KZGZfZmxpZ2h0IDwtIGRmX2ZsaWdodCAlPiUgDQogICAgICAgICAgICAgICAgICAgICAgICBncm91cF9ieSAoeWVhciwgbW9udGgpICU+JQ0KICAgICAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSggeWVhciwgbW9udGgpIA0KYGBgDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFRQMSANCmBgYHtyfQ0KbGlicmFyeShkcGx5cikNCmBgYA0KDQoNCiMjIFLDqWN1cMOpcmF0aW9uIGRlcyBkb25uw6llcw0KYGBge3J9DQojIGluc3RhbGwucGFja2FnZXMoIlJQb3N0Z3JlU1FMIikNCnJlcXVpcmUoIlJQb3N0Z3JlU1FMIikNCiANCiMgY3JlYXRlIGEgY29ubmVjdGlvbg0KcHcgPC0gIllvakNxTHIzQ25sdzZvbnV6SFUzIg0KIA0KIyBsb2FkcyB0aGUgUG9zdGdyZVNRTCBkcml2ZXINCmRydiA8LSBkYkRyaXZlcigiUG9zdGdyZVNRTCIpDQojIGNyZWF0ZXMgYSBjb25uZWN0aW9uIHRvIHRoZSBwb3N0Z3JlcyBkYXRhYmFzZQ0KIyBub3RlIHRoYXQgImNvbiIgd2lsbCBiZSB1c2VkIGxhdGVyIGluIGVhY2ggY29ubmVjdGlvbiB0byB0aGUgZGF0YWJhc2UNCmNvbiA8LSBkYkNvbm5lY3QoZHJ2LCBkYm5hbWUgPSAicG9zdGdyZXMiLA0KICAgICAgICAgICAgICAgICBob3N0ID0gImRhdGFiYXNlLTEuYzVicXNndjl0bmVhLmV1LXdlc3QtMy5yZHMuYW1hem9uYXdzLmNvbSIsIHBvcnQgPSA1NDMyLA0KICAgICAgICAgICAgICAgICB1c2VyID0gInBvc3RncmVzIiwgcGFzc3dvcmQgPSBwdykNCnJtKHB3KSAjIHJlbW92ZXMgdGhlIHBhc3N3b3JkDQoNCmRiRXhpc3RzVGFibGUoY29uLCAiZmxpZ2h0IikNCmBgYA0KDQoNCk9uIHLDqWN1cMOocmUgbGVzIGRvbm7DqWVzDQpgYGB7cn0NCmRmX2ZsaWdodCA8LSBkYkdldFF1ZXJ5KGNvbiwgIlNFTEVDVCAqIEZST00gZmxpZ2h0IGxpbWl0IDEwMCIpDQpgYGANCg0KDQojIyBDYWxjdWwgZHUgbm9tYnJlIGRlIHZvbHMgcGFyIG1vaXMNCg0KYGBge3J9DQpkZl9jb3VudCA9IGRhdGEuZnJhbWUoeWVhcj1pbnRlZ2VyKCksDQogICAgICAgICAgICAgICAgIG1vbnRoPWludGVnZXIoKSwgDQogICAgICAgICAgICAgICAgIGNvdW50PWludGVnZXIoKSkNCg0KZm9yIChpIGluIDE6bnJvdyhkZl9mbGlnaHQpKSB7DQogIGZsaWdodCA8LSBkZl9mbGlnaHRbaSxdDQogIGlmKGZsaWdodCRtb250aCAgJWluJSBmaWx0ZXIoZGZfY291bnQsIHllYXIgPT0gZmxpZ2h0JHllYXIpJG1vbnRoKSB7DQogICAgICBkZl9jb3VudCRjb3VudFtkZl9jb3VudCR5ZWFyPT1mbGlnaHQkeWVhciAmIGRmX2NvdW50JG1vbnRoPT1mbGlnaHQkbW9udGggXSA9IGRmX2NvdW50JGNvdW50W2RmX2NvdW50JHllYXI9PWZsaWdodCR5ZWFyICYgZGZfY291bnQkbW9udGg9PWZsaWdodCRtb250aCBdICsxDQogICAgfWVsc2Ugew0KICAgICAgIGRmX2NvdW50W25yb3coZGZfY291bnQpICsgMSxdPSBjKGZsaWdodCR5ZWFyLGZsaWdodCRtb250aCwgMSkNCiAgICB9DQp9DQpgYGANCg0KDQoNCg0KIyMgTm9tYnJlIGRlIHNpw6hnZSBtb3llbiBzdXIgNyBqb3VycyBnbGlzc2FudHMNCg0KYGBge3J9DQpkZl9tb3llbm5lX2dsaXNzYW50ZV9wYXNzYWdlciA9IGRhdGEuZnJhbWUoeWVhcj1pbnRlZ2VyKCksDQogICAgICAgICAgICAgICAgIG1vbnRoPWludGVnZXIoKSwNCiAgICAgICAgICAgICAgICAgZGF5PWludGVnZXIoKSwNCiAgICAgICAgICAgICAgICAgbW95ZW5uZV81PWludGVnZXIoKSwNCiAgICAgICAgICAgICAgICAgbW95ZW5uZV8xMD1pbnRlZ2VyKCkpDQoNCg0KIyBjYWxjdWxlIGRlIGxhIHNvbW1lIGR1IG5vbWJyZSBkZSBwYXNzYWdlcnMgcGFyIGpvdXINCmRmX3N1bV9wYXNzZW5nZXIgPC0gZGZfZmxpZ2h0ICU+JSANCiAgICAgICAgICAgICAgICAgICAgICAgIGdyb3VwX2J5ICh5ZWFyLCBtb250aCwgZGF5KSAlPiUNCiAgICAgICAgICAgICAgICAgICAgICAgIHN1bW1hcmlzZSAodG90YWxfcGFzc2FnZXIgPSBzdW0ocGFzc2VuZ2VycykpICU+JQ0KICAgICAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSh5ZWFyLCBtb250aCwgZGF5KQ0KDQojIE9uIGNvbW1lbmNlIGF1IDVpw6htZSBqb3VyDQpmb3IgKGkgaW4gNTpucm93KGRmX3N1bV9wYXNzZW5nZXIpKSB7DQogIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudCA8LSAwDQogIGZvcihqIGluIChpLTQpOmkpIHsNCiAgICBmbGlnaHQgPC0gZGZfc3VtX3Bhc3NlbmdlcltqLF0NCiAgICBub21icmVfcGFzc2FnZXJfZ2xpc3NhbnQgPC0gbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50ICsgZmxpZ2h0JHRvdGFsX3Bhc3NhZ2VyDQogIH0NCiAgbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXIgPC0gbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50LzUNCiAgbmV3X3JvdyA8LSBkYXRhLmZyYW1lKHllYXI9ZGZfc3VtX3Bhc3NlbmdlcltpLF0keWVhciwNCiAgICAgICAgICAgICAgICAgbW9udGg9ZGZfc3VtX3Bhc3NlbmdlcltpLF0kbW9udGgsDQogICAgICAgICAgICAgICAgIGRheT1kZl9zdW1fcGFzc2VuZ2VyW2ksXSRkYXksDQogICAgICAgICAgICAgICAgIG1veWVubmVfNT1tb3llbm5lX2dsaXNzYW50ZV9wYXNzYWdlciwNCiAgICAgICAgICAgICAgICAgbW95ZW5uZV8xMD1OQSkNCiBkZl9tb3llbm5lX2dsaXNzYW50ZV9wYXNzYWdlciA8LSBkZl9tb3llbm5lX2dsaXNzYW50ZV9wYXNzYWdlciAlPiVyYmluZChuZXdfcm93KQ0KfQ0KDQpwcmludChkZl9tb3llbm5lX2dsaXNzYW50ZV9wYXNzYWdlcikNCiMgT24gY29tbWVuY2UgYXUgMTBpw6htZSBqb3VyDQpmb3IgKGkgaW4gMTA6bnJvdyhkZl9zdW1fcGFzc2VuZ2VyKSkgew0KICBub21icmVfcGFzc2FnZXJfZ2xpc3NhbnQgPC0gMA0KICBmb3IoaiBpbiAoaS05KTppKSB7DQogICAgZmxpZ2h0IDwtIGRmX3N1bV9wYXNzZW5nZXJbaixdDQogICAgbm9tYnJlX3Bhc3NhZ2VyX2dsaXNzYW50IDwtIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudCArIGZsaWdodCR0b3RhbF9wYXNzYWdlcg0KICB9DQogIG1veWVubmVfZ2xpc3NhbnRlX3Bhc3NhZ2VyIDwtIG5vbWJyZV9wYXNzYWdlcl9nbGlzc2FudC8xMA0KIGRmX21veWVubmVfZ2xpc3NhbnRlX3Bhc3NhZ2VyW2ktNCwibW95ZW5uZV8xMCJdIDwtbW95ZW5uZV9nbGlzc2FudGVfcGFzc2FnZXINCiAgDQp9DQoNCmBgYA0KDQo=</div>
 
 
 

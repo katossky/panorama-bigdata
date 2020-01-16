@@ -1,1 +1,0 @@
-[^1] "command line interface", "console", "command prompt", "terminal", "bash terminal" ... are common names for the direct interface with the computer, usually throug a black-and-white window authorizing only text requests (the commands) in a standardized low-level language (_bash_).

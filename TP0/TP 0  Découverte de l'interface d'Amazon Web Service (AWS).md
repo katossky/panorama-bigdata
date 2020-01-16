@@ -2,9 +2,9 @@
 
 ## Objectifs
 
-Ce TP à pour but de vous familiariser avec l'interface d'Amazon Web Service (AWS). Pendant ce TP vous allez :
+Ce TP a pour but de vous familiariser avec l'interface d'Amazon Web Service (AWS). Pendant ce TP vous allez :
 
-- Vous créer une compte AWS educate
+- Créer une compte AWS educate
 
 - Créer une clef SSH qui assurera la sécurité de vos connexions en ligne de commande à vos machine virtuelle
 
@@ -14,7 +14,7 @@ Ce TP à pour but de vous familiariser avec l'interface d'Amazon Web Service (AW
 - Vous connecter à votre cluster et exécuter des commandes basiques
 - Eteindre votre cluster
 
-Le cluster que vous allez créer pendant le TP sera cloner dans le prochain TP.
+Le cluster que vous allez créer pendant le TP pourra être cloner dans les prochains TP.
 
 ## Créer son compte AWS educate
 
@@ -50,11 +50,11 @@ Le cluster que vous allez créer pendant le TP sera cloner dans le prochain TP.
 
 ## Copier des données dans votre espace de stockage dans Amazon Simple Storage Service
 
-**Amazon Simple Storage Service** (S3) est la solution de base que propose AWS pour stocker vos données de manière pérenne (la durabilité affiché de vos données est de 99,999999999 %, cela signifie que si vous stockez 10 000 000 objets avec Amazon S3, vous  pouvez vous attendre à perdre en moyenne un objet unique une fois tous  les 10 000 ans), tout en assurant un accès à vos données pour un moindre coût (0,023 USD par Go s vous avez moins que 50To).
+**Amazon Simple Storage Service** (S3) est la solution de base que propose AWS pour stocker vos données de manière pérenne (la durabilité affiché de vos données est de 99,999999999 %, cela signifie que si vous stockez 10 000 000 objets avec Amazon S3, vous  pouvez vous attendre à perdre en moyenne un objet unique une fois tous  les 10 000 ans *source amazon*), tout en assurant un accès à vos données pour un moindre coût (0,023 USD par Go s vous avez moins que 50To).
 
-Tous les services que vous propose AWS sont nativement fait pour lire et écrire dans S3. Ainsi, si vous traitez des données avec AWS il est conseillez de les importez dans S3 à un moment donné. Il est à noter qu'il est gratuit de déposer des données sur S3, le stockage dans le temps ainsi que le téléchargement sont quant à eux couteux.
+Tous les services que vous propose AWS sont nativement fait pour lire et écrire dans S3. Ainsi, si vous traitez des données avec AWS il est conseillez de les importer dans S3 à un moment donné. Néanmoins, il vous faudra par moment gérer des autorisations pour pouvoir accéder à vos fichiers. Il est à noter qu'il est gratuit de déposer des données sur S3, le stockage dans le temps ainsi que le téléchargement sont quant à eux couteux.
 
-- [ ] 2 : Copier des données dans S3
+- [ ] 2 : Copiez des données dans S3
 
   - [ ] 2-1 : Connectez-vous à votre compte amazon AWS
   - [ ] 2-2 : Dans la barre de recherche, cherchez "S3" et cliquez dessus
@@ -68,8 +68,30 @@ Tous les services que vous propose AWS sont nativement fait pour lire et écrire
   - [ ] Créez un compartiment en lui donnant un nom unique
 
     ![](../img/s3/creer_compartiment.png)
-
-
+  
+  - [ ] Bouton "Charger"
+  
+  - [ ] Dans la fenêtre qui s'ouvre vous pouvez "cliquer glisser" le fichier de votre soit. De préférence un fichier csv quelconque.![](../img/s3/s3_charger.png)
+  
+  - [ ] Sur l'écran suivant vous allez pouvoir sélectionner les permissions liées à votre fichier. Qui y a accès, avec quels droits, et si vous voulez rendre votre fichier public. Par défaut, votre fichier est privé. Laissez les paramètres par défaut et cliquez sur suivant.
+  
+    ![](../img/s3/s3_permission.png)
+  
+    
+  
+  - [ ] Sur cet écran vous allez déterminer la classe de stockage. S3 en dispose de quelques une, chacune avec des cas d'utilisation différent. Par exemple le stockage "glacier" permet d'archiver des données pour un coût faible, mais vos données auront un délais d'accès et une facturation supplémentaire par accès. Restez sur le stockage "standard" qui reste la solution la plus économique pour un accès régulier aux données.
+    ![](../img/s3/s3_type.png)
+  
+  - [ ] Le dernier écran vous permet de vérifier vos saisies précédentes.
+    ![](../img/s3/s3_verification.png)
+  
+  - [ ] En bas de la page de votre compartiment apparaitre une barre de chargement
+    ![](../img/s3/s3_bar.png)
+  
+  - [ ] Une fois le chargement terminé cliquez sur votre fichier
+    ![](../img/s3/s3_fichier.png)
+  
+    - [ ] Dans l'onglet "sélectionner depuis" vous allez avoir accès à des outils de visualisation de vos données
 
 ## Créer un cluster Sparck avec EMR et s'y connecter
 
@@ -77,7 +99,7 @@ Je vous renvoie vers ce  [document](Créer un cluster Spark avec EMR (Elastic Ma
 
 
 
-## Eteindre votre cluster EMR
+## Eteindre un cluster EMR
 
 Le coût d'un cluster EMR est en fonction de son temps d'utilisation, et pas du travail qu'il accompli. Ainsi, une fois le travail effectué, vous devez éteindre votre cluster ! Sinon vous serais pour un temps d'inactivité. **Même si le coût horaire est bas, faire tourner un cluster pendant 1 semaine pour rien commence à représenter un coût (environ 150€)**
 

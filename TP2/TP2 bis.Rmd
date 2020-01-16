@@ -4,6 +4,9 @@ output: html_notebook
 ---
 
 # TP1 
+```{r}
+library(dplyr)
+```
 
 
 ## Récupération des données
@@ -29,7 +32,7 @@ dbExistsTable(con, "flight")
 
 On récupère les données
 ```{r}
-df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 10000")
+df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 100")
 ```
 
 
@@ -53,15 +56,50 @@ for (i in 1:nrow(df_flight)) {
 
 
 
-## Nombre de siège moyen sur 3 mois glissant
+## Nombre de siège moyen sur 7 jours glissants
 
 ```{r}
-df_mean = data.frame(year=integer(),
-                 month=integer(), 
-                 count=integer())
+df_moyenne_glissante_passager = data.frame(year=integer(),
+                 month=integer(),
+                 day=integer(),
+                 moyenne_5=integer(),
+                 moyenne_10=integer())
 
-df_flight <- df_flight %>% 
-                        group_by (year, month) %>%
-                        arrange( year, month) 
+
+# calcule de la somme du nombre de passagers par jour
+df_sum_passenger <- df_flight %>% 
+                        group_by (year, month, day) %>%
+                        summarise (total_passager = sum(passengers)) %>%
+                        arrange(year, month, day)
+
+# On commence au 5ième jour
+for (i in 5:nrow(df_sum_passenger)) {
+  nombre_passager_glissant <- 0
+  for(j in (i-4):i) {
+    flight <- df_sum_passenger[j,]
+    nombre_passager_glissant <- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager <- nombre_passager_glissant/5
+  new_row <- data.frame(year=df_sum_passenger[i,]$year,
+                 month=df_sum_passenger[i,]$month,
+                 day=df_sum_passenger[i,]$day,
+                 moyenne_5=moyenne_glissante_passager,
+                 moyenne_10=NA)
+ df_moyenne_glissante_passager <- df_moyenne_glissante_passager %>%rbind(new_row)
+}
+
+print(df_moyenne_glissante_passager)
+# On commence au 10ième jour
+for (i in 10:nrow(df_sum_passenger)) {
+  nombre_passager_glissant <- 0
+  for(j in (i-9):i) {
+    flight <- df_sum_passenger[j,]
+    nombre_passager_glissant <- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager <- nombre_passager_glissant/10
+ df_moyenne_glissante_passager[i-4,"moyenne_10"] <-moyenne_glissante_passager
+  
+}
+
 ```
 
