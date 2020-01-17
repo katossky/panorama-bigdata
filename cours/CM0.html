@@ -46,7 +46,7 @@ CC-BY-SA
 .pull-left[
 - mid 1960 - mid-1990 : Fat client era.
   - Developement of micro-computing, personnal computers become cheaper and cheaper
-  - Instead of one mainframe for data and computing, one server is for the data, and computing are executed on personnal computer (**fat client**)
+  - Instead of one mainframe for data and computing, one server is for the data, and computation are executed on personnal computer (**fat client**)
   - Fat client are autonomous of each other. They need the data server only to download the data
 
   ]
@@ -67,7 +67,7 @@ CC-BY-SA
   - Personnal computer for daily tasks (mail, office etc)
   - Server for computation
 
-Note : You can go on step further, like at Ensai, and put everithing in the server
+Note : You can go on step further, like at Ensai, and put everything in the server
 
   ]
 
@@ -90,6 +90,7 @@ Note : You can go on step further, like at Ensai, and put everithing in the serv
 Wikipedia : Cloud computing  is **Internet-based  computing**,  whereby **shared resources, software, and informationare** provided to computers and  other devices **on demand**, like the electricity  grid. Cloud computing  is a style of computing  in **which dynamically  scalable** and  often **virtualized  resources** are provided  as a **service** over the Internet.
 
 --
+
 In a nutshell :
 - shared physical ressources (mutalization of cost) in remote location
 - Access via the Internet
@@ -98,19 +99,16 @@ In a nutshell :
 ---
 ## Why cloud computing ?
 
-The world is changing faster than ever
+- The world is changing faster than ever
 
 --
-
-Need quick reponse to new problem
-
---
-
-Building a new datacenter, buying new servers or create new architectures take too much time ! 
+- Need quick reponse to new problem
 
 --
+- Building a new datacenter, buying new servers or create new architectures take too much time ! 
 
-The on demande nature of cloud computing make possible to create new service in no time
+--
+- The on demand nature of cloud computing make possible to create new services in no time
 
 ---
 ## Why cloud computing
@@ -118,6 +116,7 @@ The on demande nature of cloud computing make possible to create new service in 
 - Less investment : don't have to buy anything, just pay for what you use
 - Easy scalable : "just" pay for more ressources
 - Flexible : create and delete ressource in no time
+- No maintenance cost : it's the resposability of your cloud provider
 - Reliable : it's the resposability of your cloud provider
 - Innovation : new ressources are accessible in no time, and you pay for what you use.
 
@@ -126,38 +125,56 @@ The on demande nature of cloud computing make possible to create new service in 
 
 For example you want to have somewhere to sleep. You can
 
-- Buy a site to build your house. But you have to keep everything in good condition all by yourself. Your investement is important, and before your house is built you can't sleep in your house.
+--
+
+- Buy a site to build your house.
+
+  -&gt; But you have to keep everything in good condition all by yourself. Your investement is important, and before your house is built you can't sleep in your house.
 
 --
-- Rent a site to build a house. Your landlord keep in good condition the site and you your home. Your investemet is lowqer but you still have to wait for your house.
+- Rent a site to build a house. 
+
+  -&gt; Your landlord keep in good condition the site and you your home. Your investemet is lower but you still have to wait for your house.
 
 --
-- Rent an already built empty house. Your landlord keep in good condition everything. You still have to buy a bed.
+- Rent an already built empty house. 
+
+  -&gt; Your landlord keep in good condition everything. You still have to buy a bed.
 
 --
 - Go to the hotel.
+
+  -&gt; You do not have to do anything BUT you control nothing
 
 ---
 ## Different services
 
 For example you want to have somewhere to sleep. You can
 
-- Buy a site to build your house : 
+- Buy a site to build your house **In house datacenter**.
+
+High investement, but you have full control on your infrastructure.
 
 --
-- Rent a site to build a house. **Infrastrucre as a Service**. You pay for an infrastructure but you have to build up your own IT system. You have a full controll on what you do with your ressource
+- Rent a site to build a house. **Infrastrucre as a Service**. 
+
+You pay for an infrastructure but you have to build up your own IT system. You have a full controll on what you do with your ressources.
 
 --
-- Rent an already built empty house. **Platform as a Service**. You pay for an already installed platform, do not care about any lower level resource management and develop you own IT system on it
+- Rent an already built empty house. **Platform as a Service**. 
+
+You pay for an already installed platform, you do not manage any lower level resource management and can develop you own IT system on it
 
 --
-- Go to the hotel. **Software as a Servce**. You directly use some existed IT solution.
+- Go to the hotel. **Software as a Servce**. 
+
+You directly use some existed IT solution. Little control on the software.
 
 ---
 ## Infrastrucre as a Service, IaaS
 
 - Provide to the consumer
-  - Processing
+  - Processing capacity
   - Storage
   - Network
   - and other fundamental computing ressources
@@ -168,18 +185,13 @@ For example you want to have somewhere to sleep. You can
 
 
 ---
-## Create an EC2 instance
-
----
 ## Platform as a Service, IaaS
 
-- Provide to the consumer already configure infrascture to deploy it's own application
+- Provide to the consumer already configured infrascture to deploy it's own application
 - The consumer do not manage physical infrastructure neither has control over the provided ressources
 - The consumer control the deployed application
 
 - Exemples : Amazon Relational Database Service, Amazon Elastic Map Reduce
-
-
 ---
 ## Software as a Service, SaaS
  
@@ -190,9 +202,7 @@ For example you want to have somewhere to sleep. You can
 - Exemples : all the Google Apps
 
 ---
-## Some exemples of cloud computing
-
-New York Times
+## Some exemples of cloud computing : New York Times
 
 - The need
   - conversion from TIFF to pdf of all articles from 1851 to 1922
@@ -201,7 +211,7 @@ New York Times
 --
 - The realization
   - Run around 100 EC2 instances to create an Hadoop cluster for 24h (estimate cost 800$)
-  - Realize they make a mistake
+  - Realize they made a mistake
   - Rerun the cluster with the fix for 24h (estimate cost 800$)
 
 --
@@ -209,7 +219,7 @@ New York Times
   - Convert to pdf 70 years of newspapers for less than 2000$ !
 
 ---
-## Some exemples of cloud computing
+## Some exemples of cloud computing : Animoto
 
 Animoto is a cloud-based video creation service (Saas)
 
@@ -237,8 +247,11 @@ Cannot be done with on site datacenter
 ---
 ## Cloud and ecology
 
-- It's not because you don't own the server that the server does not pollute
-- Hard
+- It's not because you don't own the server that the server does not pollute.
+- The internet consume about 2% of the worldwide electricity.
+- Theoretically, with the mutualization of ressource cloud computing could be greenner than in site datacenter
+- But, because cloud computing become cheaper, more people use it, and are less carful with the cost. So more servers are running, maybe over dimensionned one, and cloud computing can me more polluting than old school datacente.
+- No real evidence of that.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
