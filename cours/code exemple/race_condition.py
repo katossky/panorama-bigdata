@@ -1,12 +1,16 @@
 import threading
 
 def taskofThread():
+
    for _ in range(500000):
+
       increment_global()
 
+
 def increment_global():
+
    global x
-   x = x +  1
+   x += 1
 
 def main():
     global x

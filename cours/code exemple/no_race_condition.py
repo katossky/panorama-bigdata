@@ -1,18 +1,16 @@
 import threading
 
-x = 0
+def taskofThread(lock):
+
+   for _ in range(50000):
+      lock.acquire() # NEW!
+      increment_global()
+      lock.release() # NEW!
 
 def increment_global():
 
    global x
    x += 1
-
-def taskofThread(lock):
-
-   for _ in range(50000):
-      lock.acquire()
-      increment_global()
-      lock.release()
 
 def main():
    global x
