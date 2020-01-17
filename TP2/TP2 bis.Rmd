@@ -32,7 +32,7 @@ dbExistsTable(con, "flight")
 
 On récupère les données
 ```{r}
-df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 100")
+df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 100000")
 ```
 
 
@@ -56,7 +56,7 @@ for (i in 1:nrow(df_flight)) {
 
 
 
-## Nombre de siège moyen sur 7 jours glissants
+## Nombre de siège moyen sur 5 et 10 jours glissants
 
 ```{r}
 df_moyenne_glissante_passager = data.frame(year=integer(),
@@ -88,7 +88,6 @@ for (i in 5:nrow(df_sum_passenger)) {
  df_moyenne_glissante_passager <- df_moyenne_glissante_passager %>%rbind(new_row)
 }
 
-print(df_moyenne_glissante_passager)
 # On commence au 10ième jour
 for (i in 10:nrow(df_sum_passenger)) {
   nombre_passager_glissant <- 0
@@ -102,4 +101,46 @@ for (i in 10:nrow(df_sum_passenger)) {
 }
 
 ```
+
+## Regression linéaire glissante
+
+
+```{r}
+betas <- c()
+df_flight <- df_flight %>% arrange(year, month, day)
+
+for (i in 1000:nrow(df_flight)) {
+ X <-  df_flight[(i-999):i,] %>%
+      select(seats, passengers, freight, mail, distance) %>%
+      data.matrix()
+X <- cbind(matrix(1, nrow = 1000, ncol = 1), X)
+Y <- matrix(df_flight[(i-999):i,]$payload, nrow = 1000, ncol = 1)
+
+betas <- c(betas,solve(t(X)%*% X) %*% t(X) %*% Y)
+  
+}
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

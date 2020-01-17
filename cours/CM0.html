@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>CM0.utf8</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arthur Katossky &amp; Rémi Pépin" />
+    <link href="CM0_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css\presentation.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+# Large-scale machine-learning
+
+ENSAI 2019-2020 
+Arthur Katossky &amp; Rémi Pépin 
+CC-BY-SA 
+
+???
+
+---
+
+## A quick history of IT hardware in enterprise
+
+.pull-left[
+- 1940 - mid 1960 : Mainframe era
+  - Commercial, scientific, and large-scale computing only.
+  - Only big enterprise can buy mainframes.
+  - No direct user interaction (scren, keyboard), but card punches
+  - Data and computing are centralised
+  ]
+
+.pull-right[![](http://www.rhod.fr/images_dossiers/wargames/wargames03.jpg)
+*WarGames, John Badham, 1983*
+]
+
+---
+
+
+## A quick history of IT hardware in enterprise
+
+.pull-left[
+- mid 1960 - mid-1990 : Fat client era.
+  - Developement of micro-computing, personnal computers become cheaper and cheaper
+  - Instead of one mainframe for data and computing, one server is for the data, and computing are executed on personnal computer (**fat client**)
+  - Fat client are autonomous of each other. They need the data server only to download the data
+
+  ]
+
+.pull-right[&lt;img src="https://starecat.com/content/wp-content/uploads/check-out-this-bad-boy-computer-what-are-you-gonna-use-it-for-games-and-stuff-chandler-friends.jpg" style="zoom:33%;" /&gt;
+*Friends, S2 E8*
+
+]
+---
+
+## A quick history of IT hardware in enterprise
+
+.pull-left[
+- mid-1990 - 2010 : In-house datacenter era.
+  - mid 1990 : democratization of the Internet
+  - Communication speed increase quickly
+  - Centralisation of data and computing in data datacenter.
+  - Personnal computer for daily tasks (mail, office etc)
+  - Server for computation
+
+Note : You can go on step further, like at Ensai, and put everithing in the server
+
+  ]
+
+.pull-right[
+]
+
+---
+## A quick history of IT hardware in enterprise
+.pull-left[
+- 2010 - ? : cloud computing era.
+
+  ]
+
+.pull-right[
+]
+
+---
+## Cloud computing definition
+
+Wikipedia : Cloud computing  is **Internet-based  computing**,  whereby **shared resources, software, and informationare** provided to computers and  other devices **on demand**, like the electricity  grid. Cloud computing  is a style of computing  in **which dynamically  scalable** and  often **virtualized  resources** are provided  as a **service** over the Internet.
+
+--
+In a nutshell :
+- shared physical ressources (mutalization of cost) in remote location
+- Access via the Internet
+- On demand scalable services
+
+---
+## Why cloud computing ?
+
+The world is changing faster than ever
+
+--
+
+Need quick reponse to new problem
+
+--
+
+Building a new datacenter, buying new servers or create new architectures take too much time ! 
+
+--
+
+The on demande nature of cloud computing make possible to create new service in no time
+
+---
+## Why cloud computing
+
+- Less investment : don't have to buy anything, just pay for what you use
+- Easy scalable : "just" pay for more ressources
+- Flexible : create and delete ressource in no time
+- Reliable : it's the resposability of your cloud provider
+- Innovation : new ressources are accessible in no time, and you pay for what you use.
+
+---
+## Different services
+
+For example you want to have somewhere to sleep. You can
+
+- Buy a site to build your house. But you have to keep everything in good condition all by yourself. Your investement is important, and before your house is built you can't sleep in your house.
+
+--
+- Rent a site to build a house. Your landlord keep in good condition the site and you your home. Your investemet is lowqer but you still have to wait for your house.
+
+--
+- Rent an already built empty house. Your landlord keep in good condition everything. You still have to buy a bed.
+
+--
+- Go to the hotel.
+
+---
+## Different services
+
+For example you want to have somewhere to sleep. You can
+
+- Buy a site to build your house : 
+
+--
+- Rent a site to build a house. **Infrastrucre as a Service**. You pay for an infrastructure but you have to build up your own IT system. You have a full controll on what you do with your ressource
+
+--
+- Rent an already built empty house. **Platform as a Service**. You pay for an already installed platform, do not care about any lower level resource management and develop you own IT system on it
+
+--
+- Go to the hotel. **Software as a Servce**. You directly use some existed IT solution.
+
+---
+## Infrastrucre as a Service, IaaS
+
+- Provide to the consumer
+  - Processing
+  - Storage
+  - Network
+  - and other fundamental computing ressources
+- The consumer do not manage physical infrastructure but has control over the provided ressources
+
+- Exemples : Amazon Elastic Compute Cloud
+
+
+
+---
+## Create an EC2 instance
+
+---
+## Platform as a Service, IaaS
+
+- Provide to the consumer already configure infrascture to deploy it's own application
+- The consumer do not manage physical infrastructure neither has control over the provided ressources
+- The consumer control the deployed application
+
+- Exemples : Amazon Relational Database Service, Amazon Elastic Map Reduce
+
+
+---
+## Software as a Service, SaaS
+ 
+
+- Provide to the consumer the capability to use a running application manage by the cloud provider
+- The consumer do not control anything, excepte some user-specific settings
+
+- Exemples : all the Google Apps
+
+---
+## Some exemples of cloud computing
+
+New York Times
+
+- The need
+  - conversion from TIFF to pdf of all articles from 1851 to 1922
+  - 4TB of input (405,000 very large TIFF images, 3.3 million articles in SGML and 405,000 xml files mapping articles to rectangular regions in the TIFF’s)
+
+--
+- The realization
+  - Run around 100 EC2 instances to create an Hadoop cluster for 24h (estimate cost 800$)
+  - Realize they make a mistake
+  - Rerun the cluster with the fix for 24h (estimate cost 800$)
+
+--
+- Conclusion
+  - Convert to pdf 70 years of newspapers for less than 2000$ !
+
+---
+## Some exemples of cloud computing
+
+Animoto is a cloud-based video creation service (Saas)
+
+- Start-up without any physical server
+- Rents servers (IaaS) to deploy its application
+- Starts with 40 servers
+- Scales up from 40 to 5000 servers in 4 days to meet the growing number of subscriber !
+
+--
+Cannot be done with on site datacenter
+
+---
+## Some cloud providers
+
+- Amazon web service
+- Google cloud plateform
+- Microsoft azure
+- OVHcloud
+
+---
+## Cloud and ecology
+
+&lt;img src="https://pbs.twimg.com/media/CbeMAqaUAAEFWZU.png" style="zoom:50%;" /&gt;
+
+---
+## Cloud and ecology
+
+- It's not because you don't own the server that the server does not pollute
+- Hard
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"scroll": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
