@@ -34,15 +34,20 @@ In practice:
 knitr::opts_chunk$set(echo = FALSE)
 
 # TO DO:
-# [ ] The principles of IaaS
-#   [ ] Storage
-#   [ ] Virtual machines
-#   [ ] Other services
-# [ ] The principles of PaaS
+# [X] The principles of IaaS
+#   [X] Storage
+#   [X] Virtual machines
+#   [X] Other services
+# [X] The principles of PaaS
+#   [ ] Detailed services
+#   [ ] Comparison between providers
 # [ ] Add non-AWS exemples
 # [ ] Add outline for the course
-# [ ] Add something about duplication and data decay
+# [ ] Add something about data duplication and data decay
 # [ ] More about encryption
+# [ ] Add something about physical situation of clusters (why do you have to always chose a zone?)
+# [ ] Cloud vs. on=premices
+# [ ] Hybrid cloud
 ```
 
 # Large-scale machine-learning
@@ -340,7 +345,7 @@ Prices are given monthly.
 ---
 ## Normal storage
 
-Non "normal" storage includes:
+Other forms of storage, beyonf "normal" storage, include:
 
 - disks that can be "attached" to a virtual machine (faster, but more expensive)
 - storage whose physical location adapts to usage
@@ -350,9 +355,95 @@ Non "normal" storage includes:
 ---
 ## Virtual machines
 
+The other component of a typical IaaS environement are **virtual machines** (VMs).
 
+A VM is made of a combination of components:
+- memory
+- processing units
+- local storage (hard disk)
+- an operating system (FR: système d'exploitation), typically Linux
 
-solutions for day-to-day access
-2. virtual machines equipped with little storage but with custom memory & computing power
-3. processing units equipped with memory
-3. 
+The VM is... **virtual** which does **not** mean that there is no physical memory, physical processing units or physical storage, but rather that your virtual computer has rights over pooled ressources situated on neighbooring servers of the same cluster.
+
+VMs come in a fixed (but high) number of pre-configured options. Some providers offer tailored configuration, but they are usually more expensive that the closest pre-configured option.
+
+???
+
+Imagine that on cluster C, on rack R, on server S, there is in total 124 CPUs, 14 GPUs, 200Go of memory and 10 To of storage. If the configuration you request for your virutal machine V fits on S, then V will get access to the physical resources there. If V does not fit on V, the orchestrator of the cluster will try to fit in on machine S' in the same rack. Then on an other rack. If it can't find a room, it will maybe try to fit a part of the configuration (say memory and processing units) on S and the rest (local storage) on S'.
+
+---
+## Virtual machines
+
+Virtual machines (VMs) come with little pre-configured software, and _you_ are the one to perform all the rest of the configuration. You may use such machines to 
+
+VMs **may be launched and stopped for specific tasks**. Staticians are typically concerned by this king of virtual machines, for instance for training one model, for exploring one large dataset, for using software that need specific configuration, etc. **VMs may be launched and stopped programatically.**
+
+VMs, on the other hand, **may also be used continuously**. Think of a mail server, a live trafic visualisation, a back-end for a web-service, etc. Statisticians are less often concerned with this kind of usage.
+
+**BEWARE!** Holding the pysical resource and doing nothing with it comes at a cost for the provider. Thus, **you will pay for a VM even you do not use it.** It is a good reflex to shut down all your VMs before quitting a session.
+
+---
+## Virtual machines
+
+|----------|------------------|-------------|-----------|------------|
+| Provider | Service's  name  | Processing* |  Memory** | Storage*** |
+|----------|------------------|-------------|-----------|------------|
+| Google   | Compute Engine   |    ~0,03 \$ | ~0,004 \$ |   ~0,04 \$ |
+| Amazon   | EC2              |    ~0,05 \$ | ~0,005 \$ |          ? |
+| Azure    | Virtual Machines |    ~0.05 \$ | ~0.005 \$ |   ~0.00 \$ |
+| OVH      | Public Cloud     |    ~0,04  € | ~0,002  € |   ~0,00  € |
+|----------|------------------|-------------|-----------|------------|
+
+* (Average) cost per processor (CPU or GPU) per hour
+** (Average) cost per Go (CPU or GPU) per hour
+*** (Average) cost per Go per month
+
+.footnote[**Sources:** GCP, Iowa cluster (links [for processing and memory](https://cloud.google.com/compute/vm-instance-pricing) and [for storage](https://cloud.google.com/compute/disks-image-pricing)) ; AWS, London cluster, own calculation ([link](https://aws.amazon.com/ec2/pricing/on-demand/)) ; Azure, France South cluster ([link](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/)) ; OVH, Gravelines vluster, own calculation ([link](https://www.ovhcloud.com/fr/public-cloud/prices/)) ; all visited on 2020/01/18.]
+
+???
+
+Comparison Azure vs. AWS by Microsoft:
+https://docs.microsoft.com/fr-fr/azure/architecture/aws-professional/
+
+Comparison GCP vs. AWS by Google:
+https://cloud.google.com/docs/compare/aws/
+
+---
+## Virtual machines
+
+Depending on the providers, you may have extra features such as:
+
+- preenptible machines / spot instances (for tasks you don't need to run at a specific moment, you can get much cheaper machines that can be stopped at any time, and relaunched later)
+- redundancy (you get exact copies of a given VM) ; this may be useful to scale a process such as a web server
+- specialised VMs such as high CPU-to-memory ratio (e.g. for batch processing) or on the contrary high memory-to-CPU ratio (e.g. for in memory computation) or tailored configurations
+
+---
+## Infrastructure as a service: billing
+
+**BEWARE!** **All what you book is billed, even what you end up not using!** If there is something you do not use, _you_ have to shut it down. It is good practice to start small, and scale up when you need.
+
+Also, in order for customers to mind their architectural choices, **most provider will bill communication between you virtual machines and your storage spaces** — unless sometimes if they are situated in precisely the same cluster.
+
+---
+## Other services
+
+There are other services of pure infrastructure that the cloud providers offer, but that you won't have to worry about as a statistician:
+
+- network
+- security
+- orchestration
+
+---
+# Platform as a service
+
+Besides storage and VMs, you will probably get to use services, without having to install and configure yourself a computer from the bottom up. This is **platform as a service** (**PaaS**).
+
+As a statician, services you may come to use are:
+
+- databases
+- data analytics
+- machine-learning
+- serverless computing
+
+Pros: scale automatically, less maintenance
+Cons: less configurable, possibly more expensive
