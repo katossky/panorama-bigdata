@@ -24,6 +24,8 @@ pacman::p_load(dplyr, ggplot2)
 # [ ] better graphic style
 # [ ] add colors
 # [ ] add interactivity for text input (add it live to the presentation)
+# [ ] introduce the distinction between big N and big K
+# [ ] add this course's outline / summary
 ```
 
 # Large-scale machine-learning
