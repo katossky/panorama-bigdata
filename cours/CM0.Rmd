@@ -8,9 +8,41 @@ output:
       scroll: false
 ---
 
+<!-- Cours 1h30
+
+Cloud computing principles:
+> infrastructure as a service
+> platform as a service
+> software as a service
+
+Cloud computing ecosystem: Azure, AWS, GCP...
+
+Interface & principles
+- organisation: storage space, VMs, PaaS (elastic map reduce), SaaS (SageMaker)
+- services not used: security, DNS servers, etc.
+- tarification
+
+In practice:
+- security issues (ssh etc.)
+- setting up a storage space
+- setting up a virtual machine
+- setting up a cluster
+
+-->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+# TO DO:
+# [ ] The principles of IaaS
+#   [ ] Storage
+#   [ ] Virtual machines
+#   [ ] Other services
+# [ ] The principles of PaaS
+# [ ] Add non-AWS exemples
+# [ ] Add outline for the course
+# [ ] Add something about duplication and data decay
+# [ ] More about encryption
 ```
 
 # Large-scale machine-learning
@@ -253,4 +285,74 @@ Cannot be done with on site datacenter
 - No real evidence of that.
 
 
+---
+# Principles of IaaS
 
+---
+## Principles of IaaS
+
+When it comes to infrastructure as a service, all cloud-providers basically share the same two basal products:
+
+1. normal storage
+2. virtual machines
+
+---
+## Normal storage
+
+This is the place where you put all of your files, be they programs, data or else.
+
+You create as many "buckets" as you wish, where a "bucket" is a unit of storage.
+
+"Normal", in "normal storage" means:
+- slower access than directly from the virtual machine
+- faster than recovery storage
+
+On the other hand, the provider takes charge of preventing potential corruption of your data, by keeping usually 3 distinct copies of your data, in different racks situated in different rooms or even locations.
+
+Each resource you store in such a way gets a unique URL, that you can refer to from inside the cloud-provider ecosystem (for instance, from a virtual machine) or, if you allow it, from the outside world. You can control who and how people get access to these resources.
+
+Data is usually encrypted server-side (meaning that stealing physically disks from a Google server is useless) but by default, the provider stores the encryption key themselves somewhere.
+
+???
+
+(Of course you may want to use database services instead, but let's forget about that for now.)
+
+---
+## Normal storage
+
+Storage solutions have different names, but similar pricing schemes:
+
+|----------|-----------------|------------|----------------------|-----------|
+| Provider | Service's  name |      Store |                Write |     Read* |
+|----------|-----------------|------------|----------------------|-----------|
+| Google   | Cloud Storage   | 0,03 \$/Go |                 free |      free |
+| Amazon   | S3              | 0,02 \$/Go |                 free |   0,09 \$ |
+| Azure    | Blob Storage    | 0,02 \$/Go | 0,00 \$ / 10 000 op. | 0.02 \$ / 10 000 op. |
+| OVH      | Object Storage  | 0,01  €/Go |                 free |    0,01 € |
+|----------|-----------------|------------|----------------------|-----------|
+
+Prices are given monthly.
+
+* Local reads are made locally inside _one_ provider's cluster. For instance, you may be charge extra for an external reader, or for reading data from a cluster situated in an other place (ex: reading data sotred in Europe from a virtual machine located in Australia).
+
+**Sources:** GCP ([link](https://cloud.google.com/storage/pricing)), AWS ([link](https://aws.amazon.com/fr/s3/pricing)), Windows ([link](https://azure.microsoft.com/en-us/pricing/details/storage/blobs))OVH ([link](https://www.ovhcloud.com/fr/public-cloud/prices)), visited on 2020/01/18.
+
+---
+## Normal storage
+
+Non "normal" storage includes:
+
+- disks that can be "attached" to a virtual machine (faster, but more expensive)
+- storage whose physical location adapts to usage
+- so-called "cold" storage for unfrequently-accessed storage (less expensive, but you pay reads and writes more)
+- archive solution (inexpensive, but takes min. to hours for access)
+
+---
+## Virtual machines
+
+
+
+solutions for day-to-day access
+2. virtual machines equipped with little storage but with custom memory & computing power
+3. processing units equipped with memory
+3. 
