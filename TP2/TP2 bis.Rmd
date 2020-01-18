@@ -1,0 +1,146 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# TP1 
+```{r}
+library(dplyr)
+```
+
+
+## Récupération des données
+```{r}
+# install.packages("RPostgreSQL")
+require("RPostgreSQL")
+ 
+# create a connection
+pw <- "YojCqLr3Cnlw6onuzHU3"
+ 
+# loads the PostgreSQL driver
+drv <- dbDriver("PostgreSQL")
+# creates a connection to the postgres database
+# note that "con" will be used later in each connection to the database
+con <- dbConnect(drv, dbname = "postgres",
+                 host = "database-1.c5bqsgv9tnea.eu-west-3.rds.amazonaws.com", port = 5432,
+                 user = "postgres", password = pw)
+rm(pw) # removes the password
+
+dbExistsTable(con, "flight")
+```
+
+
+On récupère les données
+```{r}
+df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 100000")
+```
+
+
+## Calcul du nombre de vols par mois
+
+```{r}
+df_count = data.frame(year=integer(),
+                 month=integer(), 
+                 count=integer())
+
+for (i in 1:nrow(df_flight)) {
+  flight <- df_flight[i,]
+  if(flight$month  %in% filter(df_count, year == flight$year)$month) {
+      df_count$count[df_count$year==flight$year & df_count$month==flight$month ] = df_count$count[df_count$year==flight$year & df_count$month==flight$month ] +1
+    }else {
+       df_count[nrow(df_count) + 1,]= c(flight$year,flight$month, 1)
+    }
+}
+```
+
+
+
+
+## Nombre de siège moyen sur 5 et 10 jours glissants
+
+```{r}
+df_moyenne_glissante_passager = data.frame(year=integer(),
+                 month=integer(),
+                 day=integer(),
+                 moyenne_5=integer(),
+                 moyenne_10=integer())
+
+
+# calcule de la somme du nombre de passagers par jour
+df_sum_passenger <- df_flight %>% 
+                        group_by (year, month, day) %>%
+                        summarise (total_passager = sum(passengers)) %>%
+                        arrange(year, month, day)
+
+# On commence au 5ième jour
+for (i in 5:nrow(df_sum_passenger)) {
+  nombre_passager_glissant <- 0
+  for(j in (i-4):i) {
+    flight <- df_sum_passenger[j,]
+    nombre_passager_glissant <- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager <- nombre_passager_glissant/5
+  new_row <- data.frame(year=df_sum_passenger[i,]$year,
+                 month=df_sum_passenger[i,]$month,
+                 day=df_sum_passenger[i,]$day,
+                 moyenne_5=moyenne_glissante_passager,
+                 moyenne_10=NA)
+ df_moyenne_glissante_passager <- df_moyenne_glissante_passager %>%rbind(new_row)
+}
+
+# On commence au 10ième jour
+for (i in 10:nrow(df_sum_passenger)) {
+  nombre_passager_glissant <- 0
+  for(j in (i-9):i) {
+    flight <- df_sum_passenger[j,]
+    nombre_passager_glissant <- nombre_passager_glissant + flight$total_passager
+  }
+  moyenne_glissante_passager <- nombre_passager_glissant/10
+ df_moyenne_glissante_passager[i-4,"moyenne_10"] <-moyenne_glissante_passager
+  
+}
+
+```
+
+## Regression linéaire glissante
+
+
+```{r}
+betas <- c()
+df_flight <- df_flight %>% arrange(year, month, day)
+
+for (i in 1000:nrow(df_flight)) {
+ X <-  df_flight[(i-999):i,] %>%
+      select(seats, passengers, freight, mail, distance) %>%
+      data.matrix()
+X <- cbind(matrix(1, nrow = 1000, ncol = 1), X)
+Y <- matrix(df_flight[(i-999):i,]$payload, nrow = 1000, ncol = 1)
+
+betas <- c(betas,solve(t(X)%*% X) %*% t(X) %*% Y)
+  
+}
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

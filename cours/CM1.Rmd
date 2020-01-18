@@ -234,7 +234,7 @@ tibble(
 ) %>%
   ggplot() +
   geom_line(aes(x=year,y=lines*columns, group="measurement")) +
-  scale_y_log10(name=NULL, breaks=breaks,labels =scales:::label_number()) +
+  scale_y_log10(name=NULL, breaks=breaks) + # ,labels =scales::label_number()
   scale_x_continuous(name=NULL, breaks=1999:2010, minor_breaks = NULL) +
   expand_limits(y=1000000) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
