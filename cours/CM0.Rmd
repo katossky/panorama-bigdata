@@ -42,6 +42,8 @@ knitr::opts_chunk$set(echo = FALSE)
 #   [ ] Detailed services
 #   [ ] Comparison between providers
 # [ ] Add non-AWS exemples
+# [X] Add something about data grids
+#   [ ] Read: http://www.ianfoster.org/wordpress/wp-content/uploads/2014/01/History-of-the-Grid-numbered.pdf
 # [ ] Add outline for the course
 # [ ] Add something about data duplication and data decay
 # [ ] More about encryption
@@ -107,8 +109,32 @@ Note : You can go on step further, like at Ensai, and put everything in the serv
 
   ]
 
-.pull-right[
-]
+.pull-left[
+- mid-1990 - 2010 : In-house datacenter era.
+  - mid 1990 : democratization of the Internet
+  - Communication speed increase quickly
+  - Centralisation of data and computing in data datacenter.
+  - Personnal computer for daily tasks (mail, office etc)
+  - Server for computation
+
+Note : You can go on step further, like at Ensai, and put everything in the server
+
+  ]
+
+---
+
+## A quick history of IT hardware in enterprise
+
+.pull-left[
+- mid-1990 - 2010 : Grid Computing
+  - what enteprise could afford, could not be done by scientists
+  - idea: using idle machines and make them work together on bigger tasks (**CPU scavenging**)
+  - parallel ideas could now be applied _between_ computers
+  - on last Saturday (2020-01--18) the best grid's 495 820 computers was computing on average at the rate 30 petaflops (BOINC, Berkeley, [link](https://boinc.berkeley.edu)), same as the 5th fastest supercomputer
+  - for comparison the fastest super computer today (Summit, IBM, [link](https://www.olcf.ornl.gov/olcf-resources/compute-systems/summit)) delivers ~200 petaflops
+
+**Source:** Top 500, the List ([link](https://www.top500.org/lists/2019/11))
+  ]
 
 ---
 ## A quick history of IT hardware in enterprise
