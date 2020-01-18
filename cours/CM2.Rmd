@@ -194,7 +194,7 @@ If the problem has a share `p` that can be parallelised, you won't be able to sp
 
 ## Amdahl's Law
 
-!()[img/amdahls-law.png]
+.height500[![](img/amdahls-law.png)]
 
 ---
 
@@ -289,6 +289,7 @@ Go to code
 
 ## Race condition
 
+.small[
 ```{python, eval=F}
 import threading
 
@@ -297,27 +298,23 @@ def taskofThread():
       increment_global()
 
 def increment_global():
-   global x
-   x = x +  1
+   global x ; x = x +  1
 
 def main():
-    global x
-    x = 0
+    global x ; x = 0
 
     t1 = threading.Thread(target= taskofThread)
     t2 = threading.Thread(target= taskofThread)
 
-    t1.start()
-    t2.start()
-
-    t1.join()
-    t2.join()
+    t1.start() ; t2.start()
+    t1.join()  ; t2.join()
 
 if __name__ == "__main__":
     for i in range(10):
         main()
         print("x = {1} after Iteration {0}".format(i,x))
 ```
+]
 
 ---
 
@@ -369,7 +366,7 @@ Multiple execution cases :
 
 --
 
-Threads can overide theirs results each other !
+<br/>Threads can overide theirs results each other !
 
 ---
 ## Race condition solution (1/4)
@@ -392,40 +389,35 @@ The solution is to lock ressources. When a thread acces a ressource no other thr
 
 ## Race condition solution (2/4)
 
+.small[
 ```{python, eval=F}
 import threading
 
 def taskofThread(lock):
-
    for _ in range(50000):
       lock.acquire() # <------- NEW!
       increment_global()
       lock.release() # <------- NEW!
 
 def increment_global():
-
-   global x
-   x += 1
+   global x ; x += 1
 
 def main():
-   global x
-   x = 0
+   global x ; x = 0
 
    lock = threading.Lock()
    t1 = threading.Thread(target = taskofThread, args = (lock,))
    t2 = threading.Thread(target = taskofThread, args = (lock,))
 
-   t1.start()
-   t2.start()
-
-   t1.join()
-   t2.join()
+   t1.start() ; t2.start()
+   t1.join()  ; t2.join()
 
 if __name__ == "__main__":
    for i in range(10):
       main()
       print("x = {1} after Iteration {0}".format(i,x))
 ```
+]
 
 ---
 
@@ -588,11 +580,10 @@ Typically `if` operations won't perform well on GPUs because of this, whereas ma
 
 **Exemple**
 
-```{r, cache=TRUE}
+.small[
+```{r gpu, eval=F}
 library(gpuR)
 library(tictoc)
-
-detectGPUs() # 1
 
 for(i in seq(1:5)) {
  N = 512*i
@@ -614,8 +605,35 @@ for(i in seq(1:5)) {
  toc()
 }
 ```
+]
 
-.footnote[**Source:** Wikipédia (lien)]
+---
+## GPUs
+
+**Exemple**
+
+```
+CPU: creating two  512 x  512 matrices:      0.050 sec elapsed
+CPU: multiplying them:                       0.158 sec elapsed
+GPU: copying  512 x  512 matrices to memory: 0.030 sec elapsed
+GPU: multiplying them:                       0.012 sec elapsed
+CPU: creating two 1024 x 1024 matrices:      0.379 sec elapsed
+CPU: multiplying them:                       1.318 sec elapsed
+GPU: copying 1024 x 1024 matrices to memory: 0.096 sec elapsed
+GPU: multiplying them:                       0.007 sec elapsed
+CPU: creating two 1536 x 1536 matrices:      0.994 sec elapsed
+CPU: multiplying them:                       4.379 sec elapsed
+GPU: copying 1536 x 1536 matrices to memory: 0.137 sec elapsed
+GPU: multiplying them:                       0.006 sec elapsed
+CPU: creating two 2048 x 2048 matrices:      1.108 sec elapsed
+CPU: multiplying them:                       13.03 sec elapsed
+GPU: copying 2048 x 2048 matrices to memory: 0.255 sec elapsed
+GPU: multiplying them:                       0.007 sec elapsed
+CPU: creating two 2560 x 2560 matrices:      2.457 sec elapsed
+CPU: multiplying them:                       26.13 sec elapsed
+GPU: copying 2560 x 2560 matrices to memory: 0.415 sec elapsed
+GPU: multiplying them:                       0.009 sec elapsed
+```
 
 ???
 
@@ -646,7 +664,7 @@ It is thus specifically suited to:
 - evaluating polynoms
 - gradient descent
 
-.footnote[**More on TPUs:** Google ([link](https://cloud.google.com/tpu/docs/)]
+.footnote[**More on TPUs:** Google ([link](https://cloud.google.com/tpu/docs/))]
 
 ---
 
@@ -672,7 +690,7 @@ It is thus specifically suited to:
 - Models written in TensorFlow
 - Models that train for weeks or months
 
-.footnote[**Source:** Google ([link](https://cloud.google.com/tpu/docs/tpus), Stackoverflow ([link](https://stackoverflow.com/questions/806569/whats-the-opposite-of-embarrassingly-parallel))]
+.footnote[**Source:** Google ([link](https://cloud.google.com/tpu/docs/tpus)), Stackoverflow ([link](https://stackoverflow.com/questions/806569/whats-the-opposite-of-embarrassingly-parallel))]
 
 ???
 
@@ -760,6 +778,7 @@ All in all, they are really interesting when: **memory is not shared** and **com
 Imagine you have a list `l` of strings `s`. You want to know the total length of the strings combine.
 
 --
+
 Map step:
 ```{r, eval=F}
 l %>% map(function(s) nchar(s)) # or map(l, nchar) for short
@@ -777,11 +796,10 @@ function(a, b) a+b
 
 ## Exemple 1b: counting several things
 
-This time you may want to count more thant only one thing. You may think you can apply the first method twice, but that is not a good idea, since a significant part of the time taken by the computation comes from passing around the data itself. Computing the two things at once is often more efficient.
-
-Let's say you want to count voyels and consonants.
+Let's say you want to count voyels and consonants. You may think you can apply the first method twice, but that is _not_ a good idea, since a significant part of the time taken by the computation comes from passing around the data itself. Computing the two things at once is often more efficient.
 
 --
+
 Map step:
 ```{r, eval=F}
 count_letters <- function(char){
@@ -811,6 +829,7 @@ Mean is actually just sum and count simultaneously. At this point you realise th
 Let's imagine a list `l` of black & white images `i`, represented by a vector of black to white pixel values `p` (where `p=0` represents a black pixel, while `p=1` represents a white one). We want to know the average number of completely white pixels.
 
 --
+
 Map step:
 ```{r, eval=F}
 l %>% map( function(i) list( sum = sum(i==1), count = 1 ) )
@@ -825,19 +844,19 @@ function(a, b) list( sum = a$sum + b$sum, count = a$count + b$count )
 --
 Final step: `mean = sum / count`.
 
----
+<!--
 
 ## Exemple 3: variance
 
----
+
 
 ## Exemple 4: median
 
----
+
 
 ## Exemple 5: regression
 
----
+
 
 # 5. How to parallelise in practice?
 
@@ -862,4 +881,4 @@ Ex3a: Concieving an parallizable computation (median)
 
 Ex3b: Gradient descent
 
-Ex3c: Something not possible to parallelize ?
+Ex3c: Something not possible to parallelize ?-->

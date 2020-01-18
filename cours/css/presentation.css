@@ -6,6 +6,10 @@
     /* display: inline-block; */
 }
 
+.remark-slide .height500 img{
+    height: 500px;
+}
+
 .remark-slide .height600 img{
     height: 600px;
 }
