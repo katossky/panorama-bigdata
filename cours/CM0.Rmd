@@ -247,7 +247,7 @@ You directly use some existed IT solution. Little control on the software.
 
 
 ---
-## Platform as a Service, IaaS
+## Platform as a Service, PaaS
 
 - Provide to the consumer already configured infrascture to deploy it's own application
 - The consumer do not manage physical infrastructure neither has control over the provided ressources
@@ -317,7 +317,7 @@ Cannot be done with on site datacenter
 ---
 ## Operating system virtualization
 
-Idea: one physical machine = multiple virtual machines (VM)
+Idea: one physical machine = multiple virtual machines (VM).
 
 --
 - Must be independant
@@ -342,19 +342,22 @@ Cons :
 - Is the physical machine goes down all VMs go down too
 - There are somme security issues
 
+???
+It's not something new. Existe since 1960, but still relevant ! 
+
 ---
 ## The key to virtualization : Hypervisor
 
 - Manages Vms
 - Present ressources to the VMs
 - 2 types
-  - Type 1 : bare material hypervisor
-  - Type 2 : hosted hypervisor
+  - Type 1 : bare material hypervisor. Used in datacenter
+  - Type 2 : hosted hypervisor. Used by end user. 
   
 ---
 ## The key to virtualization : Hypervisor
 
-![]()
+![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/hypervisors.jpg)
 
 
 ---
@@ -409,14 +412,12 @@ Data is usually encrypted server-side (meaning that stealing physically disks fr
 
 Storage solutions have different names, but similar pricing schemes:
 
-|----------|-----------------|------------|----------------------|-----------|
 | Provider | Service's  name |      Store |                Write |     Read* |
 |----------|-----------------|------------|----------------------|-----------|
 | Google   | Cloud Storage   | 0,03 \$/Go |                 free |      free |
 | Amazon   | S3              | 0,02 \$/Go |                 free |   0,09 \$/Go |
 | Azure    | Blob Storage    | 0,02 \$/Go | 0,00 \$ / 10 000 op. | 0.02 \$ / 10 000 op. |
 | OVH      | Object Storage  | 0,01  €/Go |                 free |    0,01 €/Go |
-|----------|-----------------|------------|----------------------|-----------|
 
 Prices are given monthly.
 
@@ -467,14 +468,12 @@ VMs, on the other hand, **may also be used continuously**. Think of a mail serve
 ---
 ## Virtual machines
 
-|----------|------------------|-------------|-----------|------------|
 | Provider | Service's  name  | Processing* |  Memory** | Storage*** |
 |----------|------------------|-------------|-----------|------------|
 | Google   | Compute Engine   |    ~0,03 \$ | ~0,004 \$ |   ~0,04 \$ |
 | Amazon   | EC2              |    ~0,05 \$ | ~0,005 \$ |          ? |
 | Azure    | Virtual Machines |    ~0.05 \$ | ~0.005 \$ |   ~0.00 \$ |
 | OVH      | Public Cloud     |    ~0,04  € | ~0,002  € |   ~0,00  € |
-|----------|------------------|-------------|-----------|------------|
 
 * (Average) cost per processor (CPU or GPU) per hour
 ** (Average) cost per Go (CPU or GPU) per hour
