@@ -14,93 +14,129 @@ Ce TP a pour but de vous familiariser avec l'interface d'Amazon Web Service (AWS
 - Vous connecter à votre cluster et exécuter des commandes basiques
 - Eteindre votre cluster
 
-Le cluster que vous allez créer pendant le TP pourra être cloner dans les prochains TP.
+Le cluster que vous allez créer pendant le TP pourra être cloné lors de vos prochains TP.
 
-## Créer son compte AWS educate
+## 1. Création du compte AWS educate
 
+Suivez les instructions à partir du mail AWS Educate reçu sur votre adresse ENSAI.
 
+Créez un compte puis connectez-vous.
 
-## Créer une clef SSH
+## 2. Exploration
 
-**SSH** (**S**ecure **SH**ell) permet de se  connecter de façon sécurisée à un système Unix, Linux et Windows. Pour plus d'information, je vous conseille de lire le début de cette [page web ](https://doc.fedora-fr.org/wiki/SSH_:_Authentification_par_cl%C3%A9)
+Dans l'onglet "Services", trouvez:
 
-- [ ] 1 : Générez une clef-ssh pour se connecter à vos instances
+&#x274f; EC2, le service de calcul  
+&#x274f; S3, le service de calcul  
+&#x274f; la section dédiée aux bases de données  
+&#x274f; la section dédiée au _machine-learning_  
+&#x274f; la section dédiée à l'analyse de données  
+&#x274f; la section dédiée à la gestion des coûts  
 
-  - [ ] 1-1 : Connectez-vous à votre compte amazon AWS
-  - [ ] 1-2 : Dans la barre de recherche, cherchez "EC2" et cliquez dessus
-  - [ ] 1-3 : Dans le panneaux de gauche cherchez "Paires de clef" dans le section "Réseau et sécurité" et cliquez dessus.
+Vérifiez que votre crédit de 50$ est bien activé.
 
-  ![Clef ssh ec2](C:/Users/VEDA/Documents/2A/big data/panorama-bigdata/img/setup_a_la_main/step1.3_Paire_de_clés_EC2.png)
+## 3. Création d'une clef SSH
 
-  - [ ] 1-4 : Cliquez sur "Créer une paire de clés"
-  - [ ] 1-5 : Donnez lui le nom "spark_cluster_TP" et cliquez sur "créer"
-  - [ ] 1-6 : Enregistrez le fichier et ne le perdez pas !
-  - [ ] 1-7 : Dans la barre de recherche windows cherchez "PuTTygen"
-  - [ ] 1-8 : Cliquez sur Load
-  - [ ] 1-9 : Allez dans le dossier où vous avez sauvegardé votre clef. Elle ne doit pas encore apparaitre.
-  - [ ] 1-10 : En bas à droite sélectionnez "All Files (*\.\*)"
-  - [ ] 1-11 : Sélectionnez votre clef
-  - [ ] 1-12 : Un message apparait sur PuTTygen, validez le
-  - [ ] 1-13 : Cliquez sur "Save private key", puis sur "Oui" (on ne va pas mettre de passphrase)
-  - [ ] 1-14 : Sauvegarder votre clef privée .ppk
-  - [ ] 1-15 : Quittez PuTTygen
-  - [ ] 1-16 : Vous avez fini de générer votre clef ssh.
+**SSH** (**S**ecure **SH**ell) permet de se connecter de façon sécurisée à un système Unix, Linux et Windows. Pour plus d'information, je vous conseille de lire le début de cette [page web ](https://doc.fedora-fr.org/wiki/SSH_:_Authentification_par_cl%C3%A9)
 
+&#x274f; 3-1 : Dans la barre de recherche, cherchez "EC2" et cliquez dessus  
+&#x274f; 3-2 : Dans le panneaux de gauche cherchez "Paires de clef" (dans la section "Réseau et sécurité") et cliquez dessus.  
+&#x274f; 3-3 : Cliquez sur "Créer une paire de clés"  
+&#x274f; 3-4 : Donnez lui un nom (par ex: "spark_cluster_TP"), sélectionnez le format PPK, et cliquez sur "créer"  
+&#x274f; 3-5 : Enregistrez le fichier et ne le perdez pas !  
+<!-- ce qui suit ne me semble pas nécessaire -->
+&#x274f; 3-6 : Dans la barre de recherche windows cherchez "PuTTygen"  
+&#x274f; 3-7 : Cliquez sur Load  
+&#x274f; 3-8 : Allez dans le dossier où vous avez sauvegardé votre clef. Elle ne doit pas encore apparaître.  
+&#x274f; 3-9 : En bas à droite sélectionnez "All Files (*\.\*)"  
+&#x274f; 3-10 : Sélectionnez votre clef  
+&#x274f; 3-11 : Un message apparait sur PuTTygen, validez le  
+&#x274f; 3-12 : Cliquez sur "Save private key", puis sur "Oui" (on ne va pas mettre de passphrase)  
+&#x274f; 3-13 : Sauvegardez votre clef privée .ppk  
+&#x274f; 3-14 : Quittez PuTTygen  
+<!-- jusqu'ici -->
 
+Vous avez fini de générer votre clef ssh!
 
-## Copier des données dans votre espace de stockage dans Amazon Simple Storage Service
+## 4 Créeation d'un espace de stockage Amazon Simple Storage Service (S3)
 
-**Amazon Simple Storage Service** (S3) est la solution de base que propose AWS pour stocker vos données de manière pérenne (la durabilité affiché de vos données est de 99,999999999 %, cela signifie que si vous stockez 10 000 000 objets avec Amazon S3, vous  pouvez vous attendre à perdre en moyenne un objet unique une fois tous  les 10 000 ans *source amazon*), tout en assurant un accès à vos données pour un moindre coût (0,023 USD par Go s vous avez moins que 50To).
+**Amazon Simple Storage Service** (S3) est la solution de base que propose AWS pour stocker vos données de manière pérenne. Amazon dit assurer une durabilité de vos données de 99,999999999 %. Cela signifie que si vous stockez 10 000 000 objets avec Amazon S3, vous  pouvez vous attendre à perdre en moyenne un objet unique une fois tous les 10 000 ans.
 
-Tous les services que vous propose AWS sont nativement fait pour lire et écrire dans S3. Ainsi, si vous traitez des données avec AWS il est conseillez de les importer dans S3 à un moment donné. Néanmoins, il vous faudra par moment gérer des autorisations pour pouvoir accéder à vos fichiers. Il est à noter qu'il est gratuit de déposer des données sur S3, le stockage dans le temps ainsi que le téléchargement sont quant à eux couteux.
+Ce stockage est assuré à coût relativement élevé (de l'ordre de ~0,02 \$/Go/mois), sachant que vous payez en sus les opérations de lecture (de l'ordre de ~0,09 \$/Go ; les écritures sont gratuites). 1 To de données vous coûte ainsi 240€ à l'année. Pour comparaison, un disque dur externe d'1 To coûte actuellement ~40€, et un cloud-storage pour particulier coûte ~10€ / mois pour 2 To. S3 est ainsi destiné à des données d'usage régulier. D'autres offres de stockage existent comme les archives, pour des données utilisées moins régulièrement, ou les bases de données._
 
-- [ ] 2 : Copiez des données dans S3
+Tous les services que vous propose AWS peuvent nativement lire depuis et écrire vers S3. Ainsi, les programmes que vous exécutez, les données que vous traîtez... peuvent être importés dans S3. Chaque élément hébergé dans S3, appelé "objet", est acessible par une URL unique. Vous pouvez restreindre ou au contraire étendre les droits d'accès à vos objets.
 
-  - [ ] 2-1 : Connectez-vous à votre compte amazon AWS
-  - [ ] 2-2 : Dans la barre de recherche, cherchez "S3" et cliquez dessus
+&#x274f; 4-1 : Dans la barre de recherche, cherchez "S3" et cliquez dessus
 
-  ![](../img/s3/s3_accueil.png)
+![](../img/s3/s3_accueil.png)
 
-  *(Vous ne devrez pas encore de compartiment)*	
+&#x274f; 4-2 Cliquez sur "Créer un compartiment" (en anglais un "bucket")  
+&#x274f; 4-3 Choisissez un nom unique à votre compartiment  
+&#x274f; 4-4 Laissez toutes les valeurs par défaut et créez votre compartiment  
 
-  - [ ] Cliquez sur "Créer un compartiment"
+![](../img/s3/creer_compartiment.png)
 
-  - [ ] Créez un compartiment en lui donnant un nom unique
+## 5. Copie des données dans votre espace de stockage
 
-    ![](../img/s3/creer_compartiment.png)
-  
-  - [ ] Bouton "Charger"
-  
-  - [ ] Dans la fenêtre qui s'ouvre vous pouvez "cliquer glisser" le fichier de votre soit. De préférence un fichier csv quelconque.![](../img/s3/s3_charger.png)
-  
-  - [ ] Sur l'écran suivant vous allez pouvoir sélectionner les permissions liées à votre fichier. Qui y a accès, avec quels droits, et si vous voulez rendre votre fichier public. Par défaut, votre fichier est privé. Laissez les paramètres par défaut et cliquez sur suivant.
+&#x274f; 5-1 À partir du bouton "Charger", ajoutez un fichier (par exemple un fichier CSV) à votre compartiment. Laissez toutes les valeurs par défaut.
+
+![](../img/s3/s3_charger.png)
+
+- Un des écrans permet de gérer les permissions liées à votre fichier: qui y a accès, avec quels droits, et si vous voulez rendre votre fichier public. Par défaut, votre fichier est privé.
   
     ![](../img/s3/s3_permission.png)
   
-    
-  
-  - [ ] Sur cet écran vous allez déterminer la classe de stockage. S3 en dispose de quelques une, chacune avec des cas d'utilisation différent. Par exemple le stockage "glacier" permet d'archiver des données pour un coût faible, mais vos données auront un délais d'accès et une facturation supplémentaire par accès. Restez sur le stockage "standard" qui reste la solution la plus économique pour un accès régulier aux données.
-    ![](../img/s3/s3_type.png)
-  
-  - [ ] Le dernier écran vous permet de vérifier vos saisies précédentes.
-    ![](../img/s3/s3_verification.png)
-  
-  - [ ] En bas de la page de votre compartiment apparaitre une barre de chargement
-    ![](../img/s3/s3_bar.png)
-  
-  - [ ] Une fois le chargement terminé cliquez sur votre fichier
-    ![](../img/s3/s3_fichier.png)
-  
-    - [ ] Dans l'onglet "sélectionner depuis" vous allez avoir accès à des outils de visualisation de vos données
+- Un des écrans vous permet de choisir la classe de stockage. S3 en dispose de quelques une, chacune avec des cas d'utilisation différent. Par exemple le stockage "glacier" (EN: "glacieer") permet d'archiver des données pour un coût faible, mais vos données auront un délais d'accès et une facturation supplémentaire par accès.
 
-## Créer un cluster Sparck avec EMR et s'y connecter
+    ![](../img/s3/s3_type.png)
+ 
+&#x274f; 5-2 Une fois le chargement terminé cliquez sur votre fichier
+
+- Dans `Présentation > URL d'objet`, vous voyez l'URL de votre fichier, pour pouvoir s'y référencer par la suite, par exemple pour y donner accès sur Internet. (Depuis les services Amazon, l'adresse est raccourcie en `s3://<bucket-name>/<path-to-file>`.)
+- "Chemin de copie" est une mauvaise traduction de "Copy Path". Il faut s'y habituer, seule une toute petite partie d'AWS est traduite, et plutôt mal.
+- Dans l'onglet "Sélectionner depuis" vous avez accès à des outils d'exploration de vos données. Remarquez que sur AWS tous les traîtements coûtent! À tout moment, vous pouvez aller dans l'onglet facturation pour vérifier vos dépenses.
+    
+    ![](../img/s3/s3_fichier.png)
+
+<!--
+
+## 6. Créer une machine virtuelle
+
+&#x274f; Cliquez sur "EC2" dans l'onglet services
+&#x274f; Comme précédemment, créez une paire de clés //// ici par contre, le format ppk n'est pas disponible, mais en fait on s'en fout un peu ////
+&#x274f; Sur la page d'accueil, cliquez sur "Lancer une instance"
+&#x274f; Sélectionnez l'image-machine "Linux 2"
+
+Amazon vous propose un grand nombre de machines virtuelles pré-configurées, avec des configurations physiques variables.
+
+&#x274f; Choisissez une image machine à 4 coeurs ou plus, parmis les configurations prévues pour un usage général, cliquez sur "Vérifie et lancer"
+&#x274f; Choisissez la paire de clé précédemment créer
+Lisez les avertissements, puis passez outre
+
+Votre machine virtuelle (ou "instance"), est en cours de déploiement.
+
+&#x274f; Avec Putty ... XXXXXXXXXXXXX
+
+Vous êtes connecté à votre machine! Elle n'a pas d'écran ni d'interface web et ne comprend que les lignes de commande.
+
+&#x274f; Pour installaer R, par exemple, lancez la commande: `sudo amazon-linux-extras install R3.4`.
+
+Et voilà! Vous pouvez maintenant effectuer des calculs R sur votre instance.
+
+&#x274f; Prenez le programme R XXXXXXXXXX et exécutez-le sur le fichier XXXXXXXXXXXX avec la commande `R XXXXXXXX`.
+
+-->
+
+## 6. Créer un cluster Sparck avec EMR et s'y connecter
 
 Je vous renvoie vers ce  [document](Créer un cluster Spark avec EMR (Elastic Map Reduce).md) pour avoir la marche à suivre
 
 
 
-## Eteindre un cluster EMR
+## 7. Eteindre un cluster EMR
 
-Le coût d'un cluster EMR est en fonction de son temps d'utilisation, et pas du travail qu'il accompli. Ainsi, une fois le travail effectué, vous devez éteindre votre cluster ! Sinon vous serais pour un temps d'inactivité. **Même si le coût horaire est bas, faire tourner un cluster pendant 1 semaine pour rien commence à représenter un coût (environ 150€)**
+<!-- éteindre l'ensemble des instances lancées -->
 
-Pour éteindre un cluster retournez sur la page de gestion de vos clusters, sélectionnez-en un et cliquez sur "Résilier". Cela va éteindre DEFINITIVEMENT votre cluster. Vous ne pourrez plus le relancer, à la différence d'une instance Amazon Elastic Compute Cloud (EC2). Mais vous allez pouvoir relancer un cluster en clonant un ancien. Et ainsi ne pas avoir à refaire toutes la configuration. Par contre vous devrez changer l'IP utilisée pour vous y connecter.
+Le coût d'un cluster EMR est en fonction de son temps d'utilisation, et pas du travail qu'il accomplit. Ainsi, une fois le travail effectué, vous _devez_ éteindre votre cluster ! **Même si le coût horaire est bas, faire tourner un cluster pendant 1 semaine pour rien représente tout de même ~150€!**
+
+Pour éteindre un cluster, allez sur la page de gestion de vos clusters, sélectionnez-en un et cliquez sur "Résilier". Cela va éteindre _définitivement_ votre cluster. Vous ne pourrez plus le relancer, à la différence d'une instance Amazon Elastic Compute Cloud (EC2). Mais vous allez pouvoir relancer un cluster en clonant un ancien. Et ainsi ne pas avoir à refaire toutes la configuration. Par contre vous devrez changer l'IP utilisée pour vous y connecter.

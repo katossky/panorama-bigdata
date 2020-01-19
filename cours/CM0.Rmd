@@ -413,9 +413,9 @@ Storage solutions have different names, but similar pricing schemes:
 | Provider | Service's  name |      Store |                Write |     Read* |
 |----------|-----------------|------------|----------------------|-----------|
 | Google   | Cloud Storage   | 0,03 \$/Go |                 free |      free |
-| Amazon   | S3              | 0,02 \$/Go |                 free |   0,09 \$ |
+| Amazon   | S3              | 0,02 \$/Go |                 free |   0,09 \$/Go |
 | Azure    | Blob Storage    | 0,02 \$/Go | 0,00 \$ / 10 000 op. | 0.02 \$ / 10 000 op. |
-| OVH      | Object Storage  | 0,01  €/Go |                 free |    0,01 € |
+| OVH      | Object Storage  | 0,01  €/Go |                 free |    0,01 €/Go |
 |----------|-----------------|------------|----------------------|-----------|
 
 Prices are given monthly.
