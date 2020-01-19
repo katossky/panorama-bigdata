@@ -301,6 +301,62 @@ Cannot be done with on site datacenter
 - Microsoft azure
 - OVHcloud
 
+
+
+---
+## Traditional IT : 1 server = 1 physical machine = 1 function
+  - SMTP (mail) server
+  - DNS
+  - Web server, FTP server
+  - proxy
+  - ...
+
+- Pros : security, no middleware
+- Cons : cost, overdimensioned hardware
+
+---
+## Operating system virtualization
+
+Idea: one physical machine = multiple virtual machines (VM)
+
+--
+- Must be independant
+
+--
+- Can have their own OS
+
+--
+- Don't know there are other VMs on the same machine
+
+
+--
+Pros :
+- Mutualization of cost (less machine)
+- Better CPU utilization
+- Independant OS
+- Easy migration and deployment
+- Can run old OS
+
+--
+Cons : 
+- Is the physical machine goes down all VMs go down too
+- There are somme security issues
+
+---
+## The key to virtualization : Hypervisor
+
+- Manages Vms
+- Present ressources to the VMs
+- 2 types
+  - Type 1 : bare material hypervisor
+  - Type 2 : hosted hypervisor
+  
+---
+## The key to virtualization : Hypervisor
+
+![]()
+
+
 ---
 ## Cloud and ecology
 
