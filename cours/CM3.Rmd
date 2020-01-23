@@ -41,3 +41,18 @@ Key insights:
 - think befor you do
 
 -->
+
+--
+# A (not so) long time ago
+
+Spoke about parallelization
+
+--
+3 achitectures
+
+--
+- Shared memory
+- Distributed memory
+- Hybrid architecture
+
+

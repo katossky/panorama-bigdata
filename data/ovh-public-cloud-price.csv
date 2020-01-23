@@ -1,0 +1,25 @@
+Nom;Mémoire;vCore;Stockage;Réseau public;Réseau privé;Prix;
+b2-7;7 Go;2;50 Go SSD;250 Mbit/s garantis;300 Mbit/s max.;0,0619 € HT/heure;
+b2-15;15 Go;4;100 Go SSD;250 Mbit/s garantis;1 Gbit/s max.;0,1169 € HT/heure;
+b2-30;30 Go;8;200 Go SSD;500 Mbit/s garantis;2 Gbit/s max.;0,2369 € HT/heure;
+b2-60;60 Go;16;400 Go SSD;1 Gbit/s garantis;4 Gbit/s max.;0,4589 € HT/heure;
+b2-120;120 Go;32;400 Go SSD;10 Gbit/s;4 Gbit/s max.;0,9029 € HT/heure;
+c2-7;7 Go;2;50 Go SSD;250 Mbit/s garantis;300 Mbit/s max.;0,0889 € HT/heure;
+c2-15;15 Go;4;100 Go SSD;250 Mbit/s garantis;1 Gbit/s max.;0,1729 € HT/heure;
+c2-30;30 Go;8;200 Go SSD;500 Mbit/s garantis;2 Gbit/s max.;0,3479 € HT/heure;
+c2-60;60 Go;16;400 Go SSD;1 Gbit/s garantis;4 Gbit/s max.;0,6809 € HT/heure;
+c2-120;120 Go;32;400 Go SSD;10 Gbit/s;4 Gbit/s max.;1,3479 € HT/heure;
+r2-15;15 Go;2;50 Go SSD;250 Mbit/s garantis;1 Gbit/s max.;0,0889 € HT/heure;
+r2-30;30 Go;2;50 Go SSD;250 Mbit/s garantis;1 Gbit/s max.;0,1029 € HT/heure;
+r2-60;60 Go;4;100 Go SSD;250 Mbit/s garantis;2 Gbit/s max.;0,20 € HT/heure;
+r2-120;120 Go;8;200 Go SSD;1 Gbit/s garantis;4 Gbit/s max.;0,4029 € HT/heure;
+r2-240;240 Go;16;400 Go SSD;10 Gbit/s;4 Gbit/s max.;0,7919 € HT/heure;
+t1-45;45 Go;8;Tesla V100 16 Go;400 Go SSD;4 Gbit/s max.;2,299 € HT/heure;2 Gbit/s garantis
+t1-90;90 Go;18;2×Tesla V100 16 Go;800 Go SSD;4 Gbit/s max.;4,699 € HT/heure;4 Gbit/s garantis
+t1-180;180 Go;32;4×Tesla V100 16 Go;50 Go SSD + 2 To;4 Gbit/s max.;9,399 € HT/heure;10 Gbit/s
+i1-45;45 Go;8;50 Go SSD;1.9 To;2 Gbit/s max.;0,399 € HT/heure;1 Gbit/s garantis
+i1-90;90 Go;16;50 Go SSD;2 x 1.9 To;4 Gbit/s max.;0,799 € HT/heure;2 Gbit/s garantis
+i1-180;180 Go;32;50 Go SSD;4 x 1.9 To;4 Gbit/s max.;1,599 € HT/heure;8 Gbit/s garantis
+s1-2;2 Go;1;10 Go SSD;100 Mbit/s;100 Mbit/s max.;0,008 € HT/heure;
+s1-4;4 Go;1;20 Go SSD;100 Mbit/s;100 Mbit/s max.;0,0199 € HT/heure;
+s1-8;8 Go;2;40 Go SSD;100 Mbit/s;100 Mbit/s max.;0,0369 € HT/heure;

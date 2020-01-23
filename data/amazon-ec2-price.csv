@@ -1,0 +1,165 @@
+vCPU;ECU;Memory (GiB);Instance Storage (GB);Linux/UNIX Usage;
+t3.nano;2;Variable;0.5 GiB;EBS Only;$0.0059 per Hour
+t3.micro;2;Variable;1 GiB;EBS Only;$0.0118 per Hour
+t3.small;2;Variable;2 GiB;EBS Only;$0.0236 per Hour
+t3.medium;2;Variable;4 GiB;EBS Only;$0.0472 per Hour
+t3.large;2;Variable;8 GiB;EBS Only;$0.0944 per Hour
+t3.xlarge;4;Variable;16 GiB;EBS Only;$0.1888 per Hour
+t3.2xlarge;8;Variable;32 GiB;EBS Only;$0.3776 per Hour
+t3a.nano;2;Variable;0.5 GiB;EBS Only;$0.0053 per Hour
+t3a.micro;2;Variable;1 GiB;EBS Only;$0.0106 per Hour
+t3a.small;2;Variable;2 GiB;EBS Only;$0.0212 per Hour
+t3a.medium;2;Variable;4 GiB;EBS Only;$0.0425 per Hour
+t3a.large;2;Variable;8 GiB;EBS Only;$0.085 per Hour
+t3a.xlarge;4;Variable;16 GiB;EBS Only;$0.1699 per Hour
+t3a.2xlarge;8;Variable;32 GiB;EBS Only;$0.3398 per Hour
+t2.nano;1;Variable;0.5 GiB;EBS Only;$0.0066 per Hour
+t2.micro;1;Variable;1 GiB;EBS Only;$0.0132 per Hour
+t2.small;1;Variable;2 GiB;EBS Only;$0.026 per Hour
+t2.medium;2;Variable;4 GiB;EBS Only;$0.052 per Hour
+t2.large;2;Variable;8 GiB;EBS Only;$0.1056 per Hour
+t2.xlarge;4;Variable;16 GiB;EBS Only;$0.2112 per Hour
+t2.2xlarge;8;Variable;32 GiB;EBS Only;$0.4224 per Hour
+m5.large;2;8;8 GiB;EBS Only;$0.111 per Hour
+m5.xlarge;4;16;16 GiB;EBS Only;$0.222 per Hour
+m5.2xlarge;8;37;32 GiB;EBS Only;$0.444 per Hour
+m5.4xlarge;16;70;64 GiB;EBS Only;$0.888 per Hour
+m5.8xlarge;32;128;128 GiB;EBS Only;$1.776 per Hour
+m5.12xlarge;48;168;192 GiB;EBS Only;$2.664 per Hour
+m5.16xlarge;64;256;256 GiB;EBS Only;$3.552 per Hour
+m5.24xlarge;96;337;384 GiB;EBS Only;$5.328 per Hour
+m5.metal;96;345;384 GiB;EBS Only;$5.328 per Hour
+m5a.large;2;N/A;8 GiB;EBS Only;$0.10 per Hour
+m5a.xlarge;4;N/A;16 GiB;EBS Only;$0.20 per Hour
+m5a.2xlarge;8;N/A;32 GiB;EBS Only;$0.40 per Hour
+m5a.4xlarge;16;N/A;64 GiB;EBS Only;$0.80 per Hour
+m5a.8xlarge;32;N/A;128 GiB;EBS Only;$1.60 per Hour
+m5a.12xlarge;48;N/A;192 GiB;EBS Only;$2.40 per Hour
+m5a.16xlarge;64;N/A;256 GiB;EBS Only;$3.20 per Hour
+m5a.24xlarge;96;N/A;384 GiB;EBS Only;$4.80 per Hour
+m5ad.large;2;N/A;8 GiB;1 x 75 NVMe SSD;$0.12 per Hour
+m5ad.xlarge;4;N/A;16 GiB;1 x 150 NVMe SSD;$0.24 per Hour
+m5ad.2xlarge;8;N/A;32 GiB;1 x 300 NVMe SSD;$0.48 per Hour
+m5ad.4xlarge;16;N/A;64 GiB;2 x 300 NVMe SSD;$0.96 per Hour
+m5ad.8xlarge;32;N/A;128 GiB;2 x 600 NVMe SSD;$1.92 per Hour
+m5ad.12xlarge;48;N/A;192 GiB;2 x 900 NVMe SSD;$2.88 per Hour
+m5ad.16xlarge;64;N/A;256 GiB;4 x 600 NVMe SSD;$3.84 per Hour
+m5ad.24xlarge;96;N/A;384 GiB;4 x 900 NVMe SSD;$5.76 per Hour
+m5d.large;2;10;8 GiB;1 x 75 NVMe SSD;$0.131 per Hour
+m5d.xlarge;4;16;16 GiB;1 x 150 NVMe SSD;$0.262 per Hour
+m5d.2xlarge;8;37;32 GiB;1 x 300 NVMe SSD;$0.524 per Hour
+m5d.4xlarge;16;70;64 GiB;2 x 300 NVMe SSD;$1.048 per Hour
+m5d.8xlarge;32;128;128 GiB;2 x 600 NVMe SSD;$2.096 per Hour
+m5d.12xlarge;48;168;192 GiB;2 x 900 NVMe SSD;$3.144 per Hour
+m5d.16xlarge;64;256;256 GiB;4 x 600 NVMe SSD;$4.192 per Hour
+m5d.24xlarge;96;337;384 GiB;4 x 900 NVMe SSD;$6.288 per Hour
+m5d.metal;96;345;384 GiB;4 x 900 NVMe SSD;$6.288 per Hour
+m4.large;2;6.5;8 GiB;EBS Only;$0.116 per Hour
+m4.xlarge;4;13;16 GiB;EBS Only;$0.232 per Hour
+m4.2xlarge;8;26;32 GiB;EBS Only;$0.464 per Hour
+m4.4xlarge;16;53.5;64 GiB;EBS Only;$0.928 per Hour
+m4.10xlarge;40;124.5;160 GiB;EBS Only;$2.32 per Hour
+m4.16xlarge;64;188;256 GiB;EBS Only;$3.712 per Hour
+c5.large;2;10;4 GiB;EBS Only;$0.101 per Hour
+c5.xlarge;4;20;8 GiB;EBS Only;$0.202 per Hour
+c5.2xlarge;8;39;16 GiB;EBS Only;$0.404 per Hour
+c5.4xlarge;16;73;32 GiB;EBS Only;$0.808 per Hour
+c5.9xlarge;36;139;72 GiB;EBS Only;$1.818 per Hour
+c5.12xlarge;48;188;96 GiB;EBS Only;$2.424 per Hour
+c5.18xlarge;72;281;144 GiB;EBS Only;$3.636 per Hour
+c5.24xlarge;96;375;192 GiB;EBS Only;$4.848 per Hour
+c5.metal;96;375;192 GiB;EBS Only;$4.848 per Hour
+c5d.large;2;10;4 GiB;1 x 50 NVMe SSD;$0.115 per Hour
+c5d.xlarge;4;20;8 GiB;1 x 100 NVMe SSD;$0.23 per Hour
+c5d.2xlarge;8;39;16 GiB;1 x 200 NVMe SSD;$0.46 per Hour
+c5d.4xlarge;16;73;32 GiB;1 x 400 NVMe SSD;$0.92 per Hour
+c5d.9xlarge;36;139;72 GiB;1 x 900 NVMe SSD;$2.07 per Hour
+c5d.12xlarge;48;188;96 GiB;2 x 900 NVMe SSD;$2.76 per Hour
+c5d.18xlarge;72;281;144 GiB;2 x 900 NVMe SSD;$4.14 per Hour
+c5d.24xlarge;96;375;192 GiB;4 x 900 NVMe SSD;$5.52 per Hour
+c5d.metal;96;375;192 GiB;4 x 900 NVMe SSD;$5.52 per Hour
+c4.large;2;8;3.75 GiB;EBS Only;$0.119 per Hour
+c4.xlarge;4;16;7.5 GiB;EBS Only;$0.237 per Hour
+c4.2xlarge;8;31;15 GiB;EBS Only;$0.476 per Hour
+c4.4xlarge;16;62;30 GiB;EBS Only;$0.95 per Hour
+c4.8xlarge;36;132;60 GiB;EBS Only;$1.902 per Hour
+p3.2xlarge;8;31;61 GiB;EBS Only;$3.589 per Hour
+p3.8xlarge;32;97;244 GiB;EBS Only;$14.356 per Hour
+p3.16xlarge;64;201;488 GiB;EBS Only;$28.712 per Hour
+g4dn.xlarge;4;N/A;16 GiB;125 GB NVMe SSD;$0.615 per Hour
+g4dn.2xlarge;8;N/A;32 GiB;225 GB NVMe SSD;$0.88 per Hour
+g4dn.4xlarge;16;N/A;64 GiB;225 GB NVMe SSD;$1.409 per Hour
+g4dn.8xlarge;32;N/A;128 GiB;900 GB NVMe SSD;$2.546 per Hour
+g4dn.12xlarge;48;N/A;192 GiB;900 GB NVMe SSD;$4.577 per Hour
+g4dn.16xlarge;64;N/A;256 GiB;900 GB NVMe SSD;$5.092 per Hour
+g3.4xlarge;16;58;122 GiB;EBS Only;$1.429 per Hour
+g3.8xlarge;32;97;244 GiB;EBS Only;$2.858 per Hour
+g3.16xlarge;64;201;488 GiB;EBS Only;$5.716 per Hour
+g3s.xlarge;4;13;30.5 GiB;EBS Only;$0.94 per Hour
+x1.16xlarge;64;174.5;976 GiB;1 x 1920 SSD;$8.403 per Hour
+x1.32xlarge;128;349;1,952 GiB;2 x 1920 SSD;$16.806 per Hour
+r5.large;2;10;16 GiB;EBS Only;$0.148 per Hour
+r5.xlarge;4;19;32 GiB;EBS Only;$0.296 per Hour
+r5.2xlarge;8;37;64 GiB;EBS Only;$0.592 per Hour
+r5.4xlarge;16;70;128 GiB;EBS Only;$1.184 per Hour
+r5.8xlarge;32;128;256 GiB;EBS Only;$2.368 per Hour
+r5.12xlarge;48;168;384 GiB;EBS Only;$3.552 per Hour
+r5.16xlarge;64;256;512 GiB;EBS Only;$4.736 per Hour
+r5.24xlarge;96;337;768 GiB;EBS Only;$7.104 per Hour
+r5.metal;96;347;768 GiB;EBS Only;$7.104 per Hour
+r5a.large;2;N/A;16 GiB;EBS Only;$0.133 per Hour
+r5a.xlarge;4;N/A;32 GiB;EBS Only;$0.266 per Hour
+r5a.2xlarge;8;N/A;64 GiB;EBS Only;$0.532 per Hour
+r5a.4xlarge;16;N/A;128 GiB;EBS Only;$1.064 per Hour
+r5a.8xlarge;32;N/A;256 GiB;EBS Only;$2.128 per Hour
+r5a.12xlarge;48;N/A;384 GiB;EBS Only;$3.192 per Hour
+r5a.16xlarge;64;N/A;512 GiB;EBS Only;$4.256 per Hour
+r5a.24xlarge;96;N/A;768 GiB;EBS Only;$6.384 per Hour
+r5ad.large;2;N/A;16 GiB;1 x 75 NVMe SSD;$0.154 per Hour
+r5ad.xlarge;4;N/A;32 GiB;1 x 150 NVMe SSD;$0.308 per Hour
+r5ad.2xlarge;8;N/A;64 GiB;1 x 300 NVMe SSD;$0.616 per Hour
+r5ad.4xlarge;16;N/A;128 GiB;2 x 300 NVMe SSD;$1.232 per Hour
+r5ad.8xlarge;32;N/A;256 GiB;2 x 600 NVMe SSD;$2.464 per Hour
+r5ad.12xlarge;48;N/A;384 GiB;2 x 900 NVMe SSD;$3.696 per Hour
+r5ad.16xlarge;64;N/A;512 GiB;4 x 600 NVMe SSD;$4.928 per Hour
+r5ad.24xlarge;96;N/A;768 GiB;4 x 900 NVMe SSD;$7.392 per Hour
+r5d.large;2;10;16 GiB;1 x 75 NVMe SSD;$0.169 per Hour
+r5d.xlarge;4;19;32 GiB;1 x 150 NVMe SSD;$0.338 per Hour
+r5d.2xlarge;8;37;64 GiB;1 x 300 NVMe SSD;$0.676 per Hour
+r5d.4xlarge;16;70;128 GiB;2 x 300 NVMe SSD;$1.352 per Hour
+r5d.8xlarge;32;128;256 GiB;2 x 600 NVMe SSD;$2.704 per Hour
+r5d.12xlarge;48;168;384 GiB;2 x 900 NVMe SSD;$4.056 per Hour
+r5d.16xlarge;64;256;512 GiB;4 x 600 NVMe SSD;$5.408 per Hour
+r5d.24xlarge;96;337;768 GiB;4 x 900 NVMe SSD;$8.112 per Hour
+r5d.metal;96;347;768 GiB;4 x 900 NVMe SSD;$8.112 per Hour
+r4.large;2;7;15.25 GiB;EBS Only;$0.156 per Hour
+r4.xlarge;4;16;30.5 GiB;EBS Only;$0.312 per Hour
+r4.2xlarge;8;31;61 GiB;EBS Only;$0.624 per Hour
+r4.4xlarge;16;58;122 GiB;EBS Only;$1.248 per Hour
+r4.8xlarge;32;97;244 GiB;EBS Only;$2.496 per Hour
+r4.16xlarge;64;195;488 GiB;EBS Only;$4.992 per Hour
+z1d.large;2;12;16 GiB;1 x 75 NVMe SSD;$0.22 per Hour
+z1d.xlarge;4;23;32 GiB;1 x 150 NVMe SSD;$0.439 per Hour
+z1d.2xlarge;8;45;64 GiB;1 x 300 NVMe SSD;$0.879 per Hour
+z1d.3xlarge;12;75;96 GiB;1 x 450 NVMe SSD;$1.318 per Hour
+z1d.6xlarge;24;116;192 GiB;1 x 900 NVMe SSD;$2.636 per Hour
+z1d.12xlarge;48;235;384 GiB;2 x 900 NVMe SSD;$5.273 per Hour
+z1d.metal;48;271;384 GiB;2 x 900 NVMe SSD;$5.273 per Hour
+i3.large;2;8;15.25 GiB;1 x 475 NVMe SSD;$0.181 per Hour
+i3.xlarge;4;16;30.5 GiB;1 x 950 NVMe SSD;$0.362 per Hour
+i3.2xlarge;8;31;61 GiB;1 x 1900 NVMe SSD;$0.724 per Hour
+i3.4xlarge;16;53;122 GiB;2 x 1900 NVMe SSD;$1.448 per Hour
+i3.8xlarge;32;97;244 GiB;4 x 1900 NVMe SSD;$2.896 per Hour
+i3.16xlarge;64;201;488 GiB;8 x 1900 NVMe SSD;$5.792 per Hour
+i3en.large;2;10;16 GiB;1 x 1250 NVMe SSD;$0.263 per Hour
+i3en.xlarge;4;N/A;32 GiB;1 x 2500 NVMe SSD;$0.526 per Hour
+i3en.2xlarge;8;37;64 GiB;2 x 2500 NVMe SSD;$1.052 per Hour
+i3en.3xlarge;12;N/A;96 GiB;1 x 7500 NVMe SSD;$1.578 per Hour
+i3en.6xlarge;24;N/A;192 GiB;2 x 7500 NVMe SSD;$3.156 per Hour
+i3en.12xlarge;48;168;384 GiB;4 x 7500 NVMe SSD;$6.312 per Hour
+i3en.24xlarge;96;337;768 GiB;8 x 7500 NVMe SSD;$12.624 per Hour
+i3en.metal;96;N/A;768 GiB;8 x 7500 NVMe SSD;$12.624 per Hour
+d2.xlarge;4;14;30.5 GiB;3 x 2000 HDD;$0.772 per Hour
+d2.2xlarge;8;28;61 GiB;6 x 2000 HDD;$1.544 per Hour
+d2.4xlarge;16;56;122 GiB;12 x 2000 HDD;$3.087 per Hour
+d2.8xlarge;36;116;244 GiB;24 x 2000 HDD;$6.174 per Hour

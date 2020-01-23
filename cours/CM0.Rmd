@@ -1,6 +1,7 @@
 ---
 author: Arthur Katossky & Rémi Pépin
 output:
+  html_document: default
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
     nature:
@@ -65,11 +66,12 @@ CC-BY-SA
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- 1940 - mid 1960 : Mainframe era
+- 1940 - mid 1970 : Mainframe era (still use today)
   - Commercial, scientific, and large-scale computing only.
   - Only big enterprise can buy mainframes.
   - No direct user interaction (scren, keyboard), but card punches
-  - Data and computing are centralised
+  - Throughtput optimize (I/O operation)
+  - Use case: credit card operation, flight reservation, share market.
   ]
 
 .pull-right[![](http://www.rhod.fr/images_dossiers/wargames/wargames03.jpg)
@@ -82,7 +84,7 @@ CC-BY-SA
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- mid 1960 - mid-1990 : Fat client era.
+- mid 1970 - mid-1990 : Fat client era.
   - Developement of micro-computing, personnal computers become cheaper and cheaper
   - Instead of one mainframe for data and computing, one server is for the data, and computation are executed on personnal computer (**fat client**)
   - Fat client are autonomous of each other. They need the data server only to download the data
@@ -90,6 +92,7 @@ CC-BY-SA
   ]
 
 .pull-right[<img src="https://starecat.com/content/wp-content/uploads/check-out-this-bad-boy-computer-what-are-you-gonna-use-it-for-games-and-stuff-chandler-friends.jpg" style="zoom:33%;" />
+
 *Friends, S2 E8*
 
 ]
@@ -108,18 +111,12 @@ CC-BY-SA
 Note : You can go on step further, like at Ensai, and put everything in the server
 
   ]
+  
+.pull-right[<img src="https://leshorizons.net/wp-content/uploads/2019/06/DataCenter.jpg" style="zoom:100%;" />
 
-.pull-left[
-- mid-1990 - 2010 : In-house datacenter era.
-  - mid 1990 : democratization of the Internet
-  - Communication speed increase quickly
-  - Centralisation of data and computing in data datacenter.
-  - Personnal computer for daily tasks (mail, office etc)
-  - Server for computation
+*srouce : https://leshorizons.net/datacenter/*
 
-Note : You can go on step further, like at Ensai, and put everything in the server
-
-  ]
+]
 
 ---
 
@@ -132,18 +129,34 @@ Note : You can go on step further, like at Ensai, and put everything in the serv
   - parallel ideas could now be applied _between_ computers
   - on last Saturday (2020-01--18) the best grid's 495 820 computers was computing on average at the rate 30 petaflops (BOINC, Berkeley, [link](https://boinc.berkeley.edu)), same as the 5th fastest supercomputer
   - for comparison the fastest super computer today (Summit, IBM, [link](https://www.olcf.ornl.gov/olcf-resources/compute-systems/summit)) delivers ~200 petaflops
+  - still use today ((SETI@home)[https://setiathome.ssl.berkeley.edu/])
 
 **Source:** Top 500, the List ([link](https://www.top500.org/lists/2019/11))
   ]
+
+.pull-right[<img src="https://www.lebigdata.fr/wp-content/uploads/2018/02/grid-computing-vs-cluster-computing-1.jpg" style="zoom:100%;" />
+
+*srouce : https://www.lebigdata.fr/wp-content/uploads/2018/02/grid-computing-vs-cluster-computing-1.jpg*
+
+]  
+  
 
 ---
 ## A quick history of IT hardware in enterprise
 .pull-left[
 - 2010 - ? : cloud computing era.
+  - 2002 : amazon web service
+  - 2006 : amazon elastic compute cloud
+  - 2008 : google app engine
+  - 2008 : analyst house Garner claim rise of cloup computing
+  - 2010 : microsoft azure
+  
+Cloud compute revenue in 2018 : 182,4 G$, estimation in 2022 331,4 G$ ((source)[https://www.gartner.com/en/newsroom/press-releases/2019-04-02-gartner-forecasts-worldwide-public-cloud-revenue-to-g])
 
   ]
 
-.pull-right[
+.pull-right[ ![](https://www.astelis.fr/wp-content/uploads/cloud-maillage.jpg)
+*Source : https://www.astelis.fr/wp-content/uploads/cloud-maillage.jpg*
 ]
 
 ---
@@ -162,13 +175,10 @@ In a nutshell :
 ## Why cloud computing ?
 
 - The world is changing faster than ever
-
 --
 - Need quick reponse to new problem
-
 --
 - Building a new datacenter, buying new servers or create new architectures take too much time ! 
-
 --
 - The on demand nature of cloud computing make possible to create new services in no time
 
@@ -185,7 +195,7 @@ In a nutshell :
 ---
 ## Different services
 
-For example you want to have somewhere to sleep. You can
+For example you want to have somewhere to sleep. You can :
 
 --
 
@@ -213,6 +223,7 @@ For example you want to have somewhere to sleep. You can
 
 For example you want to have somewhere to sleep. You can
 
+--
 - Buy a site to build your house **In house datacenter**.
 
 High investement, but you have full control on your infrastructure.
@@ -247,7 +258,7 @@ You directly use some existed IT solution. Little control on the software.
 
 
 ---
-## Platform as a Service, IaaS
+## Platform as a Service, PaaS
 
 - Provide to the consumer already configured infrascture to deploy it's own application
 - The consumer do not manage physical infrastructure neither has control over the provided ressources
@@ -269,7 +280,6 @@ You directly use some existed IT solution. Little control on the software.
 - The need
   - conversion from TIFF to pdf of all articles from 1851 to 1922
   - 4TB of input (405,000 very large TIFF images, 3.3 million articles in SGML and 405,000 xml files mapping articles to rectangular regions in the TIFF’s)
-
 --
 - The realization
   - Run around 100 EC2 instances to create an Hadoop cluster for 24h (estimate cost 800$)
@@ -301,6 +311,106 @@ Cannot be done with on site datacenter
 - Microsoft azure
 - OVHcloud
 
+
+
+---
+## Traditional IT : 1 server = 1 physical machine = 1 function
+  - SMTP (mail) server
+  - DNS
+  - Web server, FTP server
+  - proxy
+  - ...
+
+- Pros : security, no middleware
+- Cons : cost, overdimensioned hardware
+
+---
+## Operating system virtualization
+
+Idea: one physical machine = multiple virtual machines (VMs).
+
+--
+- Must be independant
+
+--
+- Can have their own OS
+
+--
+- Don't know there are other VMs on the same machine
+
+
+--
+Pros :
+- Mutualization of cost (less machine)
+- Better CPU utilization
+- Independant OS
+- Easy migration and deployment
+- Can run old OS
+
+--
+Cons : 
+- Is the physical machine goes down all VMs go down too
+- There are somme security issues
+
+???
+It's not something new. Existe since 1960, but still relevant ! 
+
+---
+## The key to virtualization : Hypervisor
+
+- Manages Vms
+- Present ressources to the VMs
+
+--
+- 2 types
+  - Type 1 : bare material hypervisor. Used in datacenter
+  - Type 2 : hosted hypervisor. Used by end user. 
+  
+--
+- Exemples of hypervisors
+  - Type 1
+    - Hyper-V (Microsoft)
+    - KVM (Red Hat)
+    - VMware Infrastructure  (VMware)
+    - Xen (Oracle)
+
+- Type 2
+    - Virtual Box (Oracle)
+    - Microsoft Virtual Server (Microsoft)
+    - VMware Fusion  (VMware)
+
+---
+## The key to virtualization : Hypervisor
+
+![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/hypervisors.jpg)
+
+---
+## Another type fo virtualization : containerization
+
+Virtualized a full OS come with a cost in ressources. Espacially if you want only one specific application (database, python server, R server ...).
+
+
+--
+So instead of virtualize a fullOS, you can create an image with only your app and the needed libraries.
+
+
+--
+You need a runtime engine to run and manage your container. But containers are more lightweight and more portable than VMs
+
+--
+Exemple of container technology
+- Docker
+- rktlet
+- CRI-O
+- Microsoft Containers
+- Linux Conainers
+
+---
+## Another type fo virtualization : containerization
+
+![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/container.jpg)
+
+
 ---
 ## Cloud and ecology
 
@@ -310,11 +420,14 @@ Cannot be done with on site datacenter
 ## Cloud and ecology
 
 - It's not because you don't own the server that the server does not pollute.
-- The internet consume about 2% of the worldwide electricity.
+- The internet causes about 4% of the worldwide emission of GHG
+- Datacenters are reponsible for 25% of it
 - Theoretically, with the mutualization of ressource cloud computing could be greenner than in site datacenter
-- But, because cloud computing become cheaper, more people use it, and are less carful with the cost. So more servers are running, maybe over dimensionned one, and cloud computing can me more polluting than old school datacente.
+- But, because cloud computing become cheaper, more people use it, and are less carful with the cost. So more servers are running, maybe over dimensionned one, and cloud computing can me more polluting than old school datacente (rebound effect).
 - No real evidence of that.
 
+
+*Source : ADEME, la face caché du numérique, consulté le 19/01/2020 [lien](https://www.ademe.fr/sites/default/files/assets/documents/guide-pratique-face-cachee-numerique.pdf)*
 
 ---
 # Principles of IaaS
@@ -353,14 +466,12 @@ Data is usually encrypted server-side (meaning that stealing physically disks fr
 
 Storage solutions have different names, but similar pricing schemes:
 
-|----------|-----------------|------------|----------------------|-----------|
 | Provider | Service's  name |      Store |                Write |     Read* |
 |----------|-----------------|------------|----------------------|-----------|
 | Google   | Cloud Storage   | 0,03 \$/Go |                 free |      free |
 | Amazon   | S3              | 0,02 \$/Go |                 free |   0,09 \$/Go |
 | Azure    | Blob Storage    | 0,02 \$/Go | 0,00 \$ / 10 000 op. | 0.02 \$ / 10 000 op. |
 | OVH      | Object Storage  | 0,01  €/Go |                 free |    0,01 €/Go |
-|----------|-----------------|------------|----------------------|-----------|
 
 Prices are given monthly.
 
@@ -411,14 +522,12 @@ VMs, on the other hand, **may also be used continuously**. Think of a mail serve
 ---
 ## Virtual machines
 
-|----------|------------------|-------------|-----------|------------|
 | Provider | Service's  name  | Processing* |  Memory** | Storage*** |
 |----------|------------------|-------------|-----------|------------|
 | Google   | Compute Engine   |    ~0,03 \$ | ~0,004 \$ |   ~0,04 \$ |
 | Amazon   | EC2              |    ~0,05 \$ | ~0,005 \$ |          ? |
 | Azure    | Virtual Machines |    ~0.05 \$ | ~0.005 \$ |   ~0.00 \$ |
 | OVH      | Public Cloud     |    ~0,04  € | ~0,002  € |   ~0,00  € |
-|----------|------------------|-------------|-----------|------------|
 
 * (Average) cost per processor (CPU or GPU) per hour
 ** (Average) cost per Go (CPU or GPU) per hour
