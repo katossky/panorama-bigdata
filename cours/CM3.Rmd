@@ -1,5 +1,5 @@
 ---
-author: Arthur Katossky & Rémi Pépin
+author: Arthur Katossky & RÃ©mi PÃ©pin
 output:
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
@@ -7,28 +7,87 @@ output:
       ratio: 16:10
       scroll: false
 ---
-<!-- COURS 3
 
-> Distribution
+# 1. Refresher
 
-General principles
-HDFS as an exemple implementation
+vocabulary: cluster, node, etc.
 
-> Parallezing compution on distributed data
+## Storage improvement and limits
 
-Map-Reduce principles
-Spark and Hadoop as 2 implementations
+## Parallelisation
 
-> Overview of the Big Data ecosystem
+## File systems
 
-(Where to go from here?)
+## Data base
 
-- No-SQL databases
-- Hive
-- Fast languages (Go, Julia, JavaScript)
-- 
+## Cloud computing
 
-> Conclusion
+# 2. The fundamental problems of distribution
+
+In this part we do not distinguish between file systems and databases.
+
+# 3. Distributing file systems
+
+## Specific problems of distributed file systems
+
+## An exemple of distributed file system: HDFS
+
+### Why HDFS?
+
+### The architecture
+
+### Role of the master (nodename)
+
+### Role of the slaves
+
+### Properties
+
+How this specific architecture acheives fault-tolerance, etc.
+
+## Other job-schedulers
+
+# 4. Distributing databases
+
+## Specific problems of distributed databases
+
+## An exemple of distributed database: ???????????
+
+
+# 5. Distributing tasks
+
+## Specific problems of distributed task management
+
+vocabulary: job, task...
+
+## An exemple of job-scheduler: YARN
+
+### The architecture
+
+### Role of the master (job scheduler)
+
+### Role of the slaves
+
+### Properties
+
+How this specific architecture acheives fault-tolerance, etc.
+
+## Other job-schedulers
+
+# 5. Parallezing compution on distributed data
+
+## Map-reduce principle
+
+## Map-shuffle-reduce principle
+
+## An exemple of parallelized compuration framework: Spark
+
+## Other frameworks
+
+# 6. Conclusions and perspectives
+
+## What to remember from today?
+
+## What to remember from the course?
 
 Is big data a problem for you?
 Is it worth it?
@@ -40,19 +99,10 @@ Key insights:
 - low level is faster
 - think befor you do
 
--->
+## Now you understand this:
 
---
-# A (not so) long time ago
-
-Spoke about parallelization
-
---
-3 achitectures
-
---
-- Shared memory
-- Distributed memory
-- Hybrid architecture
+--> quotes explaining what this or this software is
 
 
+<!-- fast languages must be moved to the first course:
+Fast languages (Go, Julia, JavaScript) -->
