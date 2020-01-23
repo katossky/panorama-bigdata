@@ -7,8 +7,9 @@
 
 ![Console EMR](../img/setup-emr/console_emr.png)
 
-- [ ] Cliquez sur le bouton "Créer un cluster"
-
+- [ ] 
+Cliquez sur le bouton "Créer un cluster"
+  
   - [ ] Donnez le nom que vous voulez à votre cluster, par exemple Spark-TPX avec X le numéro du TP
   - [ ] Laissez sélectionnée la journalisation. Cette option permet à votre cluster de stocker les log (journaux) de votre application sur votre espace S3 et ainsi faciliter le débogage. Comme vos log sont stockées sur S3, Amazon va vous facturer le stockage. Le prix de stockage sur S3 est extrêmement faible (0,023$ par Go par mois si vous avez moins de 50To), mais il peut être intéressant d'allez nettoyer vos vieilles log de temps en temps.
   - [ ] Configuration des logiciels
@@ -22,46 +23,75 @@
     - [ ] Laissez le Rôle EMR et le Profil d'instance par défaut
   - [ ] Démarrer le cluster. Le démarrage peut prendre quelques minutes
   - [ ] Bravo vous avez démarré un cluster Spark en moins de 15min !
-  - [ ] ![Détail cluster](../img/setup-emr/mon_cluster_emr.png)
+- [ ] ![Détail cluster](../img/setup-emr/mon_cluster_emr.png)
+  
+- [ ] Avant de continuer, vérifiez si les connexions SSH sont autorisé pour votre cluster. Pour cela allez dans groupe de sécurité pour le principal
+    ![](../img/setup-emr/cluster_emr_security.png)
+
+  - [ ] Ensuite cliquez sur "ElasticMapReduce-master" et sur l'ongler "entrant" pour vérifier si les connexion SSH sont autorisés
+  ![](../img/setup-emr/liste_security_group.png)
+  
+- [ ] Si ce n'est pas le cas cliquez sur "Modifier", allez en bas de la fenêtre qui apparait et ajoutez la règle
+    SSH / n'importe où.  Cela vous permettra de vous connecter en SSH à votre cluster depuis n'importe quel ordinateur. Sauvegardez votre changement.
+
+    ![](../img/setup-emr/regle_ssh.png)
 
   ## Accéder à l'interface de suivi du cluster
 
-  ### Installer FoxyProxy
+  ### Un peu de sécurité
 
-  Pour accéder à l'interface de suivi il est nécessaire d'installer le plugin FoxyProxy Standard sur votre navigateur. 
+  Pour des raisons de sécurité, les connexions à votre cluster depuis l'extérieur sont limitées aux connexions SSH. Même s'il est possible d'autoriser plus de connexions via les "groupes de sécurité" d'aws, votre cluster ne répondra qu'au requête SSH. Problème, votre navigateur internet ne sait pas faire des requête SSH. Et tel quel il vous ait impossible d'accéder aux interface web de votre cluster. Cela est déjà un inconvénient sérieux, mais surtout cela cela vous empêche de vous connecter avec R à votre cluster.
 
-  Pour google chrome : [lien](https://chrome.google.com/webstore/detail/foxyproxy-standard/gcknhkkoolaabfmlnjonogaaifnjlfnp?hl=fr)
+  Pour remédier à cela nous allons faire deux choses :
 
-  Pour firefox: [lien](https://addons.mozilla.org/fr/firefox/addon/foxyproxy-standard/)
+  - Créer un tunnel SSH entre votre ordinateur et le cluster. Cela permettra à votre ordinateur de faire passez certaines requête dans la connexion SSH établie entre le cluster et vous. Par exemple quand vous accéderez aux interfaces graphiques du cluster cela se fera via l'intermédiaire du tunnel. Le tunnel prendra toutes les requêtes faites pour l'adresse localhost:8157 pour les transmettre aux cluster.
+- Installer FoxyProxy. Cette extension de navigateur permet de faire de la redirection de requête pour utiliser des proxys à la volée. Le fonctionnement est le suivant, vous paramétrez des motifs URL qui doivent être redirigez vers un certain proxy. Quand le motif est repéré, FoxyProxy redirige la requête vers le proxy associé aux motifs. Dans le cas présent, le proxy sera localhost:8157, le point d'entrée de notre tunnel. 
+  
+Cette procédure n'est en aucun cas un "hack" de notre part pour accéder à des services protégés, mais bien la marche à suivre officielle proposé par amazon. **Il est obligatoire de la respecter pour pouvoir utiliser R avec votre cluster**
+  
 
-  Une fois FoxyProxy installé ouvrez le plugin et importer le fichier se trouvant dans :  /settings/foxyproxy-settings.json ([lien](/settings/foxyproxy-settings.json))
-
-  ### Etablir une connection SSH avec votre cluster
-
+  
+![](../img/ssh emr.jpg)
+  
+### Installer FoxyProxy
+  
+Pour google chrome : [lien](https://chrome.google.com/webstore/detail/foxyproxy-standard/gcknhkkoolaabfmlnjonogaaifnjlfnp?hl=fr)
+  
+Pour firefox: [lien](https://addons.mozilla.org/fr/firefox/addon/foxyproxy-standard/)
+  
+Une fois FoxyProxy installé, ouvrez le plugin et importer le fichier se trouvant dans :  
+  
+- https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.json pour firefox
+  - https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.xml pour chrome
+  
+  ### Etablir une connexion SSH avec votre cluster
+  
+  *(La marche à suivre est également disponible si vous cliquez sur "activez la connexion web" depuis la pag de voter cluster)*
+  
   - [ ] Lancez PuTTY
-
+  
   - [ ] Dans la liste Category, cliquez sur Session
-
-  - [ ] Dans le champ Host Name, tapez **hadoop@XXXX** avec XXXX le DNS public principal de votre cluster (vous le trouverez dans les informations de votre cluster sur l'interface aws)
-
+  
+  - [ ] Dans le champ Host Name, tapez **hadoop@[DNS public]** avec [DNS public] le DNS public principal de votre cluster (vous le trouverez dans les informations de votre cluster sur l'interface aws)
+  
   - [ ] Dans la liste Category, développez Connection > SSH > Auth
-
+  
   - [ ] Pour le fichier de clés privées utilisé pour l'authentification, cliquez sur Browse et sélectionnez le fichier de clés privées  utilisé pour lancer le cluster.
-
+  
   - [ ] Dans la liste Category, développez Connection > SSH, puis cliquez sur Tunnels.
-
+  
   - [ ] Dans le champ Source port, tapez **8157**
-
+  
   - [ ] Sélectionnez les options Dynamic et Auto.
-
+  
     ![Putty tunnels configuration](../img/setup-emr/putty_tunnels.png)
-
+  
   - [ ] Laissez le champ Destination vide, puis cliquez sur Add.
-
+  
   - [ ] Cliquez sur Open.
-
+  
   - [ ] Cliquez sur Yes pour ignorer l'alerte de sécurité.
-
+  
     ![Connection ssh putty emr accueil](../img/setup-emr/ssh_emr.png)
     
   - [ ] Une fois connectez en ssh à votre cluster vous pouvez lancer spark-shell ou pySpark avec
@@ -103,7 +133,7 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 ### Lancer un job avec un script
 
-- [ ] Upload sur S3 le script que vous voulez utiliser. Par exemple le fichier [exemple](/exemple/script_exemple.py) suivant.
+- [ ] Uploadez sur S3 le script que vous voulez utiliser. Par exemple le fichier [exemple](/exemple/script_exemple.py) suivant.
 
 - [ ] Sur l'interface de votre cluster sélectionnez l'onglet "Etape"
 
@@ -139,7 +169,7 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 ### Se connecter avec Rstudio et sparklyR
 
-- [ ] Connectez-vous en SSH à votre cluster EMR
+- [ ] Connectez-vous en SSH à votre cluster EMR (vous pouvez réutiliser la connexion avec le tunnel faite plus tôt)
 
 - [ ] Installez  Rstudio server
 
@@ -169,7 +199,7 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
   hadoop fs -chmod 777 /user/rstudio-user
   ````
 
-- [ ] Connectez-vous à l'interface web de Rstudio server avec l'adresse suivante https://master-node-public-DNS:8787 puis connectez vous avec l'utilisation rstudio-user et le mot de passe que vous avez choisi.
+- [ ] Connectez-vous à l'interface web de Rstudio server avec l'adresse suivante https://[master-node-public-DNS]:8787 avec [master-node-public-DNS] le DNS public de votre cluster. Puis connectez vous avec l'utilisation rstudio-user et le mot de passe que vous avez choisi.
 
 - [ ] Vous pouvez commencer à coder. Voici un script exemple : [lien](exemple/script_exemple_R.R)
 

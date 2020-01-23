@@ -4,7 +4,7 @@
 
 Ce TP a pour but de vous familiariser avec l'interface d'Amazon Web Service (AWS). Pendant ce TP vous allez :
 
-- Créer une compte AWS educate
+- Créer une compte AWS Educate
 
 - Créer une clef SSH qui assurera la sécurité de vos connexions en ligne de commande à vos machine virtuelle
 
@@ -16,11 +16,31 @@ Ce TP a pour but de vous familiariser avec l'interface d'Amazon Web Service (AWS
 
 Le cluster que vous allez créer pendant le TP pourra être cloné lors de vos prochains TP.
 
-## 1. Création du compte AWS educate
+## 1. Création du compte AWS Educate
 
-Suivez les instructions à partir du mail AWS Educate reçu sur votre adresse ENSAI.
+Suivez les instructions à partir du mail AWS Educate reçu sur votre adresse ENSAI. Créez vous bien un "starter account". Cela vous permettra d'utiliser la plateforme AWS, mais sans jamais utiliser votre carte de crédit, et donc sans risque de devoir payer quoi que ce soit. Dans le processus de création, vous allez recevoir deux mails. Un premier pour vous demander de confirmer votre mail, un un second (qui arrivera quelques minutes plus tard) qui vous permettra de finaliser la création de votre compte. 
 
-Créez un compte puis connectez-vous.
+Une fois voter compte créé, connectez vous à la plateforme AWS Educate, et cliquez sur "Classroom & Credit" (*note : toutes les images proviennent d'un compte avec l"accès "Educator", il est possible que les interfaces ou que la marche à suivre soient un peu différentes.*)
+
+![](../img/educate/Screenshot_2020-01-23 Home.png)
+
+Sur la page suivante cliquez sur "Go to classroom"![](../img/educate/Screenshot_2020-01-23 My Classrooms.png)
+
+Une fenêtre va s'ouvrir, cliquez sur "Continue"
+
+![](../img/educate/Screenshot_2020-01-23 My Classrooms(1).png)
+
+Vous serez ainsi redirigé vers "Vocareum", l'application tierce qui gère les "classrooms". Sélectionnez le bon cours. 
+
+![](../img/educate/Screenshot_2020-01-23 Vocareum Labs.png)
+
+Enfin sur la dernière fenêtre, cliquer sur "AWS console". Cela vous redirigera vers la plateforme AWS. Il vous est rappelé d'utiliser le compte AWS qui vous est fourni de manière responsable. C'est à dire de penser à éteindre toutes les instances que vous créez une fois qu'elles ne sont plus utilisées.
+
+![](../img/educate/Screenshot_2020-01-23 Workbench.png)
+
+Le compte AWS que vous allez utiliser pour les TP est localiser en Virginie du Nord. Ne changez pas cela ! Comme votre compte est à but purement scolaire, vous ne disposez pas de l'intégralité des services de la plateforme (vous n'avez pas accès aux information de facturation par exemple). De même votre compte est un compte généré par Vocareum, et vous ne pouvez pas y accéder sans passez par ce service. Il est donc inutile de le noter. Pour des connections futures à AWS dans le cadre scolaire, passez toujours par le portail AWS Educate, puis Vocareum.
+
+![](../img/educate/Screenshot_2020-01-23 AWS Management Console.png)
 
 ## 2. Exploration
 
@@ -58,7 +78,7 @@ Vérifiez que votre crédit de 50$ est bien activé.
 
 Vous avez fini de générer votre clef ssh!
 
-## 4 Créeation d'un espace de stockage Amazon Simple Storage Service (S3)
+## 4 Création d'un espace de stockage Amazon Simple Storage Service (S3)
 
 **Amazon Simple Storage Service** (S3) est la solution de base que propose AWS pour stocker vos données de manière pérenne. Amazon dit assurer une durabilité de vos données de 99,999999999 %. Cela signifie que si vous stockez 10 000 000 objets avec Amazon S3, vous  pouvez vous attendre à perdre en moyenne un objet unique une fois tous les 10 000 ans.
 
@@ -89,13 +109,13 @@ Tous les services que vous propose AWS peuvent nativement lire depuis et écrire
 - Un des écrans vous permet de choisir la classe de stockage. S3 en dispose de quelques une, chacune avec des cas d'utilisation différent. Par exemple le stockage "glacier" (EN: "glacieer") permet d'archiver des données pour un coût faible, mais vos données auront un délais d'accès et une facturation supplémentaire par accès.
 
     ![](../img/s3/s3_type.png)
- 
+
 &#x274f; 5-2 Une fois le chargement terminé cliquez sur votre fichier
 
 - Dans `Présentation > URL d'objet`, vous voyez l'URL de votre fichier, pour pouvoir s'y référencer par la suite, par exemple pour y donner accès sur Internet. (Depuis les services Amazon, l'adresse est raccourcie en `s3://<bucket-name>/<path-to-file>`.)
 - "Chemin de copie" est une mauvaise traduction de "Copy Path". Il faut s'y habituer, seule une toute petite partie d'AWS est traduite, et plutôt mal.
 - Dans l'onglet "Sélectionner depuis" vous avez accès à des outils d'exploration de vos données. Remarquez que sur AWS tous les traîtements coûtent! À tout moment, vous pouvez aller dans l'onglet facturation pour vérifier vos dépenses.
-    
+  
     ![](../img/s3/s3_fichier.png)
 
 <!--
