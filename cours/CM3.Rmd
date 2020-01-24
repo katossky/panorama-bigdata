@@ -8,6 +8,15 @@ output:
       scroll: false
 ---
 
+<!-- 
+# MUST HAVE:
+[ ]
+
+# NICE TO HAVE:
+[ ]
+[ ]
+-->
+
 # 1. Refresher
 
 vocabulary: cluster, node, etc.
@@ -20,17 +29,44 @@ vocabulary: cluster, node, etc.
 
 ## Data base
 
+Notion of transaction.
+
 ## Cloud computing
+
+NOW WE'RE READY! BUCKLE UP YOUR BELTS!
+
+<!-- GIF -->
 
 # 2. The fundamental problems of distribution
 
 In this part we do not distinguish between file systems and databases.
 
+Homegeneous (all run with the same sowftware / OS) vs. inhomogeneous (diff. software / OS).
+
+
+## 
+
+
 # 3. Distributing file systems
 
 ## Specific problems of distributed file systems
 
+---
+
 ## An exemple of distributed file system: HDFS
+
+![](../img/hadoop.png)
+
+HDFS stands for "Hadoop Distributed File System."
+
+It is an open-source project financed by tha Apache Fundation.
+
+???
+
+**Sources:**
+
+- https://en.wikipedia.org/wiki/Apache_Hadoop
+
 
 ### Why HDFS?
 
@@ -48,6 +84,8 @@ How this specific architecture acheives fault-tolerance, etc.
 
 # 4. Distributing databases
 
+https://en.wikipedia.org/wiki/Distributed_database
+
 ## Specific problems of distributed databases
 
 ## An exemple of distributed database: ???????????
@@ -58,6 +96,8 @@ How this specific architecture acheives fault-tolerance, etc.
 ## Specific problems of distributed task management
 
 vocabulary: job, task...
+
+https://en.wikipedia.org/wiki/Scheduling_(computing)
 
 ## An exemple of job-scheduler: YARN
 
@@ -73,17 +113,28 @@ How this specific architecture acheives fault-tolerance, etc.
 
 ## Other job-schedulers
 
+### Python's Celery
+
+http://www.celeryproject.org/
+https://github.com/celery/celery
+https://en.wikipedia.org/wiki/Celery_(software)
+
+
 # 5. Parallezing compution on distributed data
 
 ## Map-reduce principle
 
 ## Map-shuffle-reduce principle
 
-## An exemple of parallelized compuration framework: Spark
+## An exemple of parallelized computation framework: Spark
 
 ## Other frameworks
 
-# 6. Conclusions and perspectives
+# 6. Statistical applications
+
+
+
+# 7. Conclusions and perspectives
 
 ## What to remember from today?
 
