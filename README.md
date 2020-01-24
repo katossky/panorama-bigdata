@@ -43,15 +43,29 @@ Proposition de @katossky:
 
 ## Prochaines étapes
 
-- [ ] Mettre le brainstorming au propre
-- [ ] Objectifs
-- [ ] Bibliographie
-- [ ] Contenu plus détaillé des séances
-- [ ] Définition des modalités d'examen
-- [ ] Écrire et tester le TP 1
-- [ ] Écrire et tester le TP 2
-- [ ] Écrire et tester le TP 3
-- [ ] Écrire et tester le TP 4
-- [ ] Vérifier que tous les objectifs ont été traités
-- [ ] Exporter une version définitive sur Moodle
-- [ ] Exporter une version définitive sur Moodle
+- [ ] CM3
+    
+    **must have**
+    
+    **nice to have**
+    
+    **to do next**
+    - [ ] re-read Shadi's course and include relevent topics
+    
+- [ ] 
+
+**After course has ended:**
+
+- [ ] clean up directory
+- [ ] update readme
+
+**Before next session of the course**
+
+- [ ] Romaric's read
+- [ ] Read books:
+    - [ ] Principles of Distributed Databases
+    - [ ] Distributed Computing for Big Data Analytics
+
+**Possible improvements**
+
+- [ ] include more statiscal algorithms

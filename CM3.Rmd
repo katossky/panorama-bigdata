@@ -8,15 +8,6 @@ output:
       scroll: false
 ---
 
-<!-- 
-# MUST HAVE:
-[ ]
-
-# NICE TO HAVE:
-[ ]
-[ ]
--->
-
 # 1. Refresher
 
 vocabulary: cluster, node, etc.
