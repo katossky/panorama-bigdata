@@ -30,6 +30,31 @@ NOW WE'RE READY! BUCKLE UP YOUR BELTS!
 
 # 2. The fundamental problems of distribution
 
+When dealing with distributed systems, hardware failure is the norm, rather the exception.
+
+Imagine 100 machines storing information or performing computation. There will probably at least be a couple of them not working at any moment in time. Thus, **fault-tolerance** is a core requirement.
+
+**Latency**: you don't want to wait for hours to get answered
+
+**Availability:** <!--???????-->
+
+**Throughput:** <!--???????-->
+
+**Redundancy**: keep copies of the data in far away nodes, so that you don't lose information under hardware failure
+
+**Coherence:** <!--???????-->
+
+**Consistency:** <!--???????-->
+
+**Scalability:** (under constraint of constant / acceptably-increasing request time)
+
+1. number of files / size of files
+2. number of requests
+
+1. number of nodes ; 2. number of files ; 3. size of files ; 4. number of requests.
+
+
+
 In this part we do not distinguish between file systems and databases.
 
 Homegeneous (all run with the same sowftware / OS) vs. inhomogeneous (diff. software / OS).
@@ -46,28 +71,246 @@ Homegeneous (all run with the same sowftware / OS) vs. inhomogeneous (diff. soft
 
 ## An exemple of distributed file system: HDFS
 
-![](../img/hadoop.png)
-
 HDFS stands for "Hadoop Distributed File System."
 
 It is an open-source project financed by tha Apache Fundation.
+
+.footnote[
+
+![](img/hadoop.png)
+
+This section is heavily inspired from HDFS documentation pages ([link](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html)). Asterisks (*) denote (almost) exact citations.
+
+]
 
 ???
 
 **Sources:**
 
-- https://en.wikipedia.org/wiki/Apache_Hadoop
+- https://en.wikipedia.org/wiki/Apache_Hadoop (the explanation seems to be about Hadoop v1 since HDFS is refered to as the job tracker)
+- https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
 
+---
+
+## An exemple of distributed file system: HDFS
+
+_Hadoop_ is actually a complete suite of _modules_, of which HDFS and YARN are the basic components.
+
+But "_Hadoop_" in a broader sense refers to a complete software ecosystem, most of which is also supported by the Apache fundation. This ecosystem encopasses the _Hoaddop_ modules MapReduce, Ozone and Submarine, and the libraries Ambari, Avro, Cassandra, Chukwa, HBase, Hive, Mahout, Pig, Spark, Tez and ZooKeeper. More information on [Hadoop's website](https://hadoop.apache.org).
+
+---
+
+.footnote[
+
+![](img/hadoop-ecosystem.png)
+
+**Source:** https://www.oreilly.com/library/view/apache-hive-essentials/9781788995092/e846ea02-6894-45c9-983a-03875076bb5b.xhtml
+
+]
+
+???
+
+<!-- CHECK : what do the libraries mentionned on the previous slide do, that are not displayed on this table (e.g. Tez)  ? Conversely, what are the software mentionned in this table that are not in the previous list (e.g. Flume) ? -->
+
+---
+
+## An exemple of distributed file system: HDFS
+
+_Hadoop_ was first released in 2006, and has evolved a lot since.
+
+HDFS's developement was inspired by the publication of _Google File System_, a now deprecated file system developped by Google, to serve as infrastructure for the _Apache Nutch_ web search engine project.<!-- CHECK : now deprecated ?-->
+
+We will here focus on the latest version, Hadoop 3.
+
+.footnote[_Hadoop_ is mostly coded in _Java_.]
+
+---
 
 ### Why HDFS?
 
+- open-source
+
+- well-documented
+
+- well-spread
+
+---
+
 ### The architecture
+
+HDFS has a master/slave architecture.
+
+**NameNode:** a master server that manages the file system namespace and regulates access to files by clients*
+
+**DataNodes:** slaves which manage storage attached to the nodes that they run on*
+
+---
+
+### Key ideas
+
+When given a new file, the **NameNode** splits it into one or more **blocks** and gives these blocks to be stored into a set of **DataNodes**. Each block is stored several times, and this number is the **replication factor** of that file. Files in HDFS are write-once (except for appends and truncates) and have strictly one writer at any time.*
+
+By default, the replication factor is 3, and the NameNode tries to allocate the replicas intelligently: one on a given node, that then sends a copy to a close node (faster but less fault-tolerant) and an other to a further away node (slower but more fault-tolerant).
+
+---
+
+### Key ideas
+
+If a client wants to write a file, they ask the NameNode.
+
+1. The NameNode splits the file into blocks.
+2. For each block, it selects a number of DataNode to write onto (typically 3), based on:
+  a. disk space (more space is better)
+  b. proximity to the client (closer is better)
+  c. proximity to each other (one replication close, one far)
+  d. distribution of blocks (blocks of the same file should be on different nodes)
+3. It then passes the block split and the lists to the client.
+4. The client writes each block on the first block on the list.
+5. The DataNode passes the block and the list on to the next DataNode on the list. (This minimizes the use of the network in between the cluster and the client, likely to be slower than the network inside the cluster.)
+---
+
+### Key ideas
+
+If a client wants to read a file, they ask the NameNode.
+
+1. The NameNode looks into the index to associate the file path to blocks.
+2. The NameNode locates DataNodes containing the blocks, closest to the client.
+3. It passes the information to the client, who in turn reads directly from the specified DataNodes.
+
+---
 
 ### Role of the master (nodename)
 
+The **NodeName** :
+
+- is the entry point for a client's requests
+- decides how to split files into blocks and on which DataNodes to store these blocks
+- never handles actual files, only stores metadata
+- knows at any time the correspondance between a file's name and the physical location of the corresponding blocks (aka **file registry** or **namespace**) ; that is the _**file system**_ _per se_
+- detects DataNode failure by listenning to their **heartbeat** and demands block replication as necessary
+
+
+.footnote[The client is often not directly the user, but some other module asking for read / write access.]
+
+???
+
+It periodically receives a Heartbeat and a Blockreport from each of the DataNodes in the cluster. Receipt of a Heartbeat implies that the DataNode is functioning properly. A Blockreport contains a list of all blocks on a DataNode.
+- splits 
+- manages and stores the data registry
+
+
+The NameNode is the arbitrator and repository for all HDFS metadata. The system is designed in such a way that user data never flows through the NameNode.*
+
+The number of copies of a file is called the replication factor of that file. This information is stored by the NameNode.*
+
+---
+
+### Role of the master (nodename)
+
+The NameNode executes file system namespace operations like opening, closing, and renaming files and directories. It also determines the mapping of blocks to DataNodes.*
+
+This index is persisted to disk at regular intervals (every X seconds or every Y changes). In between, a record of the changes is also written to disk, in a file know as the edit log. So that at all time, the entire file system is preserved. In a case of a failure of the master, the data on disk is restored.
+
+_Where_ exactly the blocks are stored, however, is not stored on disk, but kept in memory.
+
+---
+
 ### Role of the slaves
 
+The DataNodes are responsible for serving read and write requests from the file system’s clients. The DataNodes also perform block creation, deletion, and replication upon instruction from the NameNode.*
+
+- emits a regular **heartbeat** containing the list of all the blocks stored locally
+- sends copies directly to each other when the NameNode requires a copy to be made
+- gives access (in read or write¹) directly to the client
+
+.footnote[¹ Only append or truncate actions are allowed.]
+
+---
+
 ### Properties
+
+#### Fault-tolerance
+
+> The primary objective of HDFS is to store data reliably even in the presence of failures. The three common types of failures are NameNode failures, DataNode failures and network partitions.
+
+---
+
+### Properties
+
+#### Fault-tolerance
+
+1. Hadoop modules have **location awareness**, i.e. they use the locations of the nodes relative to each other. This enables HDFS to obtain **safe redundancy** by replicating data in different locations. By default, there is one copy in vicinity (typically in a server room, the same rack) and one copy in further away (typically, an other rack).
+
+2. Failure is explicitly taken into account in the design of the file syste. There may be 3 kinds of failure:
+  
+  - **NameNode failure:** when the NameNode fails, it is restarted, and:
+    
+    - restores the latest index saved on disk,
+    - applies all the changes that are recorded in the edit log, also saved on disk
+    - reconstitute the location of blocks in memory from the DataNodes' heartbeat
+    
+    Running several NameNodes with a distritbuted edit log is also possible.
+    
+  - **Network failure:** when a subset of DataNodes lose connectivity with the NameNode (aka _network partition_), the NameNode detects the absence of _heartbeat_ and immediately demands replication of blocks below the replication factor. Since replication happens in distinct locations, it is unlikely that all of the replicated blocks become unavailable. (By default, a DataNode is considered dead after 10 min of silence.)
+  - **DataNode failure:** this is a special case of _network partition_ with only one node disconnected from the rest
+
+---
+
+### Properties
+
+#### Availability
+
+1. In some cases, user requests may start to concentrate on only a few NameNodes, and cause over-load and slow-down. Maybe a specific file is requested particularly often. Or maybe some DataNodes are full, whereas some other are almost empty — this might happen because you just added a new node, or because you deleted some voluminous file. HDFS is compatible with _rebalancing_ (i.e. moving data blocks from over-used nodes to under-used ones, or replicating often-requested blocks), even though it is not implemented by default as of today.
+
+2.
+
+3.
+
+---
+
+### Properties
+
+#### Scalability
+
+1. By splitting files into blocks, HDFS does not limit the size of a single file.
+2. <!-- multiple files -->
+3. <!-- multiple nodes -->
+4. <!-- multiple users -->
+
+**Scalability** is guaranteed by ... . It is designed to be able to store datasets reaching possibly To in size, and possibly tens of millions of files. The number of nodes should not matter.
+
+However, HDFS is not meant for frequent writes, and does not scale in this regard. Indeed, even though data does not go through the DataNode, editting the index — which is, please remember, copied onto disk — and demanding copies to be made to the DataNodes take time. Multiple NameNode can cope with this but is not the standard installation. HDFS calls it "write-once-read-many".
+
+---
+
+### Properties
+
+#### Integrity
+
+HDFS insures integrity by storing the _**checksum**_ of a block alongside the block itself. If the block gets corrupted, the computed checksum does not match the stored one. (It is possible, but much less likely, that the checksum itselft gets corrupted.)
+
+Clients checksum the block they download and inform the DataNode of the result. DataNodes also run regular checsksum of all unchecked blocks.
+
+DataNodes store information about the checks already made, and thus can narrow the date about which data has become corrupted.
+
+In case of checksum mismatch, clients flag the incriminated block as corrupted to the NameNode, in which case a new copy is demanded.
+
+---
+
+
+
+
+
+
+
+
+
+
+**High throughput** is obtained at the expense of a (relatively) **low latency**. HDFS is not conceived for interactive use.
+
+**High throughput access** <!--????--> is guaranteed by ...
+
+
 
 How this specific architecture acheives fault-tolerance, etc.
 
@@ -92,6 +335,12 @@ https://en.wikipedia.org/wiki/Scheduling_(computing)
 
 ## An exemple of job-scheduler: YARN
 
+???
+
+**Sources:**
+
+- https://en.wikipedia.org/wiki/Apache_Hadoop
+
 ### The architecture
 
 ### Role of the master (job scheduler)
@@ -100,7 +349,15 @@ https://en.wikipedia.org/wiki/Scheduling_(computing)
 
 ### Properties
 
+**Fault-tolerance** is guaranteed by ...
+
+**Scalability** is guaranteed by ...
+
+
+
 How this specific architecture acheives fault-tolerance, etc.
+
+Hadoop has **location awareness**, i.e. it uses the locations of the nodes relative to each other, in order to allocate the data to the closest nodes.
 
 ## Other job-schedulers
 
@@ -148,3 +405,27 @@ Key insights:
 
 <!-- fast languages must be moved to the first course:
 Fast languages (Go, Julia, JavaScript) -->
+
+
+<!--
+
+THINGS TO ADD SOMEWHERE:
+
+From Wikipedia:
+
+"The master node consists of a Job Tracker, Task Tracker, NameNode, and DataNode."
+"A slave or worker node acts as both a DataNode and TaskTracker, though it is possible to have data-only and compute-only worker nodes."
+Communication between the nodes happens in SSH.
+"In a larger cluster, HDFS nodes are managed through a dedicated NameNode server to host the file system index, and a secondary NameNode that can generate snapshots of the namenode's memory structures, thereby preventing file-system corruption and loss of data."
+
+
+From https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
+
+HDFS relaxes a few POSIX requirements to enable streaming access to file system data.
+HDFS applications need a write-once-read-many access model for files. A file once created, written, and closed need not be changed except for appends and truncates. Appending the content to the end of the files is supported but cannot be updated at arbitrary point. This assumption simplifies data coherency issues and enables high throughput data access. A MapReduce application or a web crawler application fits perfectly with this model.
+A computation requested by an application is much more efficient if it is executed near the data it operates on. This is especially true when the size of the data set is huge. This minimizes network congestion and increases the overall throughput of the system. The assumption is that it is often better to migrate the computation closer to where the data is located rather than moving the data to where the application is running. HDFS provides interfaces for applications to move themselves closer to where the data is located.
+To minimize global bandwidth consumption and read latency, HDFS tries to satisfy a read request from a replica that is closest to the reader.
+
+The HDFS architecture is compatible with data rebalancing schemes. A scheme might automatically move data from one DataNode to another if the free space on a DataNode falls below a certain threshold. In the event of a sudden high demand for a particular file, a scheme might dynamically create additional replicas and rebalance other data in the cluster. These types of data rebalancing schemes are not yet implemented.
+
+-->
