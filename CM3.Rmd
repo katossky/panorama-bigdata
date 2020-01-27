@@ -135,18 +135,76 @@ In this part we do not distinguish between file systems and databases.
 
 Homegeneous (all run with the same sowftware / OS) vs. inhomogeneous (diff. software / OS).
 
+
+> Confidentiality, availability and integrity are the main keys for a secure system.
+
+> High availability: the cluster can contain thousands of file servers and some of them can be down at any time
+> A server belongs to a rack, a room, a data center, a country, and a continent, in order to precisely identify its geographical location
+> The size of a file can vary from many gigabytes to many terabytes. The file system should be able to support a massive number of files
+> The need to support append operations and allow file contents to be visible even while a file is being written
+> Communication is reliable among working machines: TCP/IP is used with a remote procedure call RPC communication abstraction. TCP allows the client to know almost immediately when there is a problem and a need to make a new connection.
+
+Load Balancing
+Load Rebalancing
+
+5.1	Confidentiality
+5.2	Integrity
+5.3	Availability vs. Replication
+
+**Source:** https://en.wikipedia.org/wiki/Distributed_file_system_for_cloud
+
+
+> Distributed file systems may aim for "transparency" in a number of aspects. That is, they aim to be "invisible" to client programs, which "see" a system which is similar to a local file system. Behind the scenes, the distributed file system handles locating files, transporting data, and potentially providing other features listed below.
+> 
+> Access transparency: clients are unaware that files are distributed and can access them in the same way as local files are accessed.
+> Location transparency: a consistent namespace exists encompassing local as well as remote files. The name of a file does not give its location.
+> Concurrency transparency: all clients have the same view of the state of the file system. This means that if one process is modifying a file, any other processes on the same system or remote systems that are accessing the files will see the modifications in a coherent manner.
+> Failure transparency: the client and client programs should operate correctly after a server failure.
+> Heterogeneity: file service should be provided across different hardware and operating system platforms.
+> Scalability: the file system should work well in small environments (1 machine, a dozen machines) and also scale gracefully to bigger ones (hundreds through tens of thousands of systems).
+> Replication transparency: Clients should be unaware of the file replication performed across multiple servers to support scalability.
+> Migration transparency: files should be able to move between different servers without the client's knowledge.
+
+**Souce:** https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems
+
+
 ---
 # 3. Distributing file systems
 
+
+
+???
+
+**Source:**
+
+- https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems
+- https://en.wikipedia.org/wiki/Distributed_file_system_for_cloud
+
+
 ---
+
+## Distributing file systems
+
+**Distributed file systems**, also known historically as **network file systems**
+
+Dates back from the beginning of "the network" in the 1960s.
+
+In 1985, Sun Microsystems creates "Network File System" (NFS), still in use today.
+
+---
+
 ## Specific problems of distributed file systems
+
+> The difference between a distributed file system and a distributed [database] is that a distributed file system allows files to be accessed using the same interfaces and semantics as local files.
+
+Such semantics include using folder-like hierarchy, attributing permissions to individual files, copying files to different locations, etc.
 
 ---
 ## An exemple of distributed file system: HDFS
 
 HDFS stands for "Hadoop Distributed File System."
 
-It is an open-source project financed by tha Apache Fundation.
+It is an open-source project financed by the Apache Fundation.
 
 .footnote[
 
@@ -169,7 +227,7 @@ This section is heavily inspired from HDFS documentation pages ([link](https://h
 
 _Hadoop_ is actually a complete suite of _modules_, of which HDFS and YARN are the basic components.
 
-But "_Hadoop_" in a broader sense refers to a complete software ecosystem, most of which is also supported by the Apache fundation. This ecosystem encopasses the _Hoaddop_ modules MapReduce, Ozone and Submarine, and the libraries Ambari, Avro, Cassandra, Chukwa, HBase, Hive, Mahout, Pig, Spark, Tez and ZooKeeper. More information on [Hadoop's website](https://hadoop.apache.org).
+But "_Hadoop_" in a broader sense refers to a complete software ecosystem, most of which is also supported by the Apache fundation. This ecosystem encompasses the _Hodoop_ modules MapReduce, Ozone and Submarine, and the libraries Ambari, Avro, Cassandra, Chukwa, HBase, Hive, Mahout, Pig, Spark, Tez and ZooKeeper. More information on [Hadoop's website](https://hadoop.apache.org).
 
 ---
 
@@ -199,6 +257,8 @@ We will here focus on the latest version, Hadoop 3.
 
 ---
 
+## An exemple of distributed file system: HDFS
+
 ### Why HDFS?
 
 - open-source
@@ -208,6 +268,8 @@ We will here focus on the latest version, Hadoop 3.
 - well-spread
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### The architecture
 
@@ -219,13 +281,19 @@ HDFS has a master/slave architecture.
 
 ---
 
+## An exemple of distributed file system: HDFS
+
 ### Key ideas
 
-When given a new file, the **NameNode** splits it into one or more **blocks** and gives these blocks to be stored into a set of **DataNodes**. Each block is stored several times, and this number is the **replication factor** of that file. Files in HDFS are write-once (except for appends and truncates) and have strictly one writer at any time.*
+When given a new file, the **NameNode** splits it into one or more **blocks** and gives these blocks to be stored into a set of **DataNodes**. Each block is stored several times, on different DataNodes, and this number is the **replication factor** of that file.*
+
+**Files in HDFS cannot be modified**, except for appends and truncates. Emphasis is indeed on the reading part, a scheme HDFS calls "write-once-read-many".
 
 By default, the replication factor is 3, and the NameNode tries to allocate the replicas intelligently: one on a given node, that then sends a copy to a close node (faster but less fault-tolerant) and an other to a further away node (slower but more fault-tolerant).
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Key ideas
 
@@ -233,14 +301,21 @@ If a client wants to write a file, they ask the NameNode.
 
 1. The NameNode splits the file into blocks.
 2. For each block, it selects a number of DataNode to write onto (typically 3), based on:
-  a. disk space (more space is better)
-  b. proximity to the client (closer is better)
-  c. proximity to each other (one replication close, one far)
-  d. distribution of blocks (blocks of the same file should be on different nodes)
+  
+    a. disk space (more space is better)
+    b. proximity to the client (closer is better)
+    c. proximity to each other (one replication close, one far)
+    d. distribution of blocks (blocks of the same file should be on different nodes)
+  
 3. It then passes the block split and the lists to the client.
 4. The client writes each block on the first block on the list.
 5. The DataNode passes the block and the list on to the next DataNode on the list. (This minimizes the use of the network in between the cluster and the client, likely to be slower than the network inside the cluster.)
+
+.footnote[The "client" is often not directly the user, but some other module asking for read / write access.]
+
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Key ideas
 
@@ -250,7 +325,11 @@ If a client wants to read a file, they ask the NameNode.
 2. The NameNode locates DataNodes containing the blocks, closest to the client.
 3. It passes the information to the client, who in turn reads directly from the specified DataNodes.
 
+.footnote[The "client" is often not directly the user, but some other module asking for read / write access.]
+
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Role of the master (nodename)
 
@@ -259,11 +338,9 @@ The **NodeName** :
 - is the entry point for a client's requests
 - decides how to split files into blocks and on which DataNodes to store these blocks
 - never handles actual files, only stores metadata
-- knows at any time the correspondance between a file's name and the physical location of the corresponding blocks (aka **file registry** or **namespace**) ; that is the _**file system**_ _per se_
+- knows at any time the correspondance between a file's name and the block's identifiers (aka **namespace**, stored on disk) and the the physical location of blocks (aka **block index**, kept in memory)
 - detects DataNode failure by listenning to their **heartbeat** and demands block replication as necessary
 
-
-.footnote[The client is often not directly the user, but some other module asking for read / write access.]
 
 ???
 
@@ -278,27 +355,32 @@ The number of copies of a file is called the replication factor of that file. Th
 
 ---
 
+## An exemple of distributed file system: HDFS
+
 ### Role of the master (nodename)
 
 The NameNode executes file system namespace operations like opening, closing, and renaming files and directories. It also determines the mapping of blocks to DataNodes.*
 
-This index is persisted to disk at regular intervals (every X seconds or every Y changes). In between, a record of the changes is also written to disk, in a file know as the edit log. So that at all time, the entire file system is preserved. In a case of a failure of the master, the data on disk is restored.
+The **namespace** is persisted to disk at regular intervals (every X seconds or every Y changes). In between, a record of the changes is also written onto disk, in a file know as the edit log, so that at all time, the entire file system is preserved. In a case of a failure of the master, the data on disk is restored.
 
 _Where_ exactly the blocks are stored, however, is not stored on disk, but kept in memory.
 
 ---
 
+## An exemple of distributed file system: HDFS
+
 ### Role of the slaves
 
 The DataNodes are responsible for serving read and write requests from the file system’s clients. The DataNodes also perform block creation, deletion, and replication upon instruction from the NameNode.*
 
-- emits a regular **heartbeat** containing the list of all the blocks stored locally
-- sends copies directly to each other when the NameNode requires a copy to be made
-- gives access (in read or write¹) directly to the client
-
-.footnote[¹ Only append or truncate actions are allowed.]
+**DataNodes:**
+- emit a regular **heartbeat** containing the list of all the blocks stored locally
+- send copies directly to each other when the NameNode requires a copy to be made
+- give access (in read or write) directly to the client
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Properties
 
@@ -307,6 +389,8 @@ The DataNodes are responsible for serving read and write requests from the file 
 > The primary objective of HDFS is to store data reliably even in the presence of failures. The three common types of failures are NameNode failures, DataNode failures and network partitions.
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Properties
 
@@ -318,9 +402,9 @@ The DataNodes are responsible for serving read and write requests from the file 
   
   - **NameNode failure:** when the NameNode fails, it is restarted, and:
     
-    - restores the latest index saved on disk,
-    - applies all the changes that are recorded in the edit log, also saved on disk
-    - reconstitute the location of blocks in memory from the DataNodes' heartbeat
+      - restores the latest index saved on disk,
+      - applies all the changes that are recorded in the edit log, also saved on disk
+      - reconstitute the location of blocks in memory from the DataNodes' heartbeat
     
     Running several NameNodes with a distritbuted edit log is also possible.
     
@@ -328,6 +412,8 @@ The DataNodes are responsible for serving read and write requests from the file 
   - **DataNode failure:** this is a special case of _network partition_ with only one node disconnected from the rest
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Properties
 
@@ -340,6 +426,8 @@ The DataNodes are responsible for serving read and write requests from the file 
 3.
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Properties
 
@@ -355,6 +443,8 @@ The DataNodes are responsible for serving read and write requests from the file 
 However, HDFS is not meant for frequent writes, and does not scale in this regard. Indeed, even though data does not go through the DataNode, editting the index — which is, please remember, copied onto disk — and demanding copies to be made to the DataNodes take time. Multiple NameNode can cope with this but is not the standard installation. HDFS calls it "write-once-read-many".
 
 ---
+
+## An exemple of distributed file system: HDFS
 
 ### Properties
 
@@ -388,7 +478,23 @@ In case of checksum mismatch, clients flag the incriminated block as corrupted t
 How this specific architecture acheives fault-tolerance, etc.
 
 ---
-## Other job-schedulers
+## Other distributed file systems
+
+- proprietary 
+- **NFS** (Linux), **SMB** (Windows) or **AFP** (Apple), typically used in Network-attached storages (NAS's)
+- **Lustre**, typically used in clusters of super computers
+- ...
+
+**More:** https://en.wikipedia.org/wiki/Comparison_of_distributed_file_systems
+
+???
+
+<!--Highlight some differences?-->
+
+> Network File System (NFS) uses a client-server architecture, which allows sharing files between a number of machines on a network as if they were located locally, providing a standardized view. The NFS protocol allows heterogeneous clients' processes, probably running on different machines and under different operating systems, to access files on a distant server, ignoring the actual location of files. Relying on a single server results in the NFS protocol suffering from potentially low availability and poor scalability. Using multiple servers does not solve the availability problem since each server is working independently.[5] The model of NFS is a remote file service. This model is also called the remote access model, which is in contrast with the upload/download model:
+> Remote access model: Provides transparency, the client has access to a file. He send requests to the remote file (while the file remains on the server).[6]
+> Upload/download model: The client can access the file only locally. It means that the client has to download the file, make modifications, and upload it again, to be used by others' clients.
+> The file system used by NFS is almost the same as the one used by Unix systems. Files are hierarchically organized into a naming graph in which directories and files are represented by nodes.
 
 ---
 # 4. Distributing databases
