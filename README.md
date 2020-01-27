@@ -65,7 +65,10 @@ Proposition de @katossky:
 - [ ] Read books:
     - [ ] Principles of Distributed Databases
     - [ ] Distributed Computing for Big Data Analytics
+    - [ ] https://hadoop.apache.org/docs/stable
 
 **Possible improvements**
 
 - [ ] include more statiscal algorithms
+- [ ] in course computing, add ref to pay-as-you-go
+- [ ] add more cloud providers, such as IBM, OpenStack, Digital Ocean...

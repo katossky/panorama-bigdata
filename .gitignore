@@ -1,5 +1,6 @@
-\.DS_Store
 .Rproj.user
-.DS_Store
-cours/.DS_Store
+*.DS_Store
 *.html
+CM3_files
+CM1_files
+.DS_Store
