@@ -94,41 +94,60 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
 - **Transaction** : unit of work
   - **A**tomicity : complete entirely or not at all
   - **C**onsistency : changes affected data only in allowed ways
-  - **I**solation : must no affect other transacations
+  - **I**solation : must no affect other transcations
   - **D**urability : changes must be written on persistant storage 
 
 ---
 ## Cloud computing
 
 NOW WE'RE READY! BUCKLE UP YOUR BELTS!
+.center[
+![](https://media2.giphy.com/media/5C472t1RGNuq4/giphy.gif?cid=790b76114b58b79ee92f2fa959969b9d111633782b5a5a7a&rid=giphy.gif)
+]
+---
+# 2. The fundamental problems of distribution
+- **Availability:** you want your data available 24/7
+  - **Latency**: you don't want to wait for hours to get answered (read and write)
+  - **Throughput:** maybe you want to read ALL your data or write GB at once 
+  - **Fault tolerance:** a single node failure shouldn't make your data unavailable
+  
+- **Coherence:** the same query with the same data return the same result
+  - **Durability:** your data mustn't get corrupted over time
+  - **Inter-node consistency:** at the same time, all the node see the same data
 
-<!-- GIF -->
+- **Schema consistency:** changes affected data only in allowed ways
+
+- **Isolation:** transactions mustn't overlap
+
+- **Elasticity/Scalability:**(under constraint of constant / acceptably-increasing request time)
+  - can it save more files (scalability) ? Bigger files ?
+  - can it process more request ? (elasticity)
+  - can I add mode node ? (scalability)
+
 ---
 # 2. The fundamental problems of distribution
 
-When dealing with distributed systems, hardware failure is the norm, rather the exception.
+Allways keep in mind those issues :
+- **Confidentiality:** only authorized person can access your data
+- **Data gouvernance:** under which law are your data ?
+- **Environment:** is your system not too big ? Does your system use too much energy ?
 
-Imagine 100 machines storing information or performing computation. There will probably at least be a couple of them not working at any moment in time. Thus, **fault-tolerance** is a core requirement.
+---
+## Some solutions 
 
-**Latency**: you don't want to wait for hours to get answered
+- **Redundancy:** keep copies of the data in far away nodes, so that you don't lose information under hardware failure
 
-**Availability:** <!--???????-->
+- **Balancing\rebalancing:** use all your node fairly
 
-**Throughput:** <!--???????-->
+- **Timestamp-based concurrency control:** use timestamp to resolve conflict (first in first out) 
 
-**Redundancy**: keep copies of the data in far away nodes, so that you don't lose information under hardware failure
+- **Get the closest data to the client:** if the data are close to the client, there is less network time
 
-**Coherence:** <!--???????-->
+- **Have a master** which organize the work to avoid conflict
 
-**Consistency:** <!--???????-->
+- **Asynchron/synchron** nodes can work in an asynchron way, and then synchronize theirs data
 
-**Scalability:** (under constraint of constant / acceptably-increasing request time)
-
-1. number of files / size of files
-2. number of requests
-
-1. number of nodes ; 2. number of files ; 3. size of files ; 4. number of requests.
-
+???
 
 
 In this part we do not distinguish between file systems and databases.
@@ -167,6 +186,14 @@ Load Rebalancing
 
 **Souce:** https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems
 
+
+---
+## The CAP theorem
+
+![](img\CAP theorem.jpg)
+
+???
+Source : https://en.wikipedia.org/wiki/CAP_theorem
 
 ---
 # 3. Distributing file systems
