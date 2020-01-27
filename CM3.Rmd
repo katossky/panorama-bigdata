@@ -92,10 +92,10 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
 
 - Data base responsibility to guarentee the coherence and validity of data
 - **Transaction** : unit of work
-  - Atomicity : complete entirely or not at all
-  - Consistency : changes affected data only in allowed ways
-  - Isolation : must no affect other transacations
-  - Durability : changes must be written on persistant storage 
+  - **A**tomicity : complete entirely or not at all
+  - **C**onsistency : changes affected data only in allowed ways
+  - **I**solation : must no affect other transacations
+  - **D**urability : changes must be written on persistant storage 
 
 ---
 ## Cloud computing
@@ -161,6 +161,10 @@ https://en.wikipedia.org/wiki/Distributed_database
 
 ---
 ## An exemple of distributed database: ???????????
+
+- MongoDB
+- Cassandra
+- Voldemort
 
 ---
 # 5. Distributing tasks
