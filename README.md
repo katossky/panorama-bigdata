@@ -72,3 +72,4 @@ Proposition de @katossky:
 - [ ] include more statiscal algorithms
 - [ ] in course computing, add ref to pay-as-you-go
 - [ ] add more cloud providers, such as IBM, OpenStack, Digital Ocean...
+- [ ] dif.. scale-in scale-out dans le premier cours

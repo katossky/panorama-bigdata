@@ -1,4 +1,5 @@
 ---
+title: Computing parallelization principles
 author: Arthur Katossky & Rémi Pépin
 output:
   xaringan::moon_reader:
@@ -8,61 +9,144 @@ output:
       scroll: false
 ---
 
-# 1. Refresher
-
-vocabulary: cluster, node, etc.
+# Forewords
 
 ---
+
+## Course outline
+
+1. Refresher `<= Today`
+2. File systems vs. databases
+3. The fundamental problems of distribution
+4. Distributing file systems
+5. Distributing databases
+6. Distributing tasks `<= Next week`
+7. Parallelizing computation on distributed data
+8. Statistical applications
+9. Conclusions and perspectives
+
+---
+
+## QCM
+
+Go on Moodle. You have 5 mins.
+
+---
+
+# 1. Refresher
+
+<!-- vocabulary: cluster, node, etc. -->
+
+---
+
 ## Storage improvement and limits
 
+???
+
+Storage has improved a lot, but not as fast as data size.
+We generate much more data than we can store on a single hard disk.
+
+---
+
+.heigth600[![](img/storage-cost.png)]
+
+---
+
+.heigth600[![](img/storage-average.png)]
 
 
 ---
 ## Parallelisation
 
+???
+
+Parallelisation is not the ideal solution, it most of the time does not bring as much improvement of a program as you might expect, since some parts of a programmed cannot be parallelised. When you parallelise, a lot of time is pent moving data around.
+
+The map-then-reduce scheme is a clever and genral way to parallelise algorithms.
+
+---
+## Cloud computing
+
+???
+
+Cloud computing allows you to operate much of your computing tasks in the cloud.
+In particular, you can store data too big to be stored on your personal computer.
+You can launch a full cluster of machines, and arrange them as you wish, to do whatever tasks you want.
+Also, they provide readily available solutions for storage and for computation at large scales.
+However, this storage solutions hides a lot of the complexity that it is to store data on several computers.
+
 ---
 
-## File systems (FS)
+# 2. File systems vs. databases
 
-- Manages files on persistant memory
-  - Makes transparent the "physical file" and the "logical file" for the user
-  - Heterogeneous unstructured data (image, sound, text, application)
+---
+
+## File systems vs. databases
+
+**Goal:** what do we do when data exceeds the physical limits of our storage?
+
+-> We first have to understand how things are stored in the normal case.
+
+???
+
+Last time we did not really talk about either file systems or databases.
+This will be the focus of this course.
+
+---
+
+## File systems
+
+- Manages files on storage space (persistant memory, i.e. most often hard disk)
+  - Makes the "physical file" (bits) and the "logical file" (fragments) transparent for the user
+  - Does not care about file formats
+  - Can handle _heterogeneous_, _unstructured_ data (image, sound, text, application)
+
 - Principal use cases :
   - Read
   - Write
-  - Security (access right)
-
-
----
-## Traditionnal file processing
-
-![](img/filesystem.jpg)
-
-
----
-## File System key features
-- Bonds the physical file (electro-magnetic field on your hardrive) and the logical file (list of bits)
-  - **Namespace** : file name (must be unique)
-  - **Index** : map files name and physical location on disk
-- Doesn't undestand files content
-- Responsible of the integrity of files
-- Responsible of the redundancy of files
-- Security (access right)
-- Metadata
-- Hierachy of files and directory
-
-**Provide an abstraction for the users**. It's not the programm responsability to know how files are stored (physical location, redundancy, access right). But it's the programm responsability to know how to read files.
+  - Security (access rights)
 
 ???
-All files are just bytes for it, the FS open a stream between the file and the application which want to read it. The application know how to read it.
+
+Transparent here means "not visible", "not disturbing".
+
+---
+
+## File systems
+
+### Traditionnal file processing
+
+.heigth600[![](img/filesystem.jpg)]
 
 
 ---
-## Data base
+## File Systems
 
-- Manages file on persistant memory
-  - Makes transparent the "physical file" and the "logical file" for the user
-  - "Homogenous structured" data
+### Key features
+
+- Is responsible for the correspondance between the physical and logical file
+- Maintains the **index** of where data is situated on disk
+- Maintains the **namespace**, a virtual hierarchy of files and directory making it possible to identify one single file by a string, called a **path**
+- Doesn't undestand file contents, only understands meta data (e.g. size, owner, time stamp of last change)
+- Responsible of the integrity of files
+- Responsible of the redundancy of files (_not needed on your personal computer_)
+- Security (access rights)
+
+**Provides an useful abstraction for the clients (=programmes)**. It's not the programm responsability to know how files are stored (physical location, redundancy, access right). But it's the programm responsability to know how to read files.
+
+???
+
+All files are just bytes for it, the FS open a stream between the file and the application which want to read it. The application know how to read it.
+
+---
+
+## Data bases
+
+- Manages files on storage space (persistant memory, i.e. most often hard disk)
+  - Makes the "physical file" (bits) and the "logical file" (fragments) transparent for the user
+  - Possibly care about data format (numbers, texts, dates...)
+  - Can handle _homogeneous_, _structured_ data
+
 - Principal use cases :
   - Unique entry point to access data
   - Knows how to read/write data
@@ -72,22 +156,28 @@ All files are just bytes for it, the FS open a stream between the file and the a
       - Models to organize data
 
 ???
+
 We mix the database (storage part) and the DBMS (management system). It's not a mistake, just a simplification.
 
-
 ---
-## Why use a data base
+
+## Data bases
+
+### Why use a data base ?
+
 - Integrated tool to process data
 - "Centralize" the data
 
-
-
 ---
+
+## Data bases
+
 ## Data base processsing
 
 ![](img/database.jpg)
 
 ---
+
 ## Data base transaction
 
 - Data base responsibility to guarentee the coherence and validity of data
@@ -97,8 +187,6 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
   - Isolation : must no affect other transacations
   - Durability : changes must be written on persistant storage 
 
----
-## Cloud computing
 
 NOW WE'RE READY! BUCKLE UP YOUR BELTS!
 
@@ -185,7 +273,7 @@ Load Rebalancing
 
 ## Distributing file systems
 
-**Distributed file systems**, also known historically as **network file systems**
+**Distributed file systems** are also known historically as **network file systems**
 
 Dates back from the beginning of "the network" in the 1960s.
 
@@ -480,14 +568,14 @@ How this specific architecture acheives fault-tolerance, etc.
 ---
 ## Other distributed file systems
 
-- proprietary 
+- Proprietary private file systems such Amazon S3, Azure Storage, Google Cloud Storage, etc.
 - **NFS** (Linux), **SMB** (Windows) or **AFP** (Apple), typically used in Network-attached storages (NAS's)
 - **Lustre**, typically used in clusters of super computers
 - ...
 
-**More:** https://en.wikipedia.org/wiki/Comparison_of_distributed_file_systems
-
 ???
+
+**Source:**https://en.wikipedia.org/wiki/Comparison_of_distributed_file_systems 
 
 <!--Highlight some differences?-->
 
@@ -501,11 +589,288 @@ How this specific architecture acheives fault-tolerance, etc.
 
 https://en.wikipedia.org/wiki/Distributed_database
 
+
+.footnote[This section is heavily inspired from « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » by Jeff Carpenter]
+
 ---
 ## Specific problems of distributed databases
 
+A key feature of (relational) databases is their **consistency**.
+
+For instance, if your schema requires an foreign key, you are not allowed to add a line to a given table without linking to a record from an other table.
+
+However, when distributing databases, it becomes increasingly difficult to maintain **consistency** accross copies of many tables. Indeed, the mere lookup of a foreign key in a table distributed across many nodes may take a long time, and one is supposed to do so for each record created / updated.
+
+In order to maintain **consistency**, databases thus generally give up the relational component, and are thus known as **no-SQL databases**.
+
+Doing so, they become mere **distributed data stores**, and the frontier with a file system tends to blur. They often consist in just a requesting programme and an interface with the underlying file system.
+
+Distributed transactions
+
 ---
-## An exemple of distributed database: ???????????
+## Specific solutions for distributed databases
+
+### Denormalisation
+
+When data becomes large, join operations becomes expensive. (So do consistency checks on foreign keys.)
+
+A solution is to pre-compute joins, so that the lookup is performed only once. This is knokwn as denormalisation.
+
+But then maintaining consistency accross the tables become a problem.
+
+---
+## Specific solutions for distributed databases
+
+### 2 phase-commit
+
+In order to maintain schema-consistency, you lock a resource until you finished the transaction.
+
+Downsides:
+
+- The resource is locked in between, preventing other clients to access it. It is thus only acceptable for transactions occuring super fast.
+- Infinite waiting is possible.
+
+---
+## Specific solutions for distributed databases
+
+### Compensation
+
+In order to maintain schema-consistency, you undo a previously done change, in case that the transaction finally ends up with an error. Like soustracting -10 if you initially did +10.
+
+Downsides:
+
+- does not work for legally binding transactions (stock sales, bank transfers...)
+
+---
+## Specific solutions for distributed databases
+
+### Sharding
+
+<!-- read more -->
+
+Sharding is the idea to split data over multiple nodes.
+
+1. functionnal segmentation
+2. (manual) key-based sharding
+3. lookup-table
+
+Downsides of look-up tables:
+
+- the lookup table is a single point of failure
+- every request goes through the lookup table
+
+---
+## Specific solutions for distributed databases
+
+### _share-nothing_ architecture
+
+A _share-nothing_ architecture is an architecure where each node is independant from each other, so that consistency becomes irrelevant.
+
+.footnote[Michael Stonebraker, 1986, "The Case for Shared Nothing."]
+
+
+---
+## Specific solutions of distributed databases
+
+### No-SQL databases
+
+If we accept some departure from the ACID requirement, it is possible to reach (horizontal) scalability and high availability though distribution.
+
+This has always existed, but the unifying "no-SQL" labels was a 2010s phenomenon.
+
+- key-value store (ex: ????)
+- column store (ex: Cassandra)
+- document store (ex: MongoDB)
+- graph database (ex: Neo4J)
+
+---
+## Specific solutions of distributed databases
+
+### Issues over consistency
+
+- strict consistency means every node containing the data gets updated simultaneously ; this means that there is some global time that the nodes can refer to ; and that they can agree in a sure way that some change will be acknowledged at a given instant (and that the other nodes know that this node knows that hey know it knows... ¹) ; the only way to insure this form of consistency is through locking-releasing resources
+- causal consistency <!-- ??? -->
+- weak consistency, changes will propagate through the nodes until, at some point in time, consistency will be achieved
+
+
+.footnote[¹ This is known as **the Byzantine Generals Problem**, where to generals refuse to attack until they get completely sure that the other is also sure that they both agree to attack.]
+
+---
+## Specific solutions of distributed databases
+
+### Summary
+
+- Consistency & Availability:
+    Such database 
+
+
+- Availability & Fault-tolerance:
+
+
+- Fault-Tolerance & Consistency:
+    If you shard your data to distribute it across several nodes.
+
+
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. »
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+« We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+« The problems that 2PC introduces for application developers include loss of availability and higher latency during partial failures. Neither of these is desirable. So once you’ve had the good fortune of being successful enough to necessitate scaling your database past a single machine, you now have to figure out how to handle transactions across multiple machines and still make the ACID properties apply. Whether you have 10 or 100 or 1,000 database machines, atomicity is still required in transactions as if you were working on a single node. But it’s now a much, much bigger pill to swallow. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+
+???
+
+**Source:**
+
+- https://en.wikipedia.org/wiki/Denormalization
+- Cassandra, the definitive guide
+
+---
+## An exemple of distributed database: Cassandra
+
+Cassandra has integration with the Hadoop ecosystem.
+
+Cassandra introduced the Cassandra Query Language (CQL). CQL is a simple interface for accessing Cassandra, as an alternative to the traditional Structured Query Language (SQL).
+Eventual Consistency
+Cassandra manages eventual consistency of reads, upserts and deletes through Tombstones.
+
+Some of the largest production deployments include Apple's, with over 75,000 nodes storing over 10 PB of data, Netflix (2,500 nodes, 420 TB, over 1 trillion requests per day), Chinese search engine Easou (270 nodes, 300 TB, over 800 million requests per day), and eBay (over 100 nodes, 250 TB).
+
+Born in Facebook in 2007, bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable.
+
+.footnote[
+
+![](img/cassandra.png)
+
+]
+
+???
+
+Distributed
+Every node in the cluster has the same role. There is no single point of failure. Data is distributed across the cluster (so each node contains different data), but there is no master as every node can service any request.
+Supports replication and multi data center replication
+Replication strategies are configurable.[16] Cassandra is designed as a distributed system, for deployment of large numbers of nodes across multiple data centers. Key features of Cassandra’s distributed architecture are specifically tailored for multiple-data center deployment, for redundancy, for failover and disaster recovery.
+Scalability
+
+---
+## An exemple of distributed database: Cassandra
+
+### Key ideas
+
+Cassandra is **decentralized**: it is a peer-to-peer database, at the opposite spectrum of the a master-slave architecture. Each node functions exactly the same as the other, and no single one is necessary to the overall functionning of the database.
+
+The nodes maintain ... through gossip.
+
+Cassandra has innate balancing and rebalancing capabilities in the case of adding or removing nodes (**elasticity**).
+
+Cassandra is always writable, and reads are not always successful, and there is not guarantee that data will be up to date.
+
+Cassandra has 2 parameters: replication factor and consistency level. As in HDFS, replication factor is number of copies the database has to maintain. Consistency level is specified at each interaction: it is the number of nodes the databse has to consult and that have to agree for the operation to be considered a success.
+
+<!-- DO: add something about single point of failure in introduction -->
+
+
+Cassandra is a **sparse**, **row-oriented** database, meaning that not all columns should exist for each record. Each row gets a key, that is used to distribute and replicate the records.This allows Cassandra to save space of non-assigned values.
+
+Cassandra uses **location awareness**, and distinguishes between two levels: the rack, and the data center.
+
+<!-- flexible schema -->
+
+---
+## An exemple of distributed database: Cassandra
+
+### Key ideas
+
+When a clients wants to write, he adresses himself to any of the nodes, while specifying a desired consistency level.
+
+1. The node becomes coordinator for this request.
+2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
+3. The replica logs the request in its "commit log" on disk, performs the write in memory, then confirms the transaction success.
+4. The coordinator waits for as many confirmations as the client has requested with its consistency level before confirming the writing.
+
+
+
+---
+## An exemple of distributed database: Cassandra
+
+### Key ideas
+
+When a clients want to read from Cassandra, he adresses himself to any of the nodes.
+
+1. The node becomes coordinator for this request.
+2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
+1. The node launches a "snitch" (FR: cafteur), whose task is to find the fastest available node having the requested records
+2. The client downloads the records.
+3. Simmultaneously, the node asks for the checksums of the same records from the other (slower) nodes that contain the same data. As many checksums are askes as the consistency level specified in the request.
+
+---
+## An exemple of distributed database: Cassandra
+
+### Replicas
+
+when an write instruction is given, a replica:
+
+1. logs it in a log (called "commit log")
+2. pushes the changes in memory ("memtable")
+3. if the current memtable reaches a threshold, creates a new memtable
+4. when idle, copies the memtable to disk
+
+### Gossipping
+
+Once per second, a node will send a message to a random node of the cluster.
+
+If the node does not answer, it marks it locally as down.
+
+<!--Not so clear...-->
+
+.footnote[The term "gossip protocol" dates back from 1987, in an article by Alan Demers.]
+
+
+---
+
+## An exemple of distributed database: Cassandra
+
+### Properties
+
+#### Fault-tolerance
+
+Data is automatically replicated to multiple nodes for fault-tolerance. Replication across multiple data centers is supported. Failed nodes can be replaced with no downtime.
+
+---
+## An exemple of distributed database: Cassandra
+
+### Properties
+
+#### Scalability
+
+Designed to have read and write throughput both increase linearly as new machines are added, with the aim of no downtime or interruption to applications.
+
+---
+## An exemple of distributed database: Cassandra
+
+### Properties
+
+#### Consistency
+
+Cassandra is typically classified as an AP system, meaning that availability and partition tolerance are generally considered to be more important than consistency in Cassandra,[17] Writes and reads offer a tunable level of consistency, all the way from "writes never fail" to "block for all replicas to be readable", with the quorum level in the middle.[18]
+
+
+
 
 ---
 # 5. Distributing tasks
