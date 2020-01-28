@@ -73,3 +73,6 @@ Proposition de @katossky:
 - [ ] in course computing, add ref to pay-as-you-go
 - [ ] add more cloud providers, such as IBM, OpenStack, Digital Ocean...
 - [ ] dif.. scale-in scale-out dans le premier cours
+- [ ] uniformize titles
+- [ ] add colors (if possible by CSS) and images
+- [ ] read "Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services"

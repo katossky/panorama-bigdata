@@ -1,6 +1,9 @@
 ---
-title: Computing parallelization principles
+title: "Large-scale machine-learning"
+subtitle: "Lesson 3 — Parallelized computing on distributed data"
 author: Arthur Katossky & Rémi Pépin
+institute: "ENSAI (Rennes, France)"
+date: "January 2020"
 output:
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
@@ -172,13 +175,15 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
 
 ## Data bases
 
-## Data base processsing
+### Data base processsing
 
 ![](img/database.jpg)
 
 ---
 
-## Data base transaction
+## Data bases
+
+### Data base transaction
 
 - Data base responsibility to guarentee the coherence and validity of data
 - **Transaction** : unit of work
@@ -187,53 +192,119 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
   - **I**solation : must no affect other transcations
   - **D**urability : changes must be written on persistant storage 
 
-
-NOW WE'RE READY! BUCKLE UP YOUR BELTS!
-.center[
-![](https://media2.giphy.com/media/5C472t1RGNuq4/giphy.gif?cid=790b76114b58b79ee92f2fa959969b9d111633782b5a5a7a&rid=giphy.gif)
-]
 ---
+
+background-image: url(https://media2.giphy.com/media/5C472t1RGNuq4/giphy.gif?cid=790b76114b58b79ee92f2fa959969b9d111633782b5a5a7a&rid=giphy.gif)
+background-size: cover
+
+---
+
 # 2. The fundamental problems of distribution
+
+---
+
+## Are the problems fundamentally different for file systems and databases?
+
+The distinction becomes blur, especially when you start giving up on the _relational_ aspect of databases.
+
+> The difference between a distributed file system and a distributed [database] is that a distributed file system allows files to be accessed using the same interfaces and semantics as local files.
+
+Such semantics include using folder-like hierarchy, attributing permissions to individual files, copying files to different locations, etc.
+
+We will thus start by the _common_ problems.
+
+---
+
+## The fundamental problems of distribution
+
+
 - **Availability:** you want your data available 24/7
-  - **Latency**: you don't want to wait for hours to get answered (read and write)
-  - **Throughput:** maybe you want to read ALL your data or write GB at once 
-  - **Fault tolerance:** a single node failure shouldn't make your data unavailable
+
+--
   
+  - **Latency**: you don't want to wait for hours to get answered (read and write)
+  
+--
+  - **Throughput:** maybe you want to read ALL your data or write GB at once
+  
+--
+  - **Fault tolerance:** a single node failure shouldn't make your data unavailable
+
+--
+
 - **Coherence:** the same query with the same data return the same result
-  - **Durability:** your data mustn't get corrupted over time
+
+--
+  - **Atomicity*:** complete entirely or not at all
+  
+--
+  - **Durability*:** your data mustn't get corrupted over time
+  
+--
   - **Inter-node consistency:** at the same time, all the node see the same data
 
-- **Schema consistency:** changes affected data only in allowed ways
+--
 
-- **Isolation:** transactions mustn't overlap
+- **Schema consistency*:** changes affected data only in allowed ways
+
+
+--
+
+- **Isolation*:** transactions mustn't overlap
+
+--
 
 - **Elasticity/Scalability:**(under constraint of constant / acceptably-increasing request time)
-  - can it save more files (scalability) ? Bigger files ?
-  - can it process more request ? (elasticity)
-  - can I add mode node ? (scalability)
+
+--
+  - can it store more or bigger files ?
+  
+--
+  - can it process more requests ? (reads / writes)
+  
+--
+  - can I add more nodes ? (_horizontal scaling_)
+  
+--
+  - does scaling require a lot of _ad hoc_ work? can the scaling happen automatically? (_elasticity_)
 
 ---
-# 2. The fundamental problems of distribution
+## The fundamental problems of distribution
 
-Allways keep in mind those issues :
+
+Plus the usual questions of large-scale systems :
+
 - **Confidentiality:** only authorized person can access your data
 - **Data gouvernance:** under which law are your data ?
 - **Environment:** is your system not too big ? Does your system use too much energy ?
+- **Economy:** isn't it too expensive to manage?
+- ...
 
 ---
-## Some solutions 
 
-- **Redundancy:** keep copies of the data in far away nodes, so that you don't lose information under hardware failure
+## The fundamental problems of distribution
 
-- **Balancing\rebalancing:** use all your node fairly
+### Some solutions 
 
-- **Timestamp-based concurrency control:** use timestamp to resolve conflict (first in first out) 
+- **Redundancy / replication:** keep copies of the data in far away nodes, so that you don't lose information under hardware failure (++ availability, ++ fault-tolerance, ++ durability, -- inter-node consistency, -- schema-consistency, --cost, --environment)
 
-- **Get the closest data to the client:** if the data are close to the client, there is less network time
+--
+- **Balancing\rebalancing:** use all your node fairly (--availability now, ++ availability later, ++ scalability)
 
-- **Have a master** which organize the work to avoid conflict
+--
+- **Timestamp-based concurrency control:** use timestamp to resolve conflict (first in first out)  (++isolation, --availability)
 
-- **Asynchron/synchron** nodes can work in an asynchron way, and then synchronize theirs data
+--
+- **Get the closest data to the client:** if the data are close to the client, there is less network time (++ availability, - inter-node consistency, - governance)
+
+--
+- **Have a master:** it organizes the work to avoid conflict (+ consistency, - availability, - fault-tolerance)
+
+--
+- **Asynchronous processing:** nodes can accept change locally, and consolidate the transactions only in a second phase (++ availability, --inter-node consistency)
+
+--
+- **First-class actions:** you may chose to priviledge reads over writes, or to completely prevent modifying files, for instance (++ availability, ++ consistency)
 
 ???
 
@@ -245,34 +316,15 @@ Homegeneous (all run with the same sowftware / OS) vs. inhomogeneous (diff. soft
 
 > Confidentiality, availability and integrity are the main keys for a secure system.
 
-> High availability: the cluster can contain thousands of file servers and some of them can be down at any time
 > A server belongs to a rack, a room, a data center, a country, and a continent, in order to precisely identify its geographical location
-> The size of a file can vary from many gigabytes to many terabytes. The file system should be able to support a massive number of files
 > The need to support append operations and allow file contents to be visible even while a file is being written
 > Communication is reliable among working machines: TCP/IP is used with a remote procedure call RPC communication abstraction. TCP allows the client to know almost immediately when there is a problem and a need to make a new connection.
-
-Load Balancing
-Load Rebalancing
-
-5.1	Confidentiality
-5.2	Integrity
-5.3	Availability vs. Replication
 
 **Source:** https://en.wikipedia.org/wiki/Distributed_file_system_for_cloud
 
 
 > Distributed file systems may aim for "transparency" in a number of aspects. That is, they aim to be "invisible" to client programs, which "see" a system which is similar to a local file system. Behind the scenes, the distributed file system handles locating files, transporting data, and potentially providing other features listed below.
 > 
-> Access transparency: clients are unaware that files are distributed and can access them in the same way as local files are accessed.
-> Location transparency: a consistent namespace exists encompassing local as well as remote files. The name of a file does not give its location.
-> Concurrency transparency: all clients have the same view of the state of the file system. This means that if one process is modifying a file, any other processes on the same system or remote systems that are accessing the files will see the modifications in a coherent manner.
-> Failure transparency: the client and client programs should operate correctly after a server failure.
-> Heterogeneity: file service should be provided across different hardware and operating system platforms.
-> Scalability: the file system should work well in small environments (1 machine, a dozen machines) and also scale gracefully to bigger ones (hundreds through tens of thousands of systems).
-> Replication transparency: Clients should be unaware of the file replication performed across multiple servers to support scalability.
-> Migration transparency: files should be able to move between different servers without the client's knowledge.
-
-**Souce:** https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems
 
 
 ---
@@ -281,12 +333,40 @@ Load Rebalancing
 ![](img\CAP theorem.jpg)
 
 ???
+
+Brewer's theorem, published as a conjecture in 1999, proved in 2002
 Source : https://en.wikipedia.org/wiki/CAP_theorem
 
 ---
+## Transparency requirements
+
+- **Access transparency:** clients are unaware that files/data are distributed and can access them in the same way as local files are accessed
+
+.footnote[**Souce:** https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems]
+
+--
+- **Location transparency:** the way to refer to a file/data does not dependon its location
+
+--
+- **Concurrency transparency:** all clients should have the same view of the state of the file system / database
+
+--
+- **Failure transparency:** clients should not notice a single node failure
+
+--
+- **Heterogeneity and scale transparency:** it should not matter on which specific machines or on how many machines the file system / the database is distributed
+
+--
+- **Replication transparency:** clients should be unaware of the file replication performed across multiple servers to support scalability
+
+--
+- **Migration transparency:** files should be able to move between different servers without the client's knowledge.
+
+--
+- ...
+
+---
 # 3. Distributing file systems
-
-
 
 ???
 
@@ -294,7 +374,6 @@ Source : https://en.wikipedia.org/wiki/CAP_theorem
 
 - https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems
 - https://en.wikipedia.org/wiki/Distributed_file_system_for_cloud
-
 
 ---
 
@@ -308,13 +387,6 @@ In 1985, Sun Microsystems creates "Network File System" (NFS), still in use toda
 
 ---
 
-## Specific problems of distributed file systems
-
-> The difference between a distributed file system and a distributed [database] is that a distributed file system allows files to be accessed using the same interfaces and semantics as local files.
-
-Such semantics include using folder-like hierarchy, attributing permissions to individual files, copying files to different locations, etc.
-
----
 ## An exemple of distributed file system: HDFS
 
 HDFS stands for "Hadoop Distributed File System."
