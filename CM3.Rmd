@@ -199,7 +199,7 @@ background-size: cover
 
 ---
 
-# 2. The fundamental problems of distribution
+# 3. The fundamental problems of distribution
 
 ---
 
@@ -366,7 +366,7 @@ Source : https://en.wikipedia.org/wiki/CAP_theorem
 - ...
 
 ---
-# 3. Distributing file systems
+# 4. Distributing file systems
 
 ???
 
@@ -586,6 +586,14 @@ The DataNodes are responsible for serving read and write requests from the file 
 
 1. Hadoop modules have **location awareness**, i.e. they use the locations of the nodes relative to each other. This enables HDFS to obtain **safe redundancy** by replicating data in different locations. By default, there is one copy in vicinity (typically in a server room, the same rack) and one copy in further away (typically, an other rack).
 
+---
+
+## An exemple of distributed file system: HDFS
+
+### Properties
+
+#### Fault-tolerance
+
 2. Failure is explicitly taken into account in the design of the file syste. There may be 3 kinds of failure:
   
   - **NameNode failure:** when the NameNode fails, it is restarted, and:
@@ -607,11 +615,15 @@ The DataNodes are responsible for serving read and write requests from the file 
 
 #### Availability
 
-1. In some cases, user requests may start to concentrate on only a few NameNodes, and cause over-load and slow-down. Maybe a specific file is requested particularly often. Or maybe some DataNodes are full, whereas some other are almost empty — this might happen because you just added a new node, or because you deleted some voluminous file. HDFS is compatible with _rebalancing_ (i.e. moving data blocks from over-used nodes to under-used ones, or replicating often-requested blocks), even though it is not implemented by default as of today.
+1. **Latency / throughput** is achieved by delegating to the slave all the communication intensive work. Yet, the NameNode is a bottleneck, since all communication goes through it. **High throughput** is obtained at the expense of a (relatively) **low latency**. HDFS is not conceived for interactive use.
 
-2.
+2. HDFS supports natively **balancing**: it will use first the least used resources.
 
-3.
+3. HDFS is also compatible with _rebalancing_.
+
+???
+
+In some cases, user requests may start to concentrate on only a few NameNodes, and cause over-load and slow-down. Maybe a specific file is requested particularly often. Or maybe some DataNodes are full, whereas some other are almost empty — this might happen because you just added a new node, or because you deleted some voluminous file.  (i.e. moving data blocks from over-used nodes to under-used ones, or replicating often-requested blocks), even though it is not implemented by default as of today.
 
 ---
 
@@ -621,12 +633,9 @@ The DataNodes are responsible for serving read and write requests from the file 
 
 #### Scalability
 
-1. By splitting files into blocks, HDFS does not limit the size of a single file.
-2. <!-- multiple files -->
-3. <!-- multiple nodes -->
-4. <!-- multiple users -->
-
-**Scalability** is guaranteed by ... . It is designed to be able to store datasets reaching possibly To in size, and possibly tens of millions of files. The number of nodes should not matter.
+1. By splitting files into blocks, HDFS does not limit the size of a single file, nor the number of files.
+2. You can add slave servers at any time.
+3. Users interact only briefly with the NameNode, and most of the interaction with the cluster is decentralized, hence enabling a large amount of simultaneous users.
 
 However, HDFS is not meant for frequent writes, and does not scale in this regard. Indeed, even though data does not go through the DataNode, editting the index — which is, please remember, copied onto disk — and demanding copies to be made to the DataNodes take time. Multiple NameNode can cope with this but is not the standard installation. HDFS calls it "write-once-read-many".
 
@@ -645,25 +654,6 @@ Clients checksum the block they download and inform the DataNode of the result. 
 DataNodes store information about the checks already made, and thus can narrow the date about which data has become corrupted.
 
 In case of checksum mismatch, clients flag the incriminated block as corrupted to the NameNode, in which case a new copy is demanded.
-
----
-
-
-
-
-
-
-
-
-
-
-**High throughput** is obtained at the expense of a (relatively) **low latency**. HDFS is not conceived for interactive use.
-
-**High throughput access** <!--????--> is guaranteed by ...
-
-
-
-How this specific architecture acheives fault-tolerance, etc.
 
 ---
 ## Other distributed file systems
@@ -685,12 +675,13 @@ How this specific architecture acheives fault-tolerance, etc.
 > The file system used by NFS is almost the same as the one used by Unix systems. Files are hierarchically organized into a naming graph in which directories and files are represented by nodes.
 
 ---
-# 4. Distributing databases
-
-https://en.wikipedia.org/wiki/Distributed_database
-
+# 5. Distributing databases
 
 .footnote[This section is heavily inspired from « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » by Jeff Carpenter]
+
+???
+
+https://en.wikipedia.org/wiki/Distributed_database
 
 ---
 ## Specific problems of distributed databases
@@ -703,9 +694,7 @@ However, when distributing databases, it becomes increasingly difficult to maint
 
 In order to maintain **consistency**, databases thus generally give up the relational component, and are thus known as **no-SQL databases**.
 
-Doing so, they become mere **distributed data stores**, and the frontier with a file system tends to blur. They often consist in just a requesting programme and an interface with the underlying file system.
-
-Distributed transactions
+Doing so, they become mere **distributed data stores**, and **the frontier with a file system tends to blur**. They often consist in just a requesting programme and an interface with the underlying file system.
 
 ---
 ## Specific solutions for distributed databases
@@ -754,12 +743,15 @@ Sharding is the idea to split data over multiple nodes.
 2. (manual) key-based sharding
 3. lookup-table
 
-Downsides of look-up tables:
+Downsides:
 
-- the lookup table is a single point of failure
+- inbalance / no duplication
+- single point of failure
 - every request goes through the lookup table
+- sharding has to be cleverly chosen
 
----
+<!--
+
 ## Specific solutions for distributed databases
 
 ### _share-nothing_ architecture
@@ -767,10 +759,10 @@ Downsides of look-up tables:
 A _share-nothing_ architecture is an architecure where each node is independant from each other, so that consistency becomes irrelevant.
 
 .footnote[Michael Stonebraker, 1986, "The Case for Shared Nothing."]
-
+-->
 
 ---
-## Specific solutions of distributed databases
+## Specific solutions for distributed databases
 
 ### No-SQL databases
 
@@ -778,7 +770,7 @@ If we accept some departure from the ACID requirement, it is possible to reach (
 
 This has always existed, but the unifying "no-SQL" labels was a 2010s phenomenon.
 
-- key-value store (ex: ????)
+- key-value store (ex: Voldemort)
 - column store (ex: Cassandra)
 - document store (ex: MongoDB)
 - graph database (ex: Neo4J)
@@ -789,13 +781,12 @@ This has always existed, but the unifying "no-SQL" labels was a 2010s phenomenon
 ### Issues over consistency
 
 - strict consistency means every node containing the data gets updated simultaneously ; this means that there is some global time that the nodes can refer to ; and that they can agree in a sure way that some change will be acknowledged at a given instant (and that the other nodes know that this node knows that hey know it knows... ¹) ; the only way to insure this form of consistency is through locking-releasing resources
-- causal consistency <!-- ??? -->
+<!--- causal consistency ?????? -->
 - weak consistency, changes will propagate through the nodes until, at some point in time, consistency will be achieved
-
 
 .footnote[¹ This is known as **the Byzantine Generals Problem**, where to generals refuse to attack until they get completely sure that the other is also sure that they both agree to attack.]
 
----
+<!--
 ## Specific solutions of distributed databases
 
 ### Summary
@@ -840,18 +831,16 @@ Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Dat
 - https://en.wikipedia.org/wiki/Denormalization
 - Cassandra, the definitive guide
 
+-->
+
 ---
 ## An exemple of distributed database: Cassandra
 
-Cassandra has integration with the Hadoop ecosystem.
+Cassandra is part of the Hadoop ecosystem.
 
-Cassandra introduced the Cassandra Query Language (CQL). CQL is a simple interface for accessing Cassandra, as an alternative to the traditional Structured Query Language (SQL).
-Eventual Consistency
-Cassandra manages eventual consistency of reads, upserts and deletes through Tombstones.
+Born in Facebook in 2007, Cassandra bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable.
 
-Some of the largest production deployments include Apple's, with over 75,000 nodes storing over 10 PB of data, Netflix (2,500 nodes, 420 TB, over 1 trillion requests per day), Chinese search engine Easou (270 nodes, 300 TB, over 800 million requests per day), and eBay (over 100 nodes, 250 TB).
-
-Born in Facebook in 2007, bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable.
+Some of the largest production deployments use Cassandra, including Apple's, with over 75,000 nodes storing over 10 PB of data, Netflix's (2,500 nodes, 420 TB, over 1 trillion requests per day), Chinese search engine Easou's (270 nodes, 300 TB, over 800 million requests per day), and eBay's (over 100 nodes, 250 TB).
 
 .footnote[
 
@@ -874,38 +863,40 @@ Scalability
 
 Cassandra is **decentralized**: it is a peer-to-peer database, at the opposite spectrum of the a master-slave architecture. Each node functions exactly the same as the other, and no single one is necessary to the overall functionning of the database.
 
-The nodes maintain ... through gossip.
+The nodes maintain their knowledge of the network through **gossip**.
 
-Cassandra has innate balancing and rebalancing capabilities in the case of adding or removing nodes (**elasticity**).
+Cassandra is a **sparse**, **row-oriented** database, meaning that not all columns should exist for each record. Each row gets a key, that is used to distribute and replicate the records.This allows Cassandra to save space of non-assigned values.
 
-Cassandra is always writable, and reads are not always successful, and there is not guarantee that data will be up to date.
-
-Cassandra has 2 parameters: replication factor and consistency level. As in HDFS, replication factor is number of copies the database has to maintain. Consistency level is specified at each interaction: it is the number of nodes the databse has to consult and that have to agree for the operation to be considered a success.
+Cassandra is always writable, and reads are not always successful, and there is not guarantee that data will be up to date. Cassandra controls the trade-off between consistency and fault-tolerance with 2 parameters:
+- **replication factor** is the number of copies the database has to maintain
+- **consistency level** is specified at each interaction: it is the number of nodes the databse has to consult and that have to agree for the operation to be considered a success.
 
 <!-- DO: add something about single point of failure in introduction -->
 
+???
 
-Cassandra is a **sparse**, **row-oriented** database, meaning that not all columns should exist for each record. Each row gets a key, that is used to distribute and replicate the records.This allows Cassandra to save space of non-assigned values.
+Cassandra has innate balancing and rebalancing capabilities in the case of adding or removing nodes.
 
 Cassandra uses **location awareness**, and distinguishes between two levels: the rack, and the data center.
 
 <!-- flexible schema -->
 
 ---
+
 ## An exemple of distributed database: Cassandra
 
 ### Key ideas
 
-When a clients wants to write, he adresses himself to any of the nodes, while specifying a desired consistency level.
+When a clients wants to write or read, he adresses himself to any of the nodes, while specifying a desired consistency level.
 
 1. The node becomes coordinator for this request.
 2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
-3. The replica logs the request in its "commit log" on disk, performs the write in memory, then confirms the transaction success.
-4. The coordinator waits for as many confirmations as the client has requested with its consistency level before confirming the writing.
-
-
+3. In case of a write, the replica logs the request in its "commit log" on disk, performs the write in memory, then confirms the transaction success, and returns a result if any.
+4. The coordinator waits for as many confirmations as the client has requested with its consistency level before confirming the reading/writing and returns the consolidated response.
 
 ---
+
+<!--
 ## An exemple of distributed database: Cassandra
 
 ### Key ideas
@@ -918,7 +909,6 @@ When a clients want to read from Cassandra, he adresses himself to any of the no
 2. The client downloads the records.
 3. Simmultaneously, the node asks for the checksums of the same records from the other (slower) nodes that contain the same data. As many checksums are askes as the consistency level specified in the request.
 
----
 ## An exemple of distributed database: Cassandra
 
 ### Replicas
@@ -939,7 +929,7 @@ If the node does not answer, it marks it locally as down.
 <!--Not so clear...-->
 
 .footnote[The term "gossip protocol" dates back from 1987, in an article by Alan Demers.]
-
+-->
 
 ---
 
@@ -967,17 +957,10 @@ Designed to have read and write throughput both increase linearly as new machine
 
 #### Consistency
 
-Cassandra is typically classified as an AP system, meaning that availability and partition tolerance are generally considered to be more important than consistency in Cassandra,[17] Writes and reads offer a tunable level of consistency, all the way from "writes never fail" to "block for all replicas to be readable", with the quorum level in the middle.[18]
-
-
-
-
-- MongoDB
-- Cassandra
-- Voldemort
+Cassandra is typically classified as an AP system, meaning that availability and partition tolerance are generally considered to be more important than consistency in Cassandra,[17] Writes and reads offer a tunable level of consistency, all the way from "writes never fail" to "block for all replicas to be readable", with the quorum level in the middle.
 
 ---
-# 5. Distributing tasks
+# 6. Distributing tasks
 
 ---
 ## Specific problems of distributed task management
@@ -1027,7 +1010,7 @@ https://github.com/celery/celery
 https://en.wikipedia.org/wiki/Celery_(software)
 
 ---
-# 5. Parallezing compution on distributed data
+# 7. Parallezing compution on distributed data
 
 ---
 ## Map-reduce principle
@@ -1042,11 +1025,11 @@ https://en.wikipedia.org/wiki/Celery_(software)
 ## Other frameworks
 
 ---
-# 6. Statistical applications
+# 8. Statistical applications
 
 
 ---
-# 7. Conclusions and perspectives
+# 9. Conclusions and perspectives
 
 ---
 ## What to remember from today?
