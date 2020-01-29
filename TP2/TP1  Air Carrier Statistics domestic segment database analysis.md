@@ -1,4 +1,4 @@
-# TP1 - Code profiling, parallelization, big data  and cloud computing architecture?
+# TP1 : Air Carrier Statistics, domestic segment database analysis
 
 You will find the code of this practical session on moodle.
 
@@ -6,7 +6,7 @@ You will find the code of this practical session on moodle.
 
 1. Run the code. 
 2. Does it take time ? Any idea why ?
-3. Find a way to make it run quickly
+3. Update the code to make it run.
 
 ## 2- Code profiling
 
@@ -21,15 +21,14 @@ Now the code is running, we will try to find how many time take each part and pr
 1. SQL optimization
 
    1. Do we really need to do
-
    ```SQL
    	SELECT * FROM flight
    ```
-
+   
    ?
-
+   
    2. Can we transfer some treatments done in R to the DB ? If so, update the R code
-
+   
 2. Optimize the computation of the mean of flight number by month.
 
    1. With R statements
@@ -37,8 +36,7 @@ Now the code is running, we will try to find how many time take each part and pr
    3. Which is the faster ?
 
 3. Think how sliding mean work. How can you change the code to optimize it ?
-4. Do the kernel regressions depend of each other ? Propose a way to accelerate them.
-5. Statistics ? (sampling, confidence interval)
+4. Statistics ?
 
 ## 4- On a bigger machine ?
 

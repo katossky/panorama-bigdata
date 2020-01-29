@@ -418,9 +418,10 @@ But "_Hadoop_" in a broader sense refers to a complete software ecosystem, most 
 
 ---
 
+![](img/hadoop-ecosystem.png)
+
 .footnote[
 
-![](img/hadoop-ecosystem.png)
 
 **Source:** https://www.oreilly.com/library/view/apache-hive-essentials/9781788995092/e846ea02-6894-45c9-983a-03875076bb5b.xhtml
 

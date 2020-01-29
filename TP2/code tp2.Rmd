@@ -2,41 +2,49 @@
 title: "R Notebook"
 output: html_notebook
 ---
-
-# TP1 
 ```{r}
 library(dplyr)
+library(RPostgreSQL)
+
 ```
 
+# TP1 : Air Carrier Statistics domestic segment database analysis
 
-## Récupération des données
+In this practical session you will manipulate the Air Carrier Statistics database, also known as the *T-100 data bank*. You can fin the initial sources here : https://www.transtats.bts.gov/Fields.asp (no need to download the sources. They have been a alterned for the purpose of this session)
+
+In this session, you have to optimise the follows script which compute :
+- the number of flights per month
+- the mean number of seat on sliding windows of 5 and 10 days
+- the kernel regression to explain payload with seats, passengers, freight, mail, distance
+
+
+## Data acquisition
 ```{r}
-# install.packages("RPostgreSQL")
-require("RPostgreSQL")
- 
-# create a connection
+# create a connection. Do not change the pw !
 pw <- "YojCqLr3Cnlw6onuzHU3"
  
-# loads the PostgreSQL driver
+# loads the PostgreSQL driver. Needed to query the data
 drv <- dbDriver("PostgreSQL")
-# creates a connection to the postgres database
-# note that "con" will be used later in each connection to the database
+
+# note that "con" will be used later in each connection to the database. No need to create another
 con <- dbConnect(drv, dbname = "postgres",
                  host = "database-1.c5bqsgv9tnea.eu-west-3.rds.amazonaws.com", port = 5432,
                  user = "postgres", password = pw)
 rm(pw) # removes the password
 
+# Check if the flight table exist
 dbExistsTable(con, "flight")
 ```
 
 
 On récupère les données
 ```{r}
-df_flight <- dbGetQuery(con, "SELECT * FROM flight limit 100000")
+# Query all the data of the flight database
+df_flight <- dbGetQuery(con, "SELECT * FROM flight ")
 ```
 
 
-## Calcul du nombre de vols par mois
+## Flight number per month
 
 ```{r}
 df_count = data.frame(year=integer(),
@@ -56,7 +64,7 @@ for (i in 1:nrow(df_flight)) {
 
 
 
-## Nombre de siège moyen sur 5 et 10 jours glissants
+## Sliding mean of passengers for 5 and 10 days
 
 ```{r}
 df_moyenne_glissante_passager = data.frame(year=integer(),
@@ -66,13 +74,13 @@ df_moyenne_glissante_passager = data.frame(year=integer(),
                  moyenne_10=integer())
 
 
-# calcule de la somme du nombre de passagers par jour
+# Sum of passengers per day
 df_sum_passenger <- df_flight %>% 
                         group_by (year, month, day) %>%
                         summarise (total_passager = sum(passengers)) %>%
                         arrange(year, month, day)
 
-# On commence au 5ième jour
+# Sliding 5 days mean. Begins at day 5
 for (i in 5:nrow(df_sum_passenger)) {
   nombre_passager_glissant <- 0
   for(j in (i-4):i) {
@@ -88,7 +96,8 @@ for (i in 5:nrow(df_sum_passenger)) {
  df_moyenne_glissante_passager <- df_moyenne_glissante_passager %>%rbind(new_row)
 }
 
-# On commence au 10ième jour
+
+# Sliding 10 days mean. Begins at day 10
 for (i in 10:nrow(df_sum_passenger)) {
   nombre_passager_glissant <- 0
   for(j in (i-9):i) {
@@ -102,8 +111,11 @@ for (i in 10:nrow(df_sum_passenger)) {
 
 ```
 
-## Regression linéaire glissante
+## Kernel regression
 
+Kernel regression : https://en.wikipedia.org/wiki/Kernel_regression
+
+This regression explain the payload of each flight with i seats number, passengers number, freight transported , mail transported and distance. The regression is done on a sliding windows of 1000 flights.
 
 ```{r}
 betas <- c()
