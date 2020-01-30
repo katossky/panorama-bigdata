@@ -1,9 +1,9 @@
+library(datastructures)
+
 # Va contenir les données inférieures à la médiane courante
-min_heap <- c()
-max_min_heap <- NA
+min_heap <- fibonacci_heap("numeric")
 #Va contenir les données supérieures à la médiane courante
-max_heap <-c()
-min_max_heap <- NA
+max_heap <- fibonacci_heap("numeric")
 
 
 #Combien d'élément
@@ -27,3 +27,12 @@ update_mediane <- function(new_element, min_heap, max_heap ) {
     
   }
 }
+
+
+# peeks into a fibonacci 
+b_heap <- binomial_heap("integer")
+b_heap <- insert(b_heap, 1:3, 1:3)
+b_heap <- insert(b_heap, 1:3, 1:3)
+
+peek(b_heap)
+values(b_heap)
