@@ -38,9 +38,13 @@ dbExistsTable(con, "flight")
 
 
 On récupère les données
-```{r}
+```{r echo=FALSE}
 # Query all the data of the flight database
-df_flight <- dbGetQuery(con, "SELECT * FROM flight ")
+df_flight <- dbGetQuery(con, "SELECT * FROM flight LIMIT 10000")
+```
+```{r, eval=FALSE}
+# Query all the data of the flight database
+df_flight <- dbGetQuery(con, "SELECT * FROM flight")
 ```
 
 
