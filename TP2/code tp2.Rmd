@@ -118,7 +118,7 @@ Kernel regression : https://en.wikipedia.org/wiki/Kernel_regression
 This regression explain the payload of each flight with i seats number, passengers number, freight transported , mail transported and distance. The regression is done on a sliding windows of 1000 flights.
 
 ```{r}
-betas <- c()
+betas <- numeric()
 df_flight <- df_flight %>% arrange(year, month, day)
 
 for (i in 1000:nrow(df_flight)) {
@@ -128,10 +128,10 @@ for (i in 1000:nrow(df_flight)) {
 X <- cbind(matrix(1, nrow = 1000, ncol = 1), X)
 Y <- matrix(df_flight[(i-999):i,]$payload, nrow = 1000, ncol = 1)
 
-betas <- c(betas,solve(t(X)%*% X) %*% t(X) %*% Y)
+betas <- rbind(betas,solve(t(X)%*% X) %*% t(X) %*% Y)
   
 }
-
+colnames(betas) <- c("seats", "passengers", "freight", "mail", "distance")
 
 ```
 
