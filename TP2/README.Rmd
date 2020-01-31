@@ -1,22 +1,3 @@
----
-title: "Large-scale machine-learning"
-author: "Arthur Katossky & Rémi Pépin"
-date: "January 2020"
-subtitle: Tutorial 1 — How to optimize a statistical algorithm?
-institute: ENSAI (Rennes, France)
----
-
-<!--
-TO DO:
-[ ] add title
-[ ] add sample section
-[ ] merge the two pages into one
-[ ] change "sliding mean" to "moving average"
-[ ] test tutorial
-[ ] add outline
-[ ] clean up Remi's code
-[ ] longer sample section
--->
 
 # TP1 - Code profiling, parallelization, big data  and cloud computing architecture?
 
