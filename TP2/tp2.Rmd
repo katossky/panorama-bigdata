@@ -62,8 +62,8 @@ dbExistsTable(con, "flight") # Check whether the "flight" table exist.
 
 ## 1.c Collect actual data set
 
-```{r echo=FALSE}
-FLIGHTS <- dbGetQuery(con, "SELECT * FROM flight LIMIT 1000")
+```{r echo=FALSE, cache=TRUE}
+FLIGHTS <- dbGetQuery(con, "SELECT * FROM flight LIMIT 2000")
 FLIGHTS <- as_tibble(FLIGHTS)
 FLIGHTS
 ```
@@ -169,16 +169,18 @@ for (i in 1000:nrow(FLIGHTS)) {
   X <- data.matrix(FLIGHTS[(i-999):i, variables])
   X <- cbind(intercept=1, X)
   Y <- matrix(FLIGHTS$payload[(i-999):i], nrow = 1000, ncol = 1)
-  betas <- rbind(betas, solve(t(X)%*% X) %*% t(X) %*% Y)
+  betas <- cbind(betas, solve(t(X)%*% X) %*% t(X) %*% Y)
 }
-colnames(betas) <- c("seats", "passengers", "freight", "mail", "distance")
-
+rownames(betas) <- c("intercept", "seats", "passengers", "freight", "mail", "distance")
+betas[,1:10]
 ```
 
 # 2. Execution
 
-2.1. Run the code. 
+2.1. Run the code.
+
 2.2. Does it take time ? Any idea why ?
+
 2.3. Find a way to make it run quickly
 
 # 3. Time-complexity and profiling
@@ -186,9 +188,13 @@ colnames(betas) <- c("seats", "passengers", "freight", "mail", "distance")
 Now that the code is running, we will try to find how much time each part takes and prioritize our work.
 
 3.1. Factorize the procedure into four functions, that each depends on the input size.
+
 3.2. What is the empirical time complexity of each part ? Is it linear? Produce a time vs. input size plot to help you. _Just focus on a couple of values at the beginning of the input-size range. You may use the `microbenchmark` package or any similar packages._
+
 3.3. What is the memory complexity of each part ? Is it linear? Produce a max-memory used vs. input size plot. _You may use the `profmem()` function from the `profmem` package._
+
 3.4. You can perform all that in one step with R-Studio (Profile > Start profiling), the advantage beeing that you get the internal details of each execution.
+
 3.5. What are the parts you would optimize in priority ?
 
 You will find resources about profiling in R and R-Studio here:
@@ -210,9 +216,10 @@ You will find resources about profiling in R and R-Studio here:
 4.2. Can we transfer some treatments done in R to the database ? If so, update the code. *Google is your friend!*
 
 4.3. Let's focus on the total number of flights by month.
-    a. Can you optimmize the computation with (faster) R statements? Compare as many solutions as you can think of with `bench::mark()`.
-    b. Can you perform the computation with SQL statements?
-    c. Which is faster ?
+  
+  a. Can you optimmize the computation with (faster) R statements? Compare as many solutions as you can think of with `bench::mark()`.
+  b. Can you perform the computation with SQL statements?
+  c. Which is faster ? (including data fetch)
 
 # 5. R-code optimisation
 
