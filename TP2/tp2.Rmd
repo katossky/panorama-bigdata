@@ -174,3 +174,171 @@ for (i in 1000:nrow(FLIGHTS)) {
 colnames(betas) <- c("seats", "passengers", "freight", "mail", "distance")
 
 ```
+
+# 2. Execution
+
+2.1. Run the code. 
+2.2. Does it take time ? Any idea why ?
+2.3. Find a way to make it run quickly
+
+# 3. Time-complexity and profiling
+
+Now that the code is running, we will try to find how much time each part takes and prioritize our work.
+
+3.1. Factorize the procedure into four functions, that each depends on the input size.
+3.2. What is the empirical time complexity of each part ? Is it linear? Produce a time vs. input size plot to help you. _Just focus on a couple of values at the beginning of the input-size range. You may use the `microbenchmark` package or any similar packages._
+3.3. What is the memory complexity of each part ? Is it linear? Produce a max-memory used vs. input size plot. _You may use the `profmem()` function from the `profmem` package._
+3.4. You can perform all that in one step with R-Studio (Profile > Start profiling), the advantage beeing that you get the internal details of each execution.
+3.5. What are the parts you would optimize in priority ?
+
+You will find resources about profiling in R and R-Studio here:
+
+- https://adv-r.hadley.nz/perf-measure.html
+- https://rstudio.github.io/profvis/index.html
+- https://adv-r.hadley.nz/names-values.html
+- https://cran.r-project.org/web/packages/profmem/vignettes/profmem.html
+- https://www.r-bloggers.com/5-ways-to-measure-running-time-of-r-code
+
+# 4. Data-transfer optimisation
+
+4.1. In the SQL querry, do we really need to do the following?
+
+```{SQL, eval=FALSE}
+ SELECT * FROM flight
+```
+
+4.2. Can we transfer some treatments done in R to the database ? If so, update the code. *Google is your friend!*
+
+4.3. Let's focus on the total number of flights by month.
+    a. Can you optimmize the computation with (faster) R statements? Compare as many solutions as you can think of with `bench::mark()`.
+    b. Can you perform the computation with SQL statements?
+    c. Which is faster ?
+
+# 5. R-code optimisation
+
+5.1 With `bench::mark()`, compare `v <- cumprod(1:n)` and `v<-1; for(i in 2:n) v[i] <- v[i-1]*i ; v`. Which is faster? Can you spot similar (un)vectorised patterns in our code?
+
+5.2 With `bench::mark()`, compare `v <- rep(1,n)`, `v <- numeric() ; for(i in 1:n) v[i] <- 1 ; v` and `v <- numeric() ; for(i in 1:n) v <- c(1,v)`. Can you spot similar assignment patterns in our code?
+
+# 6. Algorithmic optimisation
+
+6.1. Think about how rolling averages work. Are we not performing just 5 times or 10 times the computations needed? How can you change the code to optimize it ?
+
+6.2. Why is it a bad idea to recode the linear regression? Using `bench::mark()` compare our regression estimates with `lm()`. Why is it so much faster? _You may want to inspect the code, the real code is really short, most of if is just tests and warnings!_ <!-- lm.fit calls a QR decomposition in C, z <- .Call(C_Cdqrls, x, y, tol, FALSE) ; I don't think QR decomposition is particularly faster than matrix inversion — however, it is numerically much more stable! ; and C code is much faster than R code. -->
+
+You will find here the algorithmic complexity of many common mathematical operations:
+
+- https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations
+
+# 7. Parallelisation
+
+7.1. Do the regressions depend of each other ? Thus, suggest a way to accelerate this part of the procedure.
+
+7.2 You may use the `doParallel` package to declare and use more than one core. A typical exemples runs like this:
+
+```{r, eval=FALSE}
+library(foreach)               # Parallel for loops
+library(parallel)              # Interface between R and multiple cores
+library(doParallel)            # Interface between foreach and parallel
+detectCores()                  # How many cores are available ?
+registerDoParallel(cores=2)    # Number of cores you want to work with
+foreach(i=1:10) %dopar% function(i) # Parallel for loop
+```
+
+Try to increase one by one the number of cores. Plot the number of cores vs. time. Is the speed-up proportionnal to the number of cores?
+
+7.2 One regression is basically a bunch of matrix operations. How can we theoretically speed that up? <!-- by performing computation on GPU -->
+
+# 8. Sampling
+
+We do not need to perform the actual complete computation if we are ready to accept some imprecision. But there is a trade-off between computation-time and precision. **For simplification of the problem, let's assume we are only interested with the average number of passenger per flight.**
+
+Let's assume that a sample is taken from a (potentially infinite) population with a (known or knowable) data-generating process. An approach to the measure of uncertainty is **asymptotical inference**.
+
+8.1. In this context, recall the asymptotical distribution of the mean estimator of a random sample of size $n$, as n tends to infinity. How can you estimate the distribution? <!-- you need an estimation of the variance -->
+
+8.2. Modify the database request, so that it returns a _random_ sample of size $n$. You may try first with $n=40$ then wrap your code in a function for arbitrary $n$. <!-- ORDER BY random() LIMIT 40 -->
+
+8.3 On the same graph, draw violin plots of the estimated distribution for sub-samples of size $40 \times 2^k$ for $k=1,...,10$ from the downloaded sample. You may want to complete the following code.
+    
+```{r, eval=FALSE}
+library(dplyr)
+library(tictoc)
+
+x         <- mean(FLIGHTS$passengers) + seq(-200, 200, by=10)
+probs     <- tibble() # an empty data frame with dplyr package
+estimates <- tibble()
+
+for(k in 1:10){
+
+  n <- 40*2^k
+  
+  tic()
+  m_hat <- .............. # mean
+  s_hat <- .............. # standard deviation
+  t <- toc()
+  
+  
+  estimates[k, "n"] <- n
+  estimates[k, "m"] <- m_hat
+  estimates[k, "s"] <- s_hat
+  estimates[k, "t"] <- t$toc - t$tic
+  
+  probs[k,"x"] <- x
+  probs[k,"f"] <- dnorm(x,m_hat,s_hat)
+  probs[k,"k"] <- k
+  
+}
+
+probs %>% ggplot(aes(x=x, y=f, group=k, color=k)) + geom_violin() + guides(color="none")
+```
+
+8.4. Make a plot of $\hat{\sigma}$ against computation time. What would be an acceptable level of precision here?
+
+8.5. In case of more complex estimators (such as a rolling average, or rolling regression) the derivation of confidence bounds is not as straightforward. What else can be used? Could it be computed efficiently? <!-- bootstrap ; it is an embarassingly parallel problem and can thus be parallelized -->
+
+# 9 Scaling up: a bigger machine
+
+Create a powerful EC2 instance to run you code (like a m5.2xlarge with 8 cores and 32 GB or Ram) to run your code and see if there is a big difference. To do this you have to
+
+9.1. Create an EC2 instance with ubuntu on it
+
+9.2. Authorize SSH connection to the instance (see : "Etablir une connexion SSH avec votre cluster" in the previous session)
+
+9.3. Connect with SSH with a SSH tunnel from port 8157
+
+9.4. Install and configure foxyproxy (see : "Installer FoxyProxy" in the previous session. It seems that foxyproxy doesn't work well with chrome, please use Firefox)
+
+9.5. Install Rstudio server
+
+```bash
+# Install R
+sudo apt-get install r-base
+# To install local package
+sudo apt-get install gdebi-core
+# Donwload Rstudio server
+wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5033-amd64.deb
+# Install it
+sudo gdebi rstudio-server-1.2.5033-amd64.deb
+```
+
+9.6. Create a Rstudio user
+
+```bash
+# Make User
+sudo useradd -m rstudio-user
+sudo passwd rstudio-user
+```
+
+9.7. Connect to Rstudio server : https://[public-DNS]:8787 with [public-DNS] the public DNS of the instance
+
+You will find all the steps and explanation in the previous practical session. The main differences are :
+
+- you don't create an EMR cluster, just an EC2 instance
+- you have to connect to the EC2 instance with it DNS public address
+
+# 10 Scaling out: more machines
+
+Create a spark cluster, install Rstudio-server on it (see TP 0) and update the code to use spark function. Run the code.
+
+More documentation : https://spark.rstudio.com
