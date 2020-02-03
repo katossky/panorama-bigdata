@@ -74,25 +74,26 @@ Vous avez fini de générer votre clef ssh!
   - Créer un tunnel SSH entre votre ordinateur et le cluster. Cela permettra à votre ordinateur de faire passez certaines requête dans la connexion SSH établie entre le cluster et vous. Par exemple quand vous accéderez aux interfaces graphiques du cluster cela se fera via l'intermédiaire du tunnel. Le tunnel prendra toutes les requêtes faites pour l'adresse localhost:8157 pour les transmettre aux cluster.
 - Installer FoxyProxy. Cette extension de navigateur permet de faire de la redirection de requête pour utiliser des proxys à la volée. Le fonctionnement est le suivant, vous paramétrez des motifs URL qui doivent être redirigez vers un certain proxy. Quand le motif est repéré, FoxyProxy redirige la requête vers le proxy associé aux motifs. Dans le cas présent, le proxy sera localhost:8157, le point d'entrée de notre tunnel. 
   
+
 Cette procédure n'est en aucun cas un "hack" de notre part pour accéder à des services protégés, mais bien la marche à suivre officielle proposé par amazon. **Il est obligatoire de la respecter pour pouvoir utiliser R avec votre cluster**
-  
+
 ![](../img/ssh emr.jpg)
-  
+
 ### Installer FoxyProxy
-  
+
 Pour google chrome : [lien](https://chrome.google.com/webstore/detail/foxyproxy-standard/gcknhkkoolaabfmlnjonogaaifnjlfnp?hl=fr)
-  
+
 Pour firefox: [lien](https://addons.mozilla.org/fr/firefox/addon/foxyproxy-standard/)
-  
+
 Une fois FoxyProxy installé, ouvrez le plugin et importer le fichier se trouvant dans :  
-  
+
 - https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.json pour firefox
   - https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.xml pour chrome
   
 ### Etablir une connexion SSH avec votre cluster
-  
+
   *(La marche à suivre est également disponible si vous cliquez sur "activez la connexion web" depuis la pag de voter cluster)*
-  
+
   - [ ] Lancez PuTTY
   
   - [ ] Dans la liste Category, cliquez sur Session
@@ -170,14 +171,13 @@ Une fois FoxyProxy installé, ouvrez le plugin et importer le fichier se trouvan
   ````
 
   <div style="width:550px">![Résultat pyspark](../img/setup-emr/pyspark_script.png)</div>
-
-  Voici le même script scala en plus condensé
-
-  ````scala
+Voici le même script scala en plus condensé
+  
+````scala
   sc.textFile("s3://gdelt-open-data/events/2016*").count()
   ````
-
-    
+  
+  
 
 ### Ouvrir les interfaces de suivi 
 
@@ -227,14 +227,13 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
   ````shell
   sudo yum install libcurl-devel openssl-devel # used for devtools
-  wget -P /tmp https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-0.99.1266-x86_64.rpm
-  sudo yum install --nogpgcheck /tmp/rstudio-server-rhel-0.99.1266-x86_64.rpm
+  wget https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-1.2.5033-x86_64.rpm
+  sudo yum install rstudio-server-rhel-1.2.5033-x86_64.rpm
   ````
 
   <div style="width:550px">![yum install](../img/setup-emr/rstudio_yum_install.png)</div>
-
-  <div style="width:550px">![r server install](../img/setup-emr/rstudio_server_install.png)</div>
-
+<div style="width:550px">![r server install](../img/setup-emr/rstudio_server_install.png)</div>
+  
 - [ ] Créez un user pour Rstudio
 
   ````shell
