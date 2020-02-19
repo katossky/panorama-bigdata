@@ -18,12 +18,12 @@ output:
 
 ## Course outline
 
-1. Refresher `<= Today`
+1. Refresher `<= Last week`
 2. File systems vs. databases
 3. The fundamental problems of distribution
 4. Distributing file systems
-5. Distributing databases
-6. Distributing tasks `<= Next week`
+5. Distributing databases `<= Today`
+6. Distributing tasks
 7. Parallelizing computation on distributed data
 8. Statistical applications
 9. Conclusions and perspectives
@@ -697,6 +697,18 @@ In order to maintain **consistency**, databases thus generally give up the relat
 Doing so, they become mere **distributed data stores**, and **the frontier with a file system tends to blur**. They often consist in just a requesting programme and an interface with the underlying file system.
 
 ---
+## Specific problems of distributed databases
+
+More fundamentally, **strict consistency** means every node containing the data gets updated simultaneously ; this means that:
+
+- there is some global time that the nodes can refer to ;
+- that they can agree in a sure way that some change will be acknowledged at a given instant (and that the other nodes know that this node knows that hey know it knows... ¹) ;
+
+The only way to insure this form of consistency is through locking-releasing resources.
+
+.footnote[¹ This is known as **the Byzantine Generals Problem**, where to generals refuse to attack until they get completely sure that the other is also sure that they both agree to attack.]
+
+---
 ## Specific solutions for distributed databases
 
 ### Denormalisation
@@ -776,64 +788,6 @@ This has always existed, but the unifying "no-SQL" labels was a 2010s phenomenon
 - graph database (ex: Neo4J)
 
 ---
-## Specific solutions of distributed databases
-
-### Issues over consistency
-
-- strict consistency means every node containing the data gets updated simultaneously ; this means that there is some global time that the nodes can refer to ; and that they can agree in a sure way that some change will be acknowledged at a given instant (and that the other nodes know that this node knows that hey know it knows... ¹) ; the only way to insure this form of consistency is through locking-releasing resources
-<!--- causal consistency ?????? -->
-- weak consistency, changes will propagate through the nodes until, at some point in time, consistency will be achieved
-
-.footnote[¹ This is known as **the Byzantine Generals Problem**, where to generals refuse to attack until they get completely sure that the other is also sure that they both agree to attack.]
-
-<!--
-## Specific solutions of distributed databases
-
-### Summary
-
-- Consistency & Availability:
-    Such database 
-
-
-- Availability & Fault-tolerance:
-
-
-- Fault-Tolerance & Consistency:
-    If you shard your data to distribute it across several nodes.
-
-
-
-> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
-
-Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. »
-
-> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
-
-Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
-
-> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
-
-« We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
-
-Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
-
-« The problems that 2PC introduces for application developers include loss of availability and higher latency during partial failures. Neither of these is desirable. So once you’ve had the good fortune of being successful enough to necessitate scaling your database past a single machine, you now have to figure out how to handle transactions across multiple machines and still make the ACID properties apply. Whether you have 10 or 100 or 1,000 database machines, atomicity is still required in transactions as if you were working on a single node. But it’s now a much, much bigger pill to swallow. »
-
-Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
-
-Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
-
-
-???
-
-**Source:**
-
-- https://en.wikipedia.org/wiki/Denormalization
-- Cassandra, the definitive guide
-
--->
-
----
 ## An exemple of distributed database: Cassandra
 
 Cassandra is part of the Hadoop ecosystem.
@@ -856,69 +810,15 @@ Supports replication and multi data center replication
 Replication strategies are configurable.[16] Cassandra is designed as a distributed system, for deployment of large numbers of nodes across multiple data centers. Key features of Cassandra’s distributed architecture are specifically tailored for multiple-data center deployment, for redundancy, for failover and disaster recovery.
 Scalability
 
----
-## An exemple of distributed database: Cassandra
-
-### Key ideas
-
-Cassandra is **decentralized**: it is a peer-to-peer database, at the opposite spectrum of the a master-slave architecture. Each node functions exactly the same as the other, and no single one is necessary to the overall functionning of the database.
-
-The nodes maintain their knowledge of the network through **gossip**.
-
-Cassandra is a **sparse**, **row-oriented** database, meaning that not all columns should exist for each record. Each row gets a key, that is used to distribute and replicate the records.This allows Cassandra to save space of non-assigned values.
-
-Cassandra is always writable, and reads are not always successful, and there is not guarantee that data will be up to date. Cassandra controls the trade-off between consistency and fault-tolerance with 2 parameters:
-- **replication factor** is the number of copies the database has to maintain
-- **consistency level** is specified at each interaction: it is the number of nodes the databse has to consult and that have to agree for the operation to be considered a success.
-
-<!-- DO: add something about single point of failure in introduction -->
-
-???
-
 Cassandra has innate balancing and rebalancing capabilities in the case of adding or removing nodes.
 
 Cassandra uses **location awareness**, and distinguishes between two levels: the rack, and the data center.
 
 <!-- flexible schema -->
 
----
-
-## An exemple of distributed database: Cassandra
-
-### Key ideas
-
-When a clients wants to write or read, he adresses himself to any of the nodes, while specifying a desired consistency level.
-
-1. The node becomes coordinator for this request.
-2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
-3. In case of a write, the replica logs the request in its "commit log" on disk, performs the write in memory, then confirms the transaction success, and returns a result if any.
-4. The coordinator waits for as many confirmations as the client has requested with its consistency level before confirming the reading/writing and returns the consolidated response.
-
----
-
-<!--
-## An exemple of distributed database: Cassandra
-
-### Key ideas
-
-When a clients want to read from Cassandra, he adresses himself to any of the nodes.
-
-1. The node becomes coordinator for this request.
-2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
 1. The node launches a "snitch" (FR: cafteur), whose task is to find the fastest available node having the requested records
 2. The client downloads the records.
 3. Simmultaneously, the node asks for the checksums of the same records from the other (slower) nodes that contain the same data. As many checksums are askes as the consistency level specified in the request.
-
-## An exemple of distributed database: Cassandra
-
-### Replicas
-
-when an write instruction is given, a replica:
-
-1. logs it in a log (called "commit log")
-2. pushes the changes in memory ("memtable")
-3. if the current memtable reaches a threshold, creates a new memtable
-4. when idle, copies the memtable to disk
 
 ### Gossipping
 
@@ -929,7 +829,55 @@ If the node does not answer, it marks it locally as down.
 <!--Not so clear...-->
 
 .footnote[The term "gossip protocol" dates back from 1987, in an article by Alan Demers.]
--->
+
+Cassandra is typically classified as an AP system, meaning that availability and partition tolerance are generally considered to be more important than consistency in Cassandra,[17] Writes and reads offer a tunable level of consistency, all the way from "writes never fail" to "block for all replicas to be readable", with the quorum level in the middle.
+
+Data is automatically replicated to multiple nodes for fault-tolerance. Replication across multiple data centers is supported. Failed nodes can be replaced with no downtime.
+
+Designed to have read and write throughput both increase linearly as new machines are added, with the aim of no downtime or interruption to applications.
+
+---
+## An exemple of distributed database: Cassandra
+
+### Key ideas
+
+Cassandra is **decentralized**: it is a peer-to-peer database, at the opposite spectrum of the a master-slave architecture. Each node functions exactly the same as the other, and no single one is necessary to the overall functionning of the database (no **single point of failure**).
+
+The nodes maintain their knowledge of the network through **gossip**.
+
+Cassandra is a **sparse**, **row-oriented** database, meaning that not all columns should exist for each record. Each row gets a key, that is used to distribute and replicate the records.This allows Cassandra to save space of non-assigned values.
+
+Cassandra fundamental choice is giving up consistency in echange for availability: there is not guarantee that data will be up to date when reading. Cassandra controls the trade-off between consistency and fault-tolerance with 2 parameters:
+- **replication factor** is the number of copies the database has to maintain
+- **consistency level** is specified at each interaction: it is the number of nodes the databse has to consult and that have to agree for the operation to be considered a success.
+
+---
+
+## An exemple of distributed database: Cassandra
+
+### Typical execution
+
+When a clients wants to write or read, he adresses himself to any of the nodes, while specifying a desired consistency level.
+
+1. The node becomes coordinator for this request.
+2. The coordinator forwards the request to all the <!--known?--> replicas hosting the nodes.
+3. In case of a write, the replica logs the request in its "commit log" on disk, performs the write in memory, then confirms the transaction success, and returns a result if any.
+4. The coordinator waits for as many confirmations as the client has requested with its consistency level before confirming the reading/writing and returns the consolidated response.
+
+---
+
+## An exemple of distributed database: Cassandra
+
+### Replicas
+
+When an write instruction is given, a replica:
+
+1. logs it in a log (called "commit log")
+2. pushes the changes in memory ("memtable")
+3. if the current memtable reaches a threshold, creates a new memtable
+4. when idle, copies the memtable to disk
+
+This ensures a trade-off between availability and fault-tolerance.
 
 ---
 
@@ -939,16 +887,12 @@ If the node does not answer, it marks it locally as down.
 
 #### Fault-tolerance
 
-Data is automatically replicated to multiple nodes for fault-tolerance. Replication across multiple data centers is supported. Failed nodes can be replaced with no downtime.
-
 ---
 ## An exemple of distributed database: Cassandra
 
 ### Properties
 
 #### Scalability
-
-Designed to have read and write throughput both increase linearly as new machines are added, with the aim of no downtime or interruption to applications.
 
 ---
 ## An exemple of distributed database: Cassandra
@@ -957,37 +901,91 @@ Designed to have read and write throughput both increase linearly as new machine
 
 #### Consistency
 
-Cassandra is typically classified as an AP system, meaning that availability and partition tolerance are generally considered to be more important than consistency in Cassandra,[17] Writes and reads offer a tunable level of consistency, all the way from "writes never fail" to "block for all replicas to be readable", with the quorum level in the middle.
-
 ---
 # 6. Distributing tasks
 
+
 ---
+## Scheduling
+
+1. divide a "job" into "tasks"
+2. priorize tasks and divide them into queues
+3. get the resources (disk, memory, processing power) to execute these tasks
+4. get the job done and return the result
+
+.footnote[There is a lot of blur around the vocabulary here. We will distinguish between a _job_, work asked by a client and to be executed at some point, and a _task_, the miminimal unit of work executable at once. This is not to be confused with the physical counterpart of the effective computation: we there talk about a _process_ for a unit of work that needs resources to be executed (typically disk and memory) and and about a _tread_ for the minimal computing unit sharing the latter resources. This vocabulary, however, is not stabilized: the "Windows Task Manager" manages processes while the "Windows Task Scheduler" manages jobs.]
+
+---
+
 ## Specific problems of distributed task management
 
-vocabulary: job, task...
+1. **load balancing** (do not over-use some resources, nor underuse them)
+2. target **quality of service** such as:
+  - maximizing throughput (the total amount of work completed per time unit);
+  - minimizing wait time (time between job submission and first task being executed);
+  - minimizing latency or response time (time between job submission and completion);
+  - maximizing fairness (equal resource usage allocated to each job, incl. specific clients may have specific access)
+3. scalability (clients can be added, so can machines)
+4. fault tolerance (not dependant on one single machine)
 
-https://en.wikipedia.org/wiki/Scheduling_(computing)
+???
+
+**Sources:**
+
+- https://en.wikipedia.org/wiki/Scheduling_(computing)
+- https://stackoverflow.com/questions/3073948/job-task-and-process-whats-the-difference/3073961
+- https://arxiv.org/pdf/1901.03270.pdf #TO-READ
+- http://www.ijsce.org/wp-content/uploads/papers/v2i3/C0812062312.pdf # TO-READ
+- https://en.wikipedia.org/wiki/Parallel_computing #TO-READ
+- https://en.wikipedia.org/wiki/Distributed_computing #TO-READ (à partir de Theoretical Fundations)
+
+> Three significant characteristics of distributed systems are: concurrency of components, lack of a global clock, and independent failure of components
+
+> [T]he following defining properties are commonly used as:
+> - There are several autonomous computational entities (computers or nodes), each of which has its own local memory.
+> - The entities communicate with each other by message passing.
+> - The system has to tolerate failures in individual computers.
+
+> A distributed system may [or may not] have a common goal, such as solving a large computational problem; [...] Alternatively, each computer may have its own user with individual needs, and the purpose of the distributed system is to coordinate the use of shared resources or provide communication services to the users.
+
+> The structure of the system (network topology, network latency, number of computers) [may or may not be] known in advance [...] Each computer may [or not] know only one part of the input.
+
+> Parallel computing may be seen as a particular tightly coupled form of distributed computing, and distributed computing may be seen as a loosely coupled form of parallel computing. In parallel computing, all processors may have access to a shared memory to exchange information between processors. In distributed computing, each processor has its own private memory (distributed memory). Information is exchanged by passing messages between the processors.
+
+> the traditional uses of the terms parallel and distributed algorithm that do not quite match the above definitions of parallel and distributed systems 
 
 ---
 ## An exemple of job-scheduler: YARN
+
+YARN is the job-scheduler associated with HDFS.
+
+.footnote[![](img/hadoop-yarn.png)]
 
 ???
 
 **Sources:**
 
 - https://en.wikipedia.org/wiki/Apache_Hadoop
+- https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+
+---
+## An exemple of job-scheduler: YARN
 
 ### The architecture
 
----
-### Role of the master (job scheduler)
+YARN has a slave-master architecture, but not a standard one.
 
----
-### Role of the slaves
+There are two layers:
 
+- the global resource manager, which is in charge of monitoring the resource usage (CPU, memory, storage, network) ; the master (ResourceManager) arbitrates what the resources are being used for, while the slaves (NodeManagers) track the effective usage and report to the master
+- the per-application task manager, which is in charge of neogiciating resources with the ResourceManager ; the master (ApplicationMaster) runs on a specific NodeManager and is in charge of checking the tasks progress ; the slaves (resource containers) execute the tasks
 
----
+???
+
+> YARN allows applications to specify placement constraints in the form of data locality (preference to specific nodes or racks) or (non-overlapping) node labels. (...) For example, it may be beneficial to co-locate the allocations of a job on the same rack (affinity constraints) to reduce network costs, spread allocations across machines (anti-affinity constraints) to minimize resource interference, or allow up to a specific number of allocations in a node group (cardinality constraints) to strike a balance between the two. (...) The applications can specify constraints without requiring knowledge of the underlying topology of the cluster or the other applications deployed. Currently, all constraints are hard, that is, if a constraint for a container cannot be satisfied due to the current cluster condition or conflicting constraints, the container request will remain pending or get rejected.
+
+<!--
+## An exemple of job-scheduler: YARN
 ### Properties
 
 **Fault-tolerance** is guaranteed by ...
@@ -999,27 +997,159 @@ https://en.wikipedia.org/wiki/Scheduling_(computing)
 How this specific architecture acheives fault-tolerance, etc.
 
 Hadoop has **location awareness**, i.e. it uses the locations of the nodes relative to each other, in order to allocate the data to the closest nodes.
-
-## Other job-schedulers
+-->
 
 ---
-### Python's Celery
 
-http://www.celeryproject.org/
-https://github.com/celery/celery
-https://en.wikipedia.org/wiki/Celery_(software)
+bakground-image:
+![](img/yarn-architecture.gif)
+
+---
+## Other job-schedulers
+
+Distributed job-schedulers are sometimes labelled "cluster management software".
+
+- Mesos
+- SLURM
+- ...
+
+???
+
+- https://en.wikipedia.org/wiki/Slurm_Workload_Manager #TO-READ
+- HPC-ABDS #TO-READ
+
+---
+## Other job-schedulers
+
+In order to support heterogeneous clusters composed of computers running different OS's, most of job-schedulers use so-called "containers", i.e. extremely light virtual machines. Thus job-scheduling gets quite close to "container orchestration", i.e. the dynamic luanching and management of containers.
+
+- EC2
+- Kubernetes
+- ...
+
 
 ---
 # 7. Parallezing compution on distributed data
 
 ---
+
+## Parallezing compution on distributed data
+
+- minimize data transfer
+- perform computation at the location of data
+
+---
 ## Map-reduce principle
+
+As you remember, the map-then-reduce principle is the idea of performing:
+- first all embarassingly parallel steps
+- then an associative, commutative summarizing rule
+
+-> The second step can be performed as soon as a the first nodes finish completing the first step, and the summaries are usually of smaller size than the original data.
 
 ---
 ## Map-shuffle-reduce principle
 
+On distributed data, the transfer of data becomes increasingly expensive. Thus it is a good idea to minimize tranfer.
+
+Yet, in a typical "group action" (like group count, group average, rolling average...), the same reducer is applied to separately to each group. Group actions are very common in practice.
+
+The **shuffle** step consists in the optimal transfer of data so that all data concerning one group be situated on the same node, while minimizing the overal data transfer, for optimal reduce step.
+
 ---
 ## An exemple of parallelized computation framework: Spark
+
+Spark is a project supported by the Apache fundation.
+
+It is written mostly in Java (for portability), but exposes APIs in Java, Scala, Python and R, even though not all functionnalities are available in all languages.
+
+Specificities:
+
+- handling of failures
+- lazy evaluation
+
+.footnote[![](img/spark-logo.png)]
+
+???
+
+**Sources:**
+- https://stackoverflow.com/questions/29011574/how-does-spark-partitioning-work-on-files-in-hdfs
+- https://stackoverflow.com/questions/38284210/how-does-a-spark-task-access-hdfs
+- https://sujithjay.com/spark/with-yarn
+- Hig Perfromence Spark, O'Reilly, (ch.2)
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Key ideas
+
+The usual way to go is to run a Spark job:
+
+1. You create a Spark _application_, in charge of maintaining communication with the the cluster. The application asks for resources to be attributed, typically on each node of the cluster.
+2. The cluster's job-scheduler reserves resources for the Spark application, until termination.
+3. The Spark application launches Java virtual machines (JVMs) on the nodes, and ships the code necessary for the execution of the different tasks.
+4. Each job (one specific computation) is decomposed as elementary tasks along a _directed acyclic graph_ (DAG)
+5. Parallelisable tasks are computed the closest possible to the data blocks
+6. Intermediary results are shufled, then summarized (reduce step)
+7. Result is returned to the application
+
+This means:
+
+- two Spark applications do not share virtual machine on the same computer, thus jobs submitted via different applications can not share data (besides writing to external support such as disk / database)
+- when running interactively, there is no "termination" or "completion" ; the Spark session will usually hold on to the resources, preventing other users / other jobs to be run on these nodes in the meanwhile
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Architecture
+
+Spark has a master-slave architecture: the master is called the _driver_, and the slaves the _executors_. Whereas _executors_ are typically situated on the same nodes as HDFS and YARN slaves, the _driver_ is typically a client outside the cluster.
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Partitions
+
+Data is typically first loaded by Spark, in memory or onto disk, creating an object distributed accross all executors called a _partition_. If the executors live on the same nodes as some of the data blocks they are willing to read, then data is read locally. Otherwise, Spark will ship data blocks from the closest available DataNode.
+
+Every _split_ of a _partition_ has a "prefered location", that depends ultimately on where it was stored in the distirbuted file system / database. Spark will try to move each split as little as possible.
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Lazy evaluation & execution plans
+
+Spark only records the succession of _transformations_ you want to perform, and only performs the computation on specific _actions_, such as collecting a result bak to the _driver_ or writing in the file system.
+
+At this moment, the _driver_ builds a _directed acyclic graph_ (DAG), of all the intermediary steps needed to obtain this result, going backward from the result. This series of steps is called the _execution plan_.
+
+The execution plan voids unneeded computation that may have wrongly added to the transformation chain. Typically, all filter actions will be performed first, so that you don't compute things that you do not use later. And all map steps are grouped together.
+
+The execution of one DAG is a _job_ for the cluster's task-scheduler. One Spark application can thus launch several jobs, as many as actions.
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Lazy evaluation & execution plans
+
+This strategy has several advantages:
+- filter operations actually stop any further computation
+- all map steps can be computed in a single pass on the data
+- any intermediary result can be recomputed in the case of a node failure
+
+---
+## An exemple of parallelized computation framework: Spark
+
+### Persistence
+
+- Does not store data on the long term, only for the life of the application
+- Typical usage is to return results to the driver / to write the output on a network file
+- Does not care about storage failure (it prefers re-computing from the DAG instead)
+- Normal behaviour:
+    - Stores all computed intermediary results as distinct values in memory, until memory limit is exceeded. This allows recycling earlier computations for new execution plans.
+    - When memory limit is exceeded, new results replace the older.
+    - If a single step exceeds the memory limits, data is stored to disk.
+- It is possible to control the caching behaviour and forcing some intermediary results to persist and to chose where it has to persist.
 
 ---
 ## Other frameworks
@@ -1078,4 +1208,41 @@ To minimize global bandwidth consumption and read latency, HDFS tries to satisfy
 
 The HDFS architecture is compatible with data rebalancing schemes. A scheme might automatically move data from one DataNode to another if the free space on a DataNode falls below a certain threshold. In the event of a sudden high demand for a particular file, a scheme might dynamically create additional replicas and rebalance other data in the cluster. These types of data rebalancing schemes are not yet implemented.
 
+-->
+
+<!--
+- Consistency & Availability:
+    Such database 
+
+- Availability & Fault-tolerance:
+
+- Fault-Tolerance & Consistency:
+    If you shard your data to distribute it across several nodes.
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. »
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+> « We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+« We encounter scalability problems when our relational applications become successful and usage goes up. Joins are inherent in any relatively normalized relational database of even modest size, and joins can be slow. The way that databases gain consistency is typically through the use of transactions, which require locking some portion of the database so it’s not available to other clients. This can become untenable under very heavy loads, as the locks mean that competing users start queuing up, waiting for their turn to read or write the data. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+« The problems that 2PC introduces for application developers include loss of availability and higher latency during partial failures. Neither of these is desirable. So once you’ve had the good fortune of being successful enough to necessitate scaling your database past a single machine, you now have to figure out how to handle transactions across multiple machines and still make the ACID properties apply. Whether you have 10 or 100 or 1,000 database machines, atomicity is still required in transactions as if you were working on a single node. But it’s now a much, much bigger pill to swallow. »
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+Extrait de: Jeff Carpenter. « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » Apple Books. 
+
+???
+
+**Source:**
+
+- https://en.wikipedia.org/wiki/Denormalization
+- Cassandra, the definitive guide
 -->
