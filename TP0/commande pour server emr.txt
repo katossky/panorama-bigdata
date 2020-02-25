@@ -1,0 +1,17 @@
+# used for devtools
+sudo yum install libcurl-devel openssl-devel 
+
+#Rstudio server
+wget https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-1.2.5033-x86_64.rpm
+sudo yum install rstudio-server-rhel-1.2.5033-x86_64.rpm
+
+# Make User
+sudo useradd -m rstudio-user
+sudo passwd rstudio-user
+
+# Create new directory in hdfs
+hadoop fs -mkdir /user/rstudio-user
+hadoop fs -chmod 777 /user/rstudio-user
+
+# Driver for postgres
+sudo yum install postgresql-devel

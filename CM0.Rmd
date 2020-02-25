@@ -1,7 +1,10 @@
 ---
+title: "Big data tools"
+subtitle: "Lesson 3 — Clood computing and the AWS platform"
 author: Arthur Katossky & Rémi Pépin
+institute: "ENSAI (Rennes, France)"
+date: "March 2020"
 output:
-  html_document: default
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
     nature:
@@ -53,20 +56,25 @@ knitr::opts_chunk$set(echo = FALSE)
 # [ ] Hybrid cloud
 ```
 
-# Large-scale machine-learning
 
-ENSAI 2019-2020 
-Arthur Katossky & Rémi Pépin 
-CC-BY-SA 
+## Course outline
 
-???
+1. A quick history of IT hardware in enterprise
+2. What's cloud computing ?
+3. Cloud computing services
+  1. Infrastructure as a Service (IaaS)
+  2. Platform as a Service (PaaS)
+  3. Software as a Service (SaaS)
+4. Virtualization
+5. Ecology
 
 ---
 
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- 1940 - mid 1970 : Mainframe era (still use today)
+- 1940 - mid 1970 (still use today) : Mainframe era 
+  - It's not a super-computer
   - Commercial, scientific, and large-scale computing only.
   - Only big enterprise can buy mainframes.
   - No direct user interaction (scren, keyboard), but card punches
@@ -75,7 +83,7 @@ CC-BY-SA
   ]
 
 .pull-right[![](http://www.rhod.fr/images_dossiers/wargames/wargames03.jpg)
-*WarGames, John Badham, 1983*
+*Source : WarGames, John Badham, 1983*
 ]
 
 ---
@@ -84,16 +92,14 @@ CC-BY-SA
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- mid 1970 - mid-1990 : Fat client era.
+- mid 1970 - mid-1990 (still use today) : Fat client era.
   - Developement of micro-computing, personnal computers become cheaper and cheaper
   - Instead of one mainframe for data and computing, one server is for the data, and computation are executed on personnal computer (**fat client**)
   - Fat client are autonomous of each other. They need the data server only to download the data
 
   ]
 
-.pull-right[<img src="https://starecat.com/content/wp-content/uploads/check-out-this-bad-boy-computer-what-are-you-gonna-use-it-for-games-and-stuff-chandler-friends.jpg" style="zoom:33%;" />
-
-*Friends, S2 E8*
+.pull-right[.center.height500[![](https://img-9gag-fun.9cache.com/photo/az1owGj_460swp.webp)]
 
 ]
 ---
@@ -101,12 +107,12 @@ CC-BY-SA
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- mid-1990 - 2010 : In-house datacenter era.
+- mid-1990 - 2010 (still use today) : In-house datacenter era.
   - mid 1990 : democratization of the Internet
   - Communication speed increase quickly
   - Centralisation of data and computing in data datacenter.
-  - Personnal computer for daily tasks (mail, office etc)
-  - Server for computation
+  - Personnal computers for daily tasks (mail, office etc)
+  - Servers for computation
 
 Note : You can go on step further, like at Ensai, and put everything in the server
 
@@ -114,7 +120,7 @@ Note : You can go on step further, like at Ensai, and put everything in the serv
   
 .pull-right[<img src="https://leshorizons.net/wp-content/uploads/2019/06/DataCenter.jpg" style="zoom:100%;" />
 
-*srouce : https://leshorizons.net/datacenter/*
+*Source : https://leshorizons.net/datacenter/*
 
 ]
 
@@ -123,20 +129,20 @@ Note : You can go on step further, like at Ensai, and put everything in the serv
 ## A quick history of IT hardware in enterprise
 
 .pull-left[
-- mid-1990 - 2010 : Grid Computing
+- mid-1990 - 2010 (still use today) : Grid Computing
   - what enteprise could afford, could not be done by scientists
   - idea: using idle machines and make them work together on bigger tasks (**CPU scavenging**)
   - parallel ideas could now be applied _between_ computers
-  - on last Saturday (2020-01--18) the best grid's 495 820 computers was computing on average at the rate 30 petaflops (BOINC, Berkeley, [link](https://boinc.berkeley.edu)), same as the 5th fastest supercomputer
+  - In November 2019 the best grid's 495 820 computers was computing on average at the rate 30 petaflops (BOINC, Berkeley, [link](https://boinc.berkeley.edu)), same as the 5th fastest supercomputer
   - for comparison the fastest super computer today (Summit, IBM, [link](https://www.olcf.ornl.gov/olcf-resources/compute-systems/summit)) delivers ~200 petaflops
-  - still use today ((SETI@home)[https://setiathome.ssl.berkeley.edu/])
+  - still use today ([SETI@home](https://setiathome.ssl.berkeley.edu/))
 
 **Source:** Top 500, the List ([link](https://www.top500.org/lists/2019/11))
   ]
 
 .pull-right[<img src="https://www.lebigdata.fr/wp-content/uploads/2018/02/grid-computing-vs-cluster-computing-1.jpg" style="zoom:100%;" />
 
-*srouce : https://www.lebigdata.fr/wp-content/uploads/2018/02/grid-computing-vs-cluster-computing-1.jpg*
+*Source : https://www.lebigdata.fr/wp-content/uploads/2018/02/grid-computing-vs-cluster-computing-1.jpg*
 
 ]  
   
@@ -144,20 +150,137 @@ Note : You can go on step further, like at Ensai, and put everything in the serv
 ---
 ## A quick history of IT hardware in enterprise
 .pull-left[
-- 2010 - ? : cloud computing era.
+- 2005 - ? : cloud computing era.
   - 2002 : amazon web service
   - 2006 : amazon elastic compute cloud
   - 2008 : google app engine
   - 2008 : analyst house Garner claim rise of cloup computing
   - 2010 : microsoft azure
   
-Cloud compute revenue in 2018 : 182,4 G$, estimation in 2022 331,4 G$ ((source)[https://www.gartner.com/en/newsroom/press-releases/2019-04-02-gartner-forecasts-worldwide-public-cloud-revenue-to-g])
+Cloud compute revenue in 2018 : 182,4 G$, estimation in 2022 331,4 G$ ([Source](https://www.gartner.com/en/newsroom/press-releases/2019-04-02-gartner-forecasts-worldwide-public-cloud-revenue-to-g))
 
   ]
 
 .pull-right[ ![](https://www.astelis.fr/wp-content/uploads/cloud-maillage.jpg)
 *Source : https://www.astelis.fr/wp-content/uploads/cloud-maillage.jpg*
 ]
+
+---
+## A quick history of IT hardware in enterprise
+.pull-left[
+- ? (2020) - ? : edge/fog/mist computing era.
+  - 2016 : W. Shi, J. Cao, Q. Zhang, Y. Li and L. Xu, "Edge Computing: Vision and Challenges," in IEEE Internet of Things Journal
+  - 2017 : M. Satyanarayanan, "The emergence of egde computing"
+  - 2019 : Jad Darrous, Thomas Lambert, Shadi Ibrahim. On the Importance of Container Image Placementfor Service Provisioning in the Edge
+  - 2019 : Pedro Silva, Alexandru Costan, Gabriel Antoniu. Investigating Edge vs. Cloud Computing Trade-offs for Stream Processing. BigData 2019
+  ]
+
+.pull-right[ ![](https://img.alicdn.com/tfs/TB1QdC2KhjaK1RjSZKzXXXVwXXa-3302-1854.png)
+*Source : https://www.alibabacloud.com/fr/knowledge/what-is-edge-computing*
+]
+
+
+
+---
+## Traditional IT : 1 server = 1 physical machine = 1 function
+
+  - SMTP (mail) server
+  - DNS
+  - Web server, FTP server
+  - proxy
+  - ...
+
+--
+
+- .green[Pros : security, no middleware]
+- .red[Cons : cost, overdimensioned hardware]
+
+---
+## Operating system virtualization
+
+Idea: one physical machine = multiple virtual machines (VMs).
+
+--
+- Must be independant
+
+--
+- Can have their own OS
+
+--
+- Don't know there are other VMs on the same machine
+
+
+--
+.green[Pros :]
+- Mutualization of cost (less machines)
+- Better CPU utilization
+- Independant OS
+- Easy migration and deployment
+- Can run old OS
+
+--
+
+.red[Cons :] 
+- Is the physical machine goes down all VMs go down too
+- There are some security issues
+
+???
+It's not something new. Existe since 1960, but still relevant ! 
+
+---
+## The key to virtualization : Hypervisor
+
+- Manages VMs
+- Present ressources to the VMs
+--
+
+- 2 types
+  - Type 1 : bare material hypervisor. Used in datacenter
+  - Type 2 : hosted hypervisor. Used by end user. 
+--
+
+- Exemples of hypervisors
+  - Type 1
+      - Hyper-V (Microsoft)
+      - KVM (Red Hat)
+      - VMware Infrastructure (VMware)
+      - Xen (Oracle)
+  - Type 2
+      - Virtual Box (Oracle)
+      - Microsoft Virtual Server (Microsoft)
+      - VMware Fusion  (VMware)
+---
+## The key to virtualization : Hypervisor
+
+![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/hypervisors.jpg)
+
+---
+## Another type fo virtualization : containerization
+
+Virtualized a full OS come with a cost in ressources. Especially if you want only one specific application (database, python server, R server ...).
+
+
+--
+So instead of virtualize a full OS, you can create an image with only your app and the needed libraries.
+
+
+--
+You need a runtime engine to run and manage your container. But containers are more lightweight and more portable than VMs
+
+--
+
+Exemple of container technology
+- Docker
+- rktlet
+- CRI-O
+- Microsoft Containers
+- Linux Conainers
+
+---
+## Another type fo virtualization : containerization
+
+![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/container.jpg)
+
 
 ---
 ## Cloud computing definition
@@ -175,22 +298,25 @@ In a nutshell :
 ## Why cloud computing ?
 
 - The world is changing faster than ever
+
 --
-- Need quick reponse to new problem
+- Need quick reponses to new problems
+
 --
 - Building a new datacenter, buying new servers or create new architectures take too much time ! 
+
 --
-- The on demand nature of cloud computing make possible to create new services in no time
+- The on demand nature of cloud computing make possible to create new services in no time (or in a coffee break time)
 
 ---
-## Why cloud computing
+## Why cloud computing ? 
 
 - Less investment : don't have to buy anything, just pay for what you use
 - Easy scalable : "just" pay for more ressources
-- Flexible : create and delete ressource in no time
+- Flexible : create and delete ressources in no time
 - No maintenance cost : it's the resposability of your cloud provider
 - Reliable : it's the resposability of your cloud provider
-- Innovation : new ressources are accessible in no time, and you pay for what you use.
+- Innovation : new ressources are propose regularly, and you pay for what you use.
 
 ---
 ## Different services
@@ -216,7 +342,7 @@ For example you want to have somewhere to sleep. You can :
 --
 - Go to the hotel.
 
-  -> You do not have to do anything BUT you control nothing
+  -> You do not have to do anything BUT you don't control anything
 
 ---
 ## Different services
@@ -244,64 +370,12 @@ You pay for an already installed platform, you do not manage any lower level res
 You directly use some existed IT solution. Little control on the software.
 
 ---
-## Infrastrucre as a Service, IaaS
 
-- Provide to the consumer
-  - Processing capacity
-  - Storage
-  - Network
-  - and other fundamental computing ressources
-- The consumer do not manage physical infrastructure but has control over the provided ressources
+## Different services
 
-- Exemples : Amazon Elastic Compute Cloud
-
-
-
----
-## Platform as a Service, PaaS
-
-- Provide to the consumer already configured infrascture to deploy it's own application
-- The consumer do not manage physical infrastructure neither has control over the provided ressources
-- The consumer control the deployed application
-
-- Exemples : Amazon Relational Database Service, Amazon Elastic Map Reduce
----
-## Software as a Service, SaaS
- 
-
-- Provide to the consumer the capability to use a running application manage by the cloud provider
-- The consumer do not control anything, excepte some user-specific settings
-
-- Exemples : all the Google Apps
-
----
-## Some exemples of cloud computing : New York Times
-
-- The need
-  - conversion from TIFF to pdf of all articles from 1851 to 1922
-  - 4TB of input (405,000 very large TIFF images, 3.3 million articles in SGML and 405,000 xml files mapping articles to rectangular regions in the TIFF’s)
---
-- The realization
-  - Run around 100 EC2 instances to create an Hadoop cluster for 24h (estimate cost 800$)
-  - Realize they made a mistake
-  - Rerun the cluster with the fix for 24h (estimate cost 800$)
-
---
-- Conclusion
-  - Convert to pdf 70 years of newspapers for less than 2000$ !
-
----
-## Some exemples of cloud computing : Animoto
-
-Animoto is a cloud-based video creation service (Saas)
-
-- Start-up without any physical server
-- Rents servers (IaaS) to deploy its application
-- Starts with 40 servers
-- Scales up from 40 to 5000 servers in 4 days to meet the growing number of subscriber !
-
---
-Cannot be done with on site datacenter
+.center.height400[![](https://www.supinfo.com/articles/resources/174920/9516/0.png)
+]
+sources : https://www.supinfo.com/articles/single/9516-cloud-computing-une-partie-integrante-informatique-aujourd-hui
 
 ---
 ## Some cloud providers
@@ -313,121 +387,43 @@ Cannot be done with on site datacenter
 
 
 
----
-## Traditional IT : 1 server = 1 physical machine = 1 function
-  - SMTP (mail) server
-  - DNS
-  - Web server, FTP server
-  - proxy
-  - ...
+<!-- --- -->
+<!-- ## Infrastrucre as a Service, IaaS -->
 
-- Pros : security, no middleware
-- Cons : cost, overdimensioned hardware
+<!-- - Provide to the consumer -->
+<!--   - Processing capacity -->
+<!--   - Storage -->
+<!--   - Network -->
+<!--   - and other fundamental computing ressources -->
+<!-- - The consumer do not manage physical infrastructure but has control over the provided ressources -->
 
----
-## Operating system virtualization
+<!-- - Exemples : -->
 
-Idea: one physical machine = multiple virtual machines (VMs).
-
---
-- Must be independant
-
---
-- Can have their own OS
-
---
-- Don't know there are other VMs on the same machine
+<!--   - VM : Amazon Elastic Compute Cloud, Google compute Engine, Azure Virtual Machines, OVH Public Cloud -->
+<!--   - Storage : Amazon Simple Storage Service, Gougle Cloud Storage, Azure Blob Storage, OVH Object Storage -->
 
 
---
-Pros :
-- Mutualization of cost (less machine)
-- Better CPU utilization
-- Independant OS
-- Easy migration and deployment
-- Can run old OS
 
---
-Cons : 
-- Is the physical machine goes down all VMs go down too
-- There are somme security issues
+<!-- --- -->
+<!-- ## Platform as a Service, PaaS -->
 
-???
-It's not something new. Existe since 1960, but still relevant ! 
+<!-- - Provide to the consumer already configured infrascture to deploy it's own application -->
 
----
-## The key to virtualization : Hypervisor
+<!-- - The consumer do not manage physical infrastructure neither has control over the provided ressources -->
 
-- Manages Vms
-- Present ressources to the VMs
+<!-- - The consumer control the deployed application -->
 
---
-- 2 types
-  - Type 1 : bare material hypervisor. Used in datacenter
-  - Type 2 : hosted hypervisor. Used by end user. 
-  
---
-- Exemples of hypervisors
-  - Type 1
-    - Hyper-V (Microsoft)
-    - KVM (Red Hat)
-    - VMware Infrastructure  (VMware)
-    - Xen (Oracle)
-
-- Type 2
-    - Virtual Box (Oracle)
-    - Microsoft Virtual Server (Microsoft)
-    - VMware Fusion  (VMware)
-
----
-## The key to virtualization : Hypervisor
-
-![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/hypervisors.jpg)
-
----
-## Another type fo virtualization : containerization
-
-Virtualized a full OS come with a cost in ressources. Espacially if you want only one specific application (database, python server, R server ...).
+<!-- - Exemples : Amazon Relational Database Service, Amazon Elastic Map Reduce -->
+<!-- --- -->
+<!-- ## Software as a Service, SaaS -->
 
 
---
-So instead of virtualize a fullOS, you can create an image with only your app and the needed libraries.
+<!-- - Provide to the consumer the capability to use a running application manage by the cloud provider -->
 
+<!-- - The consumer do not control anything, excepte some user-specific settings -->
 
---
-You need a runtime engine to run and manage your container. But containers are more lightweight and more portable than VMs
+<!-- - Exemples : all the Google Apps -->
 
---
-Exemple of container technology
-- Docker
-- rktlet
-- CRI-O
-- Microsoft Containers
-- Linux Conainers
-
----
-## Another type fo virtualization : containerization
-
-![](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/container.jpg)
-
-
----
-## Cloud and ecology
-
-<img src="https://pbs.twimg.com/media/CbeMAqaUAAEFWZU.png" style="zoom:50%;" />
-
----
-## Cloud and ecology
-
-- It's not because you don't own the server that the server does not pollute.
-- The internet causes about 4% of the worldwide emission of GHG
-- Datacenters are reponsible for 25% of it
-- Theoretically, with the mutualization of ressource cloud computing could be greenner than in site datacenter
-- But, because cloud computing become cheaper, more people use it, and are less carful with the cost. So more servers are running, maybe over dimensionned one, and cloud computing can me more polluting than old school datacente (rebound effect).
-- No real evidence of that.
-
-
-*Source : ADEME, la face caché du numérique, consulté le 19/01/2020 [lien](https://www.ademe.fr/sites/default/files/assets/documents/guide-pratique-face-cachee-numerique.pdf)*
 
 ---
 # Principles of IaaS
@@ -435,7 +431,7 @@ Exemple of container technology
 ---
 ## Principles of IaaS
 
-When it comes to infrastructure as a service, all cloud-providers basically share the same two basal products:
+When it comes to infrastructure as a service, all cloud-providers basically share the same two basic products:
 
 1. normal storage
 2. virtual machines
@@ -443,7 +439,7 @@ When it comes to infrastructure as a service, all cloud-providers basically shar
 ---
 ## Normal storage
 
-This is the place where you put all of your files, be they programs, data or else.
+This is the place where you put all of your files, script, logs, data or else.
 
 You create as many "buckets" as you wish, where a "bucket" is a unit of storage.
 
@@ -488,6 +484,12 @@ Other forms of storage, beyonf "normal" storage, include:
 - storage whose physical location adapts to usage
 - so-called "cold" storage for unfrequently-accessed storage (less expensive, but you pay reads and writes more)
 - archive solution (inexpensive, but takes min. to hours for access)
+
+---
+## Normal storage, the snowmobile
+
+.center.height400[![](https://media.datacenterdynamics.com/media/images/Snowmobile-AWS-truck-data-delivery.original.jpg)]
+More info : https://www.datacenterdynamics.com/en/news/aws-snowmobile-delivers-petabytes-to-the-cloud-by-truck/
 
 ---
 ## Virtual machines
@@ -569,7 +571,10 @@ There are other services of pure infrastructure that the cloud providers offer, 
 - orchestration
 
 ---
-# Platform as a service
+# Paas and Saas
+
+---
+## Platform as a service
 
 Besides storage and VMs, you will probably get to use services, without having to install and configure yourself a computer from the bottom up. This is **platform as a service** (**PaaS**).
 
@@ -580,5 +585,73 @@ As a statician, services you may come to use are:
 - machine-learning
 - serverless computing
 
-Pros: scale automatically, less maintenance
-Cons: less configurable, possibly more expensive
+.green[++Pros]: scale automatically, less maintenance, easy to access
+
+.red[--Cons]: less configurable, possibly more expensive, cloud provider dependent
+
+Exemple : Hadoop Platform (AWS EMR, GCP Cloud Dataproc, Azuer HDInsight)
+
+---
+## Software as a Service, SaaS
+
+
+- Provide to the consumer the capability to use a running application manage by others (application provider)
+
+- The consumer do not control anything, except some user-specific settings
+
+- You must agree some terms and conditions before use
+
+- I heavly discourage using those kind of services for sensible data analysis (specialy if it's a "free" service)
+
+- Exemples : all the Google suite, Facebook, Twitter, Instagram, Github, Binder  ...
+
+---
+## Some exemples of cloud computing success: New York Times
+
+- The need
+  - conversion from TIFF to pdf of all articles from 1851 to 1922
+  - 4TB of input (405,000 very large TIFF images, 3.3 million articles in SGML and 405,000 xml files mapping articles to rectangular regions in the TIFF’s)
+--
+
+- The realization
+  - Run around 100 EC2 instances to create an Hadoop cluster for 24h (estimate cost 800$)
+  - Realize they made a mistake
+  - Rerun the cluster with the fix for 24h (estimate cost 800$)
+
+--
+- Conclusion
+  - Convert to pdf 70 years of newspapers for less than 2000$ in no time!
+
+---
+## Some exemples of cloud computing success: Animoto
+
+Animoto is a cloud-based video creation service (Saas)
+
+- Start-up without any physical server
+- Rents servers (IaaS) to deploy its application
+- Starts with 40 servers
+- Scales up from 40 to 5000 servers in 4 days to meet the growing number of subscriber !
+
+--
+
+Cannot be done with on site datacenter
+
+
+
+---
+#Cloud and ecology
+.center.height500[![](https://pbs.twimg.com/media/CbeMAqaUAAEFWZU.png)]
+
+---
+## Cloud and ecology
+
+- It's not because you don't own the server that the server does not pollute.
+- The internet causes about 4% of the worldwide emission of GHG
+- Datacenters are reponsible for 25% of it
+- Theoretically, with the mutualization of ressource cloud computing could be greenner than in site datacenter
+- But, because cloud computing become cheaper, more people use it, and are less carefull with the cost. So more servers are running, maybe over dimensionned one, and cloud computing can me more polluting than old school datacente (rebound effect).
+- No real evidence of that.
+
+
+*Source : ADEME, la face caché du numérique, consulté le 19/01/2020 [lien](https://www.ademe.fr/sites/default/files/assets/documents/guide-pratique-face-cachee-numerique.pdf)*
+
