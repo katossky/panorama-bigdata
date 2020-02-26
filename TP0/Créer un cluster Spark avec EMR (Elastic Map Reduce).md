@@ -55,7 +55,7 @@ Vous avez fini de générer votre clef ssh!
 - [ ] Avant de continuer, vérifiez si les connexions SSH sont autorisées pour votre cluster. Pour cela allez dans groupe de sécurité pour le principal
     ![](../img/setup-emr/cluster_emr_security.png)
 
-  - [ ] Ensuite cliquez sur "ElasticMapReduce-master" et sur l'ongler "entrant" pour vérifier si les connexion SSH sont autorisées
+  - [ ] Ensuite cliquez sur "ElasticMapReduce-master" et sur l'onglet "entrant" pour vérifier si les connexion SSH sont autorisées
   ![](../img/setup-emr/liste_security_group.png)
   
 - [ ] Si ce n'est pas le cas cliquez sur "Modifier", allez en bas de la fenêtre qui apparait et ajoutez la règle
@@ -88,8 +88,7 @@ Pour firefox: [lien](https://addons.mozilla.org/fr/firefox/addon/foxyproxy-stand
 Une fois FoxyProxy installé, ouvrez le plugin et importer le fichier se trouvant dans :  
 
 - https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.json pour firefox
-  - https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.xml pour chrome
-  
+- https://github.com/katossky/panorama-bigdata/blob/master/settings/foxyproxy-settings.xml pour chrome
 ### Etablir une connexion SSH avec votre cluster
 
   *(La marche à suivre est également disponible si vous cliquez sur "activez la connexion web" depuis la pag de voter cluster)*
@@ -158,7 +157,7 @@ Une fois FoxyProxy installé, ouvrez le plugin et importer le fichier se trouvan
 
   *Si vous préférez écrire votre code en python, il est nécessaire de lancer spark-shell avant pour charger toutes les bibliothèques java nécessaires.*
 
-  <div style="width:550px">![Accueil Pyspark](../img/setup-emr/pyspark_emr.png)</div>
+  ![Accueil Pyspark](../img/setup-emr/pyspark_emr.png)
 
 - [ ] Vous pouvez désormais écrire du code spark en interactif. Par exemple voici un petit script python qui compte le nombre de lignes dans un fichier public stocké sur s3.
 
@@ -175,8 +174,8 @@ Voici le même script scala en plus condensé
   
 ````scala
   sc.textFile("s3://gdelt-open-data/events/2016*").count()
-  ````
-  
+````
+
   
 
 ### Ouvrir les interfaces de suivi 
@@ -231,9 +230,8 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
   sudo yum install rstudio-server-rhel-1.2.5033-x86_64.rpm
   ````
 
-  <div style="width:550px">![yum install](../img/setup-emr/rstudio_yum_install.png)</div>
+  ![yum install](../img/setup-emr/rstudio_yum_install.png)
 <div style="width:550px">![r server install](../img/setup-emr/rstudio_server_install.png)</div>
-  
 - [ ] Créez un user pour Rstudio
 
   ````shell
@@ -254,7 +252,6 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 
 - [ ] Vous pouvez commencer à coder. Voici un script exemple : [lien](exemple/script_exemple_R.R)
 
-<!--
 ## Liens utiles
 
 - [Documentation officielle spark EMR](https://docs.aws.amazon.com/fr_fr/emr/latest/ReleaseGuide/emr-spark.html)
@@ -263,4 +260,3 @@ Une fois la connexion shh établie, et FoxyPproxy configuré, vous pouvez désor
 - [Creating PySpark DataFrame from CSV in AWS S3 in EMR  ](https://gist.github.com/jakechen/6955f2de51212163312b6430555b8e0b)
 
 - [Connection avec Rstudio](https://spark.rstudio.com/examples/yarn-cluster-emr/#set-up-the-cluster)
--->

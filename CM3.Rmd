@@ -1,15 +1,16 @@
 ---
-title: "Large-scale machine-learning"
-subtitle: "Lesson 3 — Parallelized computing on distributed data"
+title: "Big data tools"
+subtitle: "Lesson 2 — Parallelized computing on distributed data"
 author: Arthur Katossky & Rémi Pépin
 institute: "ENSAI (Rennes, France)"
-date: "January 2020"
+date: "March 2020"
 output:
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
     nature:
       ratio: 16:10
       scroll: false
+
 ---
 
 # Forewords
@@ -51,11 +52,11 @@ We generate much more data than we can store on a single hard disk.
 
 ---
 
-.heigth600[![](img/storage-cost.png)]
+.height600[![](img/storage-cost.png)]
 
 ---
 
-.heigth600[![](img/storage-average.png)]
+.height600[![](img/storage-average.png)]
 
 
 ---
@@ -113,13 +114,24 @@ This will be the focus of this course.
 
 Transparent here means "not visible", "not disturbing".
 
+
+---
+
+## File systems
+
+### Storage schema
+
+.height400.center[![](img/fragments.jpg)]
+
+
+
 ---
 
 ## File systems
 
 ### Traditionnal file processing
 
-.heigth600[![](img/filesystem.jpg)]
+.height400.center[![](img/filesystem.jpg)]
 
 
 ---
@@ -128,7 +140,7 @@ Transparent here means "not visible", "not disturbing".
 ### Key features
 
 - Is responsible for the correspondance between the physical and logical file
-- Maintains the **index** of where data is situated on disk
+- Maintains the **index** of where data is physicaly situated on disk
 - Maintains the **namespace**, a virtual hierarchy of files and directory making it possible to identify one single file by a string, called a **path**
 - Doesn't undestand file contents, only understands meta data (e.g. size, owner, time stamp of last change)
 - Responsible of the integrity of files
@@ -177,7 +189,7 @@ We mix the database (storage part) and the DBMS (management system). It's not a 
 
 ### Data base processsing
 
-![](img/database.jpg)
+.height400.center[![](img/database.jpg)]
 
 ---
 
@@ -268,6 +280,10 @@ We will thus start by the _common_ problems.
 --
   - does scaling require a lot of _ad hoc_ work? can the scaling happen automatically? (_elasticity_)
 
+
+???
+
+* are ACID properties
 ---
 ## The fundamental problems of distribution
 
@@ -286,25 +302,25 @@ Plus the usual questions of large-scale systems :
 
 ### Some solutions 
 
-- **Redundancy / replication:** keep copies of the data in far away nodes, so that you don't lose information under hardware failure (++ availability, ++ fault-tolerance, ++ durability, -- inter-node consistency, -- schema-consistency, --cost, --environment)
+- **Redundancy / replication:** keep copies of the data in far away nodes, so that you don't lose information under hardware failure (.green[++ availability], .green[++ fault-tolerance], .green[++ durability], .red[-- inter-node consistency], .red[-- schema-consistency], .red[--cost], .red[--environment])
 
 --
-- **Balancing\rebalancing:** use all your node fairly (--availability now, ++ availability later, ++ scalability)
+- **Balancing\rebalancing:** use all your node fairly (.red[--availability now], .green[++ availability later], .green[++ scalability])
 
 --
-- **Timestamp-based concurrency control:** use timestamp to resolve conflict (first in first out)  (++isolation, --availability)
+- **Timestamp-based concurrency control:** use timestamp to resolve conflict (first in first out)  (.green[++isolation], .red[--availability])
 
 --
-- **Get the closest data to the client:** if the data are close to the client, there is less network time (++ availability, - inter-node consistency, - governance)
+- **Get the closest data to the client:** if the data are close to the client, there is less network time (.green[++ availability], .red[-inter-node consistency], .red[-governance]) (*edge, fog, mist computing*)
 
 --
-- **Have a master:** it organizes the work to avoid conflict (+ consistency, - availability, - fault-tolerance)
+- **Have a master:** it organizes the work to avoid conflict (.green[+consistency], .red[-availability], .red[-fault-tolerance])
 
 --
-- **Asynchronous processing:** nodes can accept change locally, and consolidate the transactions only in a second phase (++ availability, --inter-node consistency)
+- **Asynchronous processing:** nodes can accept change locally, and consolidate the transactions only in a second phase (.green[++availability], .red[--inter-node consistency])
 
 --
-- **First-class actions:** you may chose to priviledge reads over writes, or to completely prevent modifying files, for instance (++ availability, ++ consistency)
+- **First-class actions:** you may chose to priviledge reads over writes, or to completely prevent modifying files, for instance (.green[++availability], .green[++consistency])
 
 ???
 
@@ -339,13 +355,12 @@ Source : https://en.wikipedia.org/wiki/CAP_theorem
 
 ---
 ## Transparency requirements
-
 - **Access transparency:** clients are unaware that files/data are distributed and can access them in the same way as local files are accessed
 
 .footnote[**Souce:** https://en.wikipedia.org/wiki/Clustered_file_system#Distributed_file_systems]
 
 --
-- **Location transparency:** the way to refer to a file/data does not dependon its location
+- **Location transparency:** the way to refer to a file/data does not depend on its location
 
 --
 - **Concurrency transparency:** all clients should have the same view of the state of the file system / database
@@ -360,13 +375,13 @@ Source : https://en.wikipedia.org/wiki/CAP_theorem
 - **Replication transparency:** clients should be unaware of the file replication performed across multiple servers to support scalability
 
 --
-- **Migration transparency:** files should be able to move between different servers without the client's knowledge.
+- **Migration transparency:** files should be able to move between different servers without the client's knowledge (*interoperability*).
 
 --
 - ...
 
 ---
-# 4. Distributing file systems
+# 4. Distributed file systems
 
 ???
 
@@ -377,7 +392,7 @@ Source : https://en.wikipedia.org/wiki/CAP_theorem
 
 ---
 
-## Distributing file systems
+## Distributed file systems
 
 **Distributed file systems** are also known historically as **network file systems**
 
@@ -437,11 +452,14 @@ But "_Hadoop_" in a broader sense refers to a complete software ecosystem, most 
 
 _Hadoop_ was first released in 2006, and has evolved a lot since.
 
-HDFS's developement was inspired by the publication of _Google File System_, a now deprecated file system developped by Google, to serve as infrastructure for the _Apache Nutch_ web search engine project.<!-- CHECK : now deprecated ?-->
+HDFS's developement was inspired by the publication of _Google File System_, a now deprecated¹ file system developped by Google, to serve as infrastructure for the _Apache Nutch_ web search engine project.
 
 We will here focus on the latest version, Hadoop 3.
 
-.footnote[_Hadoop_ is mostly coded in _Java_.]
+.footnote[_Hadoop_ is mostly coded in _Java_. <br/>
+¹source :https://www.systutorials.com/colossus-successor-to-google-file-system-gfs/ <br/>
+map-reduce principles : https://static.googleusercontent.com/media/research.google.com/fr//archive/mapreduce-osdi04.pdf <br/>
+Google File System : https://static.googleusercontent.com/media/research.google.com/fr//archive/gfs-sosp2003.pdf]
 
 ---
 
@@ -473,7 +491,7 @@ HDFS has a master/slave architecture.
 
 ### Key ideas
 
-When given a new file, the **NameNode** splits it into one or more **blocks** and gives these blocks to be stored into a set of **DataNodes**. Each block is stored several times, on different DataNodes, and this number is the **replication factor** of that file.*
+When given a new file, the **NameNode** splits it into one or more **blocks** (default size 128MB) and gives these blocks to be stored into a set of **DataNodes**. Each block is stored several times, on different DataNodes, and this number is the **replication factor** of that file.
 
 **Files in HDFS cannot be modified**, except for appends and truncates. Emphasis is indeed on the reading part, a scheme HDFS calls "write-once-read-many".
 
@@ -488,15 +506,17 @@ By default, the replication factor is 3, and the NameNode tries to allocate the 
 If a client wants to write a file, they ask the NameNode.
 
 1. The NameNode splits the file into blocks.
+
 2. For each block, it selects a number of DataNode to write onto (typically 3), based on:
-  
-    a. disk space (more space is better)
-    b. proximity to the client (closer is better)
-    c. proximity to each other (one replication close, one far)
-    d. distribution of blocks (blocks of the same file should be on different nodes)
-  
+    1. disk space (more space is better)
+    2. proximity to the client (closer is better)
+    3. proximity to each other (one replication close, one far)
+    4. distribution of blocks (blocks of the same file should be on different nodes)
+    
 3. It then passes the block split and the lists to the client.
+
 4. The client writes each block on the first block on the list.
+
 5. The DataNode passes the block and the list on to the next DataNode on the list. (This minimizes the use of the network in between the cluster and the client, likely to be slower than the network inside the cluster.)
 
 .footnote[The "client" is often not directly the user, but some other module asking for read / write access.]
@@ -515,13 +535,24 @@ If a client wants to read a file, they ask the NameNode.
 
 .footnote[The "client" is often not directly the user, but some other module asking for read / write access.]
 
+
 ---
 
 ## An exemple of distributed file system: HDFS
 
-### Role of the master (nodename)
+### Key ideas
 
-The **NodeName** :
+.center.height400[![](img/hadoop example.jpg)]
+
+---
+
+
+
+## An exemple of distributed file system: HDFS
+
+### Role of the master (NameNode)
+
+The **NameNode** :
 
 - is the entry point for a client's requests
 - decides how to split files into blocks and on which DataNodes to store these blocks
@@ -545,7 +576,7 @@ The number of copies of a file is called the replication factor of that file. Th
 
 ## An exemple of distributed file system: HDFS
 
-### Role of the master (nodename)
+### Role of the master (NameNode)
 
 The NameNode executes file system namespace operations like opening, closing, and renaming files and directories. It also determines the mapping of blocks to DataNodes.*
 
@@ -594,7 +625,7 @@ The DataNodes are responsible for serving read and write requests from the file 
 
 #### Fault-tolerance
 
-2. Failure is explicitly taken into account in the design of the file syste. There may be 3 kinds of failure:
+2. Failure is explicitly taken into account in the design of the file system. There may be 3 kinds of failure:
   
   - **NameNode failure:** when the NameNode fails, it is restarted, and:
     
@@ -675,7 +706,7 @@ In case of checksum mismatch, clients flag the incriminated block as corrupted t
 > The file system used by NFS is almost the same as the one used by Unix systems. Files are hierarchically organized into a naming graph in which directories and files are represented by nodes.
 
 ---
-# 5. Distributing databases
+# 5. Distributed databases
 
 .footnote[This section is heavily inspired from « Cassandra: The Definitive Guide: Distributed Data at Web Scale. » by Jeff Carpenter]
 
@@ -708,6 +739,17 @@ The only way to insure this form of consistency is through locking-releasing res
 
 .footnote[¹ This is known as **the Byzantine Generals Problem**, where to generals refuse to attack until they get completely sure that the other is also sure that they both agree to attack.]
 
+
+
+---
+## Specific solutions for distributed databases
+
+### Denormalisation
+
+.center.height400[![](img/join db.jpg)]
+
+
+
 ---
 ## Specific solutions for distributed databases
 
@@ -715,9 +757,11 @@ The only way to insure this form of consistency is through locking-releasing res
 
 When data becomes large, join operations becomes expensive. (So do consistency checks on foreign keys.)
 
-A solution is to pre-compute joins, so that the lookup is performed only once. This is knokwn as denormalisation.
+A solution is to pre-compute joins, so that the lookup is performed only once. This is known as denormalisation.
 
 But then maintaining consistency accross the tables become a problem.
+
+
 
 ---
 ## Specific solutions for distributed databases
@@ -776,6 +820,52 @@ A _share-nothing_ architecture is an architecure where each node is independant 
 ---
 ## Specific solutions for distributed databases
 
+### Sharding
+
+.pull-left[
+
+Product table, store on one node
+
+| Product | Price |
+|---------|-------|
+| p1      | 45    |
+| p2      | 50    |
+| p3      | 200   |
+| p4      | 230   |
+| p5      | 500   |
+| p6      | 12    |
+| p7      | 56    |
+| p8      | 1000  |
+]
+
+.pull-right[
+Product table sharded. Each shard is stored on one node (or multiple for redundancy)
+
+.pull-left[
+Shard 1, price < 100
+
+| Product | Price |
+|---------|-------|
+| p1      | 45    |
+| p2      | 50    |
+| p6      | 12    |
+| p7      | 56    |
+]
+.pull-right[
+Shard 1, price >= 100
+
+| Product | Price |
+|---------|-------|
+| p3      | 200   |
+| p4      | 230   |
+| p5      | 500   |
+| p8      | 1000  |
+]
+]
+
+---
+## Specific solutions for distributed databases
+
 ### No-SQL databases
 
 If we accept some departure from the ACID requirement, it is possible to reach (horizontal) scalability and high availability though distribution.
@@ -790,7 +880,7 @@ This has always existed, but the unifying "no-SQL" labels was a 2010s phenomenon
 ---
 ## An exemple of distributed database: Cassandra
 
-Cassandra is part of the Hadoop ecosystem.
+Cassandra is part of the Hadoop ecosystem (it support map reduce task, and cassandra node can be installed on top of hadoop).
 
 Born in Facebook in 2007, Cassandra bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable.
 
@@ -959,6 +1049,8 @@ This ensures a trade-off between availability and fault-tolerance.
 
 YARN is the job-scheduler associated with HDFS.
 
+.center.height400[![](img/hadoop-ecosystem.png)]
+
 .footnote[![](img/hadoop-yarn.png)]
 
 ???
@@ -1000,9 +1092,13 @@ Hadoop has **location awareness**, i.e. it uses the locations of the nodes relat
 -->
 
 ---
+## An exemple of job-scheduler: YARN
 
-bakground-image:
-![](img/yarn-architecture.gif)
+### The architecture
+
+.center[![](img/yarn-architecture.gif)
+
+.footnote[source :https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html]
 
 ---
 ## Other job-schedulers
@@ -1093,6 +1189,11 @@ The usual way to go is to run a Spark job:
 6. Intermediary results are shufled, then summarized (reduce step)
 7. Result is returned to the application
 
+---
+## An exemple of parallelized computation framework: Spark
+
+### Key ideas
+
 This means:
 
 - two Spark applications do not share virtual machine on the same computer, thus jobs submitted via different applications can not share data (besides writing to external support such as disk / database)
@@ -1151,11 +1252,11 @@ This strategy has several advantages:
     - If a single step exceeds the memory limits, data is stored to disk.
 - It is possible to control the caching behaviour and forcing some intermediary results to persist and to chose where it has to persist.
 
----
-## Other frameworks
+<!-- --- -->
+<!-- ## Other frameworks -->
 
----
-# 8. Statistical applications
+<!-- --- -->
+<!-- # 8. Statistical applications -->
 
 
 ---
@@ -1163,6 +1264,14 @@ This strategy has several advantages:
 
 ---
 ## What to remember from today?
+
+- When use a file system or a database
+- The challeng of distribution
+- Master-slave architecture
+- The main features Hadoop works
+- The main features Cassandra works
+- What is Yarn
+- The main features of Spark
 
 ---
 ## What to remember from the course?
@@ -1177,8 +1286,14 @@ Key insights:
 - low level is faster
 - think befor you do
 
----
-## Now you understand this:
+<!-- --- -->
+<!-- ## Now you understand this : -->
+
+
+
+
+
+???
 
 --> quotes explaining what this or this software is
 

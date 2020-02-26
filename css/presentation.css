@@ -6,10 +6,27 @@
     /* display: inline-block; */
 }
 
+
+.center{
+    text-align: center;
+}
+
 .remark-slide .height500 img{
     height: 500px;
 }
 
 .remark-slide .height600 img{
     height: 600px;
+}
+
+.remark-slide .height400 img{
+    height: 400px;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: rgb(168, 0, 0);
 }
