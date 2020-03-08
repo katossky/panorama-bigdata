@@ -23,6 +23,10 @@
     height: 400px;
 }
 
+.remark-slide .height450 img{
+    height: 450px;
+}
+
 .green {
     color: green;
 }

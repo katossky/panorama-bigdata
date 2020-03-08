@@ -99,8 +99,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
   ]
 
-.pull-right[.center.height500[![](https://img-9gag-fun.9cache.com/photo/az1owGj_460swp.webp)]
-
+.pull-right[.center.height450[![](https://img-9gag-fun.9cache.com/photo/a0Rz2rL_700bwp.webp)]
+*Source :  Friends Season 2 Episode 8*
 ]
 ---
 

@@ -33,7 +33,7 @@ output:
 
 ## QCM
 
-Go on Moodle. You have 5 mins.
+Go on Moodle. You have 10 mins.
 
 ---
 
@@ -1252,6 +1252,12 @@ This strategy has several advantages:
     - If a single step exceeds the memory limits, data is stored to disk.
 - It is possible to control the caching behaviour and forcing some intermediary results to persist and to chose where it has to persist.
 
+---
+## An exemple of parallelized computation framework: Spark
+
+### Client mode architecture
+
+.center.height400[![](img/spark client mode.jpg)]
 <!-- --- -->
 <!-- ## Other frameworks -->
 
