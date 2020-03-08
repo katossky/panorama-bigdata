@@ -1,6 +1,9 @@
 ---
-title: Computing parallelization principles
-author: Arthur Katossky & Rémi Pépin
+title: "Introduction to Big Data"
+author: "Arthur Katossky & Rémi Pépin"
+date: "February 2020"
+subtitle: Lesson 2 — Data-intensive computing
+institute: ENSAI (Rennes, France)
 output:
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
@@ -65,72 +68,12 @@ Recall: embarrassingly parallel problems.
 
 # 0. Outline
 
-0. Outline, quizz
-1. Introduction
+(0. Outline, quizz)
+(1. Introduction)
 2. Parallelisation theory
 3. CPUs, GPUs, TPUs
 4. Map Reduce principle
 5. How to parallelise in practice?
-
----
-
-# 0. Quizz
-
-Go on Moodle > Apprentissage statistique à grand échelle > Quizz
-
-You have 5 minutes to answer 3 questions.
-
----
-
-# 1. Introduction
-
----
-
-## How many figures are there in Mankiew's _Macroéconomie_?
-
-The book has ~650 pages.
-
-- **Group 1:** 1 student counts in the whole book
-- **Group 2:** 7 students:
-    - one cuts the book in 6 chunks of ~ 100 pages (the master) ;
-    - the others (the slaves) count each their chunk as soon as they receive it and tell the result back to the master
-    - the master counts back
-- **Group 3:** 21 students, same principle but with 20 chunks of ~30 pages and 20 slaves
-
----
-
-## How many figures are there in Mankiew's _Macroéconomie_?
-
-**What can we get from this exercice?**
-
-- Counting is an operation that can be parallelised
-- On can get speed up from parallelisation of the task, but only up to a certain point
-- There are 2 operations performed: the addition at the slave level, the addition at the master level
-- Order of operations (tasks) does not matter
-- The slave tasks can be rerun if one slave dies out (the master must keep a copy of the task, though)
-- If the master dies out, the slaves can elect a new master and send the results to him (the slave must keep a copy of the results, though)
-- Communication actualy takes a lot of time
-
-???
-
-Think of a ballot.
-
----
-
-## Is there any duplicate of figure in Mankiew's _Macroéconomie_?
-
-(Let's imagine we can copy the book.)
-
-**Can we still parallelise?**
-
---
-- Yes we can! (The master reads the book. Each time he finds an image, he copies the rest of the book and asks a slave if there is a copy of this image in it.)
-
---
-- However, the first task will still be quite long, especially if the book is long!
-
---
-- If (and that's a big if) we have $n$ processors, parallelisation shortens down the time spent, which is now $O(n)$. The over all complexity is still $O(n^2)$.
 
 ---
 

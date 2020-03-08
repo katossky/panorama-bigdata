@@ -1,5 +1,9 @@
 ---
-author: Arthur Katossky & Rémi Pépin
+title: "Introduction to Big Data"
+author: "Arthur Katossky & Rémi Pépin"
+date: "February 2020"
+subtitle: Lesson 1 — Data-intensive computing
+institute: ENSAI (Rennes, France)
 output:
   xaringan::moon_reader:
     css: ["default", "css/presentation.css"]
@@ -28,11 +32,7 @@ pacman::p_load(dplyr, ggplot2)
 # [ ] add this course's outline / summary
 ```
 
-# Large-scale machine-learning
-
-ENSAI 2019-2020 
-Arthur Katossky & Rémi Pépin 
-CC-BY-SA 
+# Forewords
 
 ???
 
@@ -99,8 +99,7 @@ One would thus consider how these computation procedures may be accellerated.
 
 --
 
-These are many many solutions... and each of this problems is far from tivial!
-
+These are many many solutions... and each of this problems is far from trivial!
 
 --
 
@@ -141,23 +140,23 @@ Ex techniques: sampled vs. exhaustive, sequential vs. parallel, in memory vs. on
 
 **Courses:**
 
-- **Course 0:** Introduction to cloud computing (1h30, January 20)
-- **Course 1:** Data-intensive computing in a nutshell (3h, January 13)
-- **Course 2:** Computing parallelization principles (3h, January 17)
-- **Course 3:** Parallelized computing on distributed data (2 × 1h30, January 28, February 6)
+- **Course 0:** Introduction to cloud computing (1h30, March 3)
+- **Course 1:** Data-intensive computing in a nutshell (3h, February 18)
+- **Course 2:** Parallelized computing and distributed computing (3h, March 2)
 
 --
 
 **Tutorials:**
 
-- **Tutorial 0:** Hands on AWS (1h30)
-- **Tutorial 1:** How to optimize a statistical algorithm? (3h, January, 20)
-- **Tutorial 2:** How to compute a statistical summary over distributed data? (3h, February, 6)
-- **Tutorial 3:** How to accelerate a neural network? (3h, February, 7)
+- **Tutorial 0:** Hands-on AWS (1h30, March 3)
+- **Tutorial 1:** Hands-on Spark (3h, March 18)
+- **Tutorial 2:** How to optimize a statistical algorithm? (3h, March 4)
+- **Tutorial 3:** How to compute a statistical summary over distributed data? (3h, March 11)
+- **Tutorial 4:** Coping with APIs, data streams and exotic formats (3h, March 25)
 
 ???
 
-There will be 9h course + 1h30 presentation of cloud computing solutions:
+There will be 6h course + 1h30 presentation of cloud computing solutions:
 
 There will be 9h tutorials + 1h30 hands-on session with AWS:
 
@@ -170,7 +169,7 @@ The course's content this year is the same as 2nd-year students' "Introduction t
 ## Evaluation
 
 - Multiple-choice questionnaire at the beginning of every tutorial
-- 1 short tutorial report (tutorial 2)
+- 1 short tutorial report (tutorial 1)
 - Desk examination (most probably multiple-choice questionnaire)
 
 ---
@@ -702,12 +701,6 @@ Sometimes you don't have the choice. You get data you have to read before you ca
 7. avoid i/o or network operations
 8. **parallelize on non-local nodes**
 
-]
-
-.footnote[
-*
-
-**
 ]
 
 ???

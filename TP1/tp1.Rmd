@@ -1,0 +1,350 @@
+---
+title: "Introduction to Big Data"
+author: "Arthur Katossky (on previous work by Arthur Katossky & Damien Crémilleux)"
+date: "March, 4, 2020 (updated: `r Sys.Date()`)"
+subtitle: Tutorial 1 — Introduction to Apache Spark
+licence: CC BY-SA
+institute: ENSAI (Rennes, France)
+output:
+    html_document:
+        theme: flatly
+        highlight: tango
+---
+
+# Outline
+
+1. Launching a Spark cluster on AWS
+2. HDFS, YARN and Spark
+3. First steps with Spark
+4. Map-and-reduce architecture
+
+# Exercice 1. Launching a Spark cluster on AWS
+
+`r emo::ji("desktop_computer")`  **1.1. Connect to AWS —** In a browser, go to AWS Educate's website (https://www.awseducate.com), log in, reach the "Big Data IT Tools" classroom, then launch the AWS Console.
+
+`r emo::ji("rocket")`  **1.2. Launch an EMR cluster —** In advanced settings, select Hadoop and Spark. In security, Keep all the other defaults. Re-use an earlier pair of security keys. Starting up may take a few minutes.
+
+`r emo::ji("electric_plug")`  **1.3. Connect to your cluster —** Verify that SSH connections are allowed for your master node ("Groupes de sécurité pour le principal" / "Security groups for Master" > select the security group `ElasticMapReduce-Master` > "Entrant" / "Inbound" > Do you see SSH in the "Protocole" column?), and in the negative add an authorisation for SSH connections ("Modifier" / "Edit" > "Ajouter une règle" / "Add Rule" > SSH with source "N'importe où" / "Anywhere"). Now launch Putty and input:
+
+- in Session > Hostname: `hadoop@<your Master public DNS>` ;
+- in Connection > SSH > Auth: your private key in the `ppk` format ;
+- in Connection > SSH > Tunnels: source port 8157, dynamic, auto.
+
+`r emo::ji("mag")` **1.4. Note down the address of your cluster's nodes —** Your EMR cluster is just a bunch of virtual machines launched simmultaneously. You can see them either on the "Hardware" tab of your EMR cluster, or through Services > EC2 > Instances. (Remember, EC2 is Amazon's Virtual Machine renting service.) Check both ways and find the Public DNS / Public IP address of your VMs.
+
+`r emo::ji("chart_with_upwards_trend")` **1.5. Enable the web graphical interfaces —** Install FoxyProxy. Create an XML file as specified by AWS ("Enable Web Connection") then import it into FoxyProxy. Refresh the EMR cluster page. You should now see Zeppelin, Spark History Server, Ganglie... You're good to go!
+
+# Exercice 2. HDFS, YARN and Spark
+
+A lot is happenning simmultaneously on your cluster. In this exercice, we are going to disentangle the different layers of hardware and software. But first, we need to import some data on the cluster, if we want to see anything happening at all.
+
+`r emo::ji("cd")` **2.1. Data import —** In your Putty console, type the following. Pay attention to the file size.
+
+```bash
+# create a new data directory at the root of the file system
+hadoop fs -mkdir /data
+
+# download the data ("curl")
+# progressively stream it ("|", pronounced "pipe")
+# into HDFS ("hadoop fs -put")
+curl http://ensaitp0remipepin.s3.eu-west-3.amazonaws.com/flight-data2.csv |
+  hadoop fs -put - /data/flights.csv
+```
+
+You can type `hadoop fs help` to know more about the instructions you can send (copy a file, delete it, rename it, etc.)[^2]. Specifically, you can check that the data exsists, and look at the first rows.
+
+[^2]: There are actually 3 different commands. `hadoop fs` has acces to the local file system whereas `hadoop dfs` and `hdfs dfs` do not. The documentation on the Hadoop website is [the same](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-common/FileSystemShell.html) for the three of them. See [this StackOverFlow question](https://stackoverflow.com/questions/18142960/whats-the-difference-between-hadoop-fs-shell-commands-and-hdfs-dfs-shell-co) for a dicussion.
+
+```bash
+# lists files and directories at the root on the *local* file system
+ls /
+
+# lists files and directories at the root of the *distributed* file system
+hadoop fs -ls /
+
+# same inside the "data" folder
+hadoop fs -ls /data
+
+# hadoop has also access to the local file system
+hadoop fs -ls file:///
+
+# look at the last lines of your file
+hadoop fs -tail /data/flights.csv 
+```
+
+`r emo::ji("card_file_box")` **2.2. HDFS Console —** HDFS is the distribituded file system of a Hadoop cluster. From the AWS console, launch HDFS Name Node web user interface.
+
+- How many DataNodes do we have in our cluster? When were they last heard of by the NameNode? Do their IP addesses match the ones that we can see through the EC2 interface?
+- Where can you find information about the number of blocks stored on each DataNode? Does the used space match the size of our file? What is the replication factor on our cluster, in your opinion? <!-- EMR is not intended for storage: people on AWS use S3, hence there isn't much sense to duplicate information, unless it to accelerate the shuffle operations on some suffle-intense computations -->
+
+`r emo::ji("open_book")` **2.3. Reading data from Spark**
+
+- In your Putty console, launch Spark with the command `pyspark`
+- Load your data into spark with:
+    
+    ```python
+    flights = spark.read\
+      .option("inferSchema", "true")\
+      .option("header", "true")\
+      .csv("/data/flights.csv")
+    ```
+    
+- Print the first lines of the table with:
+    
+    ```python
+    flights.take(5)
+    ```
+    
+- Quit the Python console with `quit()`.
+- You just launched and completed a first Spark application! `r emo::ji("tada")`
+
+`r emo::ji("circus_tent")` **2.4. YARN Console —** YARN is the resource manager of a Hadoop cluster. It is responsible for allowing applications (such as the Spark application `pyspark` you just launched) to access resource, i.e. processing units and memory.
+
+- From the AWS console, launch YARN Resource Manager.
+- How many NodeManagers do we have in our cluster? Do their IP addresses match the slave nodes from HDFS and from EC2?
+- Can you see our ephemeral `pyspark` application? On which node was the corresponding ApplicationMaster stored? Did it use a lot of resource?
+
+`r emo::ji("sparkles")` **2.5. Spark Console —** Each time you run Spark, Spark launches an ApplicationMaster called "Spark Context". This ApplicationMaster is assigned to a node by YARN. Launch the Spark interface from the AWS console.
+
+- Since we did not submit any specific job, there is not much to see here. However, you can check in the "Executors" tab that we find yet again the same slave nodes.
+
+`r emo::ji("framed_picture")` **2.6. Overview —** Make a drawing that summarises how all these layers — EC2 (physical), HDFS (storage), YARN (resource), Spark (application) ... — fit together. Your drawing will include:
+
+- the physical location of your cluster,
+- the IP address of the nodes,
+- the blocks of data,
+- you at ENSAI, sending instructions to your cluster via SSH,
+- the ApplicationManager "Spark Context"
+
+# Exercice 3. First steps with Spark
+
+Spark is a program that runs in Java, but it has interfaces for Python, R and Java. Alas, all the functionalities are not implemented in all the interfaces. During this tutorial, we will therefore use Spark from the Python console.
+
+Spark can be used interactively from the Putty with the following commands:
+
+- `spark-shell` for the Scala interface, which you can quit with `:quit`
+- `pyspark` for Python, with `quit()` for quitting
+- `sparkR` for R, with `q()`
+
+`r emo::ji("wave")` **3.1  Your first DataFrame —** Spark's main object class is the DataFrame, which is a distributed table. It is analogous to R's or Python's data frames: one row represents an observation, one column represents a variable. But contrary to R or Python, Spark's DataFrames can be distributed over hundred of nodes.
+
+- Can the `flights` data set fit in your computer's memory? Could you use Excel or R to read it?
+- In Putty, relaunch the Python interface. Is the `flights` variable still there? Why? <!-- Spark works in memory, like R ; virtually nothing is stored on disk ; when a Spark application is finished, YARN get the resource back -->
+- Run the following:
+    
+    ```python
+    flights = spark.read.csv(
+      "/data/flights.csv",
+      inferSchema = True,
+      header = True
+    )
+    ```
+    
+    You have just created a data frame! `r emo::ji("tada")`
+    
+    Data frames are **immutable**: there is no method to alter one specific value once one is created. Also, data frames are **distributed**: they are split into blocks, ill-named **partitions**[^3], that are stored separately in the memory of the slave nodes.
+    
+- In the Spark console, click on "Show incomplete applications" to see our current `pyspark` session. Look at the timeline. How many **executors** were used to perform the importation?
+- Click on the **_job_** corresponding to the imporation, then on the unique **_stage_** that composes this job. On which nodes of the cluster were the executors located?
+- For the importation stage, we have the equivalence one task = one partition, since the tasj is actually to create one partition. Does the number of tasks executed on each node recall you anything? (_**Hint:** go back to the HDFS Console._) <!-- Spark does not move the data at all from where HDFS has stored it ; it just loads the blocks in memory locally and call them paritions ; so we find that number of task in Spark == number of blocks in HDFS. In the timeline, we can notice that there is absolutely no time spent shuffling data around, which confirms the read-local interpretation. -->
+- Lastly, open the event time line. From what you see, how many processors on each nodes were thre? Can you confirm it from EC2?
+
+[^3]: Usually a "partition" is an set of chunks that cover all the data, without any repetition between the chunks. But not in Spark!
+
+`r emo::ji("wrench")` **3.3 DataFrame manipulation —** Data frames are immutable, but they can be **_transformed_** in other data frames. Such **transformations** include: filtering, sampling, dropping columns, selecting columns, adding new columns...
+
+- First, you can get information about the columns with:
+    
+    ```python
+    flights.columns       # get the column names
+    flights.schema        # get the column names and their respective type
+    flights.printSchema() # same, but human-readable
+    ```
+- What does the following code do?
+    
+    ```python
+    passengers_per_month = flights\
+      .select("PASSENGERS","YEAR","MONTH")\
+      .groupBy("YEAR","MONTH")\
+      .sum("PASSENGERS")
+    ```
+
+- And this one?
+   
+    ```python
+    flights_from_2018 = flights\
+      .sample(fraction=0.001)\
+      .filter(flights.YEAR==2018)\
+      .limit(100)
+    ```
+
+- And this one?
+   
+    ```python
+    overconfident_carriers = flights\
+      .select("CARRIER", "DEPARTURES_SCHEDULED", "DEPARTURES_PERFORMED")\
+      .withColumn(        # computes new variable
+        "OVERCONFIDENCE", # called "OVERCONFIDENCE"
+        (flights.DEPARTURES_SCHEDULED - flights.DEPARTURES_PERFORMED)/
+        flights.DEPARTURES_PERFORMED
+       )\
+      .groupBy("CARRIER")\
+      .sum("OVERCONFIDENCE")\
+      .sort("sum(OVERCONFIDENCE)")
+    ```
+
+- Run each of the code sections.
+
+`r emo::ji("sleeping")` **3.3 Lazy evaluation**
+
+- What happens when you run `flights`, like you would do in Python or R? Why?
+- At question **3.2**, did you get any result at all? Did any of the instructions cause computation to actually happen? (_**Hint:** look at the Spark console_)
+
+This is because Spark has what is known as **lazy evaluation**, in the sense that it will wait as much as it can before performing the actual computation. Said otherwise, when you run an instruction such as:
+
+```python
+filtered_flights = flights.filter(fligths.YEAR==2018)
+```
+
+... you are not executing anything! Rather, you are building an **execution plan**, to be realised later.
+
+Spark is quite extreme in its lazyness, since only a handful of methods called **actions**, by opposition to **transformations**, will trigger an execution. The most notable are:
+
+1. `collect()`, explicitly asking Spark to fetch the resulting rows instead of to lazily wait for more instructions,
+2. `take(n)`, asking for `n` first rows
+3. `first()`, an alias for `take(1)`
+2. `show()` and `show(n)`, human-friendly alternatives[^5]
+3. `count()`, asking for the numbers of rows
+4. all the "write" methods (write on file, write to database)
+
+[^5]: `first()` is exactly `take(1)` ([ref]( https://stackoverflow.com/questions/37495039/difference-between-spark-rdds-take1-and-first)) and show prints the result instead of returning it as a list of rows ([ref](https://stackoverflow.com/questions/53884994/what-is-the-difference-between-dataframe-show-and-dataframe-take-in-spark-t))
+
+**This has advantages:** on huge data, you don't want to accidently perform a computation that is not needed. Also, Spark can optimize each **stage** of the execution in regard to what comes next. For instance, filters will be executed as early as possible, since it diminishes the number of rows on which to perform later operations. On the contrary, joins are very computation-intense and will be executed as late as possible. The resulting **execution plan** consists in a **directed acyclic graph** (DAG) that contains the tree of all required actions for a specific computation, ordered in the most effective fasshion.
+
+**This has also drawbacks.** Since the computation is optimized for the end result, the intermediate stages are discarded by default. For instance, in the following:
+
+```python
+# step 1
+flights_overconfidence = flights\
+  .withColumn(
+    "OVERCONFIDENCE",
+    (flights.DEPARTURES_SCHEDULED - flights.DEPARTURES_PERFORMED)/
+    flights.DEPARTURES_PERFORMED
+  )
+# step 2
+flights_overconfidence_2018 = flights_overconfidence\
+  .filter(fligths.YEAR==2018)\
+  .collect()
+```
+
+... the intermediate `flights_overconfidence` does not exist more after `collect()` have been called than before the call. Indeed, the values for other years than 2018 have not be computed at all!
+
+- Now run:
+    
+    ```python
+    passengers_per_month.show()
+    flights_from_2018.count()
+    overconfident_carriers.take(10)
+    ```
+    
+    Was something executed this time?
+
+- You can get the execution plan from the Spark console, or from Python with the `explain()` method. Try with `flights_from_2018.explain()`. Does the order of the stages make sense?
+
+`r emo::ji("billed_hat")` **3.4 Practice**
+
+The complete list of methods (transformations and actions) for data frames is listed [here](https://spark.apache.org/docs/latest/api/python/pyspark.sql.html?highlight=dataframe#pyspark.sql.DataFrame). The aggregation functions, such as `sum()`, `max()`, `mean()`... are listed [here](https://spark.apache.org/docs/latest/api/python/pyspark.sql.html?highlight=dataframe#module-pyspark.sql.functions).
+
+- What are the 10 biggest airports of the USA in 2018? <!--
+flights\
+  .filter(flights.YEAR==2018)\
+  .groupBy("DEST")\
+  .sum("PASSENGERS")\
+  .orderBy("sum(PASSENGERS)", ascending=False)\
+  .show(10)
+-->
+
+- What is the longest regular flight served by each carrier in 2000? <!--
+flights\
+  .filter(flights.YEAR==2000)\
+  .groupBy("CARRIER")\
+  .max("DISTANCE")\
+  .show()
+Returning the DEST and ORIGIN of those flights is out of scope for this tutorial, since it requires to introduce window functions or "structs". At this stage, we may want to use:
+flights\
+  .orderBy("DISTANCE", ascending=False)\
+  .groupBy("CARRIER")\
+  .agg(first(...),...) # could not find the proper syntax anyway
+but this is wrong, because first() is non-deterministic (it tries to minimize the use of the cluster, reading from the fewest nodes it can, thus returning only approximate solutions)
+See [here](https://stackoverflow.com/questions/33878370/how-to-select-the-first-row-of-each-group).
+-->
+
+# Exercice 4. Map-and-reduce architecture
+
+Manny computation algorithms can be expressed using two stages:
+- a **map stage**, where the intructions can be applied element-wise, in the sense the if elements are arranged as a list, the operation on element $e$, does not depend on the value of $e'$
+- a **reduce stage**, where the instructions obtained in the first stage are combined pairwise recursively ; each time a result is obtained from the first stage, it is combined with earlier results, as in an accumulator
+
+The reduce function must be associative, and commutativity simplifies the reduce step even further. Typical exemples are addition and multiplication. Concatenation is associative, but not commutative.
+
+`r emo::ji("man_teacher")` **4.1. Map-and-reduce exemples**
+
+- Find two exemples of computation problems that decompose well under the map-and-reduce principle, and one that can't. <!-- Facile: moyenne, somme, techniques de Monte Carlo. Difficile: inversion de matrice. Impossible: travelling salesman. Opposition entre "embarassingly parallel problems" et "inherently sequential problems". -->
+
+- The `count()` method is expressible as a _map-and-reduce_ algorithm. `flights.count()` is equivalent to the following code. Can you make clear how the job is executed? Is it faster?
+    
+    ```python
+    # the map function is not available at the data frame level
+    # we have to go down at the data set (RDD) level
+    flights\
+      .rdd\ 
+      .map(lambda flight: 1)\
+      .reduce(
+        lambda accumulator, value:
+          accumulator + value
+      )
+    # reduce is an action verb
+    # we do not need an explicit collect()
+    ```
+    
+- Explain the `lambda flight: 1` syntax. How do you call this kind of object? <!-- anonymous functions -->
+-  Look at the Spark console to see where the different stages of the computation actually happenned.
+
+<!-- L'opération `reduce` est le plus souvent commutative puisque le résultat final doit être le même quel que soit l'ordre d'exécution des tâches du `map`. La distinction formelle entre `accumulator` et `value` est donc plus pédagogique qu'autre chose. -->
+
+`r emo::ji("soccer")` **4.2. Practice** 
+
+- Compute the total number of passengers transported following the map-and-reduce principle. Is it faster than <!-- 
+flights\
+  .rdd\
+  .map(lambda flight: flight.DISTANCE)\ # ONLY CHANGE HERE!
+  .reduce(
+    lambda accumulator, value:
+      accumulator + value
+  )
+-->
+
+- What does the following code do?
+    
+    ```python
+    def my_function( a, b ) :
+      return b if b > a else a
+    
+    flights\
+      .rdd\
+      .map(lambda flight: flight.AIR_TIME)\
+      .reduce( my_function )
+    ```
+
+- The _map_ stage may as well return a tupple (FR: n-uplet), as long as the you have an corresponding well chosen _reduce_ stage. For instance, what does the following do?
+    
+    ```python
+    flights\
+      .rdd\
+      .map(lambda flight: (flight.AIR_TIME, flight.CARRIER))\
+      .reduce(lambda a, b: a if a[0] > b[0] else b)
+    ```
+
+- How would you recode the `mean()` function in two succesive map-and-reduce operations? Is it possible with only one?
+
+- What about the variance? <!-- open problem -->

@@ -76,3 +76,5 @@ Proposition de @katossky:
 - [ ] uniformize titles
 - [ ] add colors (if possible by CSS) and images
 - [ ] read "Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services"
+- [ ] add the distinction between single pass, double pass, etc.
+- [ ] mention the concept of single-point-of-failure in introduction of the distributed system part
