@@ -5,9 +5,8 @@
 ### 0.1 Setup an EMR cluster
 
 - Sign on AWS educate then AWS using your student account.
-
 - Launch an EMR cluster (with as many nodes you want)
-- Install Rstudio server on it
+- Install Rstudio server on it ([use this cookbook](https://foad-moodle.ensai.fr/mod/resource/view.php?id=2336))
 - Connect to Rstudio server
 
 You will find all the steps to setup your cluster [here](https://foad-moodle.ensai.fr/course/view.php?id=183#section-3)

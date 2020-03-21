@@ -4,3 +4,8 @@
 CM3_files
 CM1_files
 .DS_Store
+TP4-2A/server_python/.idea/
+
+TP4-2A/server_python/__pycache__/
+
+TP4-2A/server_python/metastore_db/

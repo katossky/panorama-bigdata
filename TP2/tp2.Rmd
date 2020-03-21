@@ -1,8 +1,9 @@
 ---
-title: "Large-scale machine-learning"
+title: "Big Data IT tools"
 author: "Arthur Katossky & Rémi Pépin"
-date: "January 2020"
-subtitle: Tutorial 1 — How to optimize a statistical algorithm?
+date: "March 2020"
+output: pdf_document
+subtitle: Tutorial 2  — How to optimize a statistical algorithm?
 institute: ENSAI (Rennes, France)
 ---
 
@@ -52,7 +53,7 @@ drv <- dbDriver("PostgreSQL") # loads the PostgreSQL driver.
 # This is the proper connection.
 # The same object will be used each time we want to connect to the database.
 con <- dbConnect(drv, dbname = "postgres",
-                 host = "database-1.c5bqsgv9tnea.eu-west-3.rds.amazonaws.com", port = 5432,
+                 host = "tp-avion.c5bqsgv9tnea.eu-west-3.rds.amazonaws.com", port = 5432,
                  user = "postgres", password = pw)
 
 rm(pw) # We don't need the password anymore.
@@ -337,7 +338,7 @@ sudo useradd -m rstudio-user
 sudo passwd rstudio-user
 ```
 
-9.7. Connect to Rstudio server : https://[public-DNS]:8787 with [public-DNS] the public DNS of the instance
+9.7. Connect to Rstudio server : https://**public-DNS**:8787 with **public-DNS** the public DNS of the instance
 
 You will find all the steps and explanation in the previous practical session. The main differences are :
 

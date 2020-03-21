@@ -205,7 +205,7 @@ fi
 
 # install required packages
 sudo R --no-save << R_SCRIPT
-install.packages(c('devtools', 'DBI', 'ggplot2', 'dplyr', 'R.methodsS3'),
+install.packages(c('devtools', 'DBI', 'ggplot2', 'dplyr', 'R.methodsS3', 'RPostgreSQL', 'datastructures'),
 repos="http://cran.rstudio.com")
 # here you can add your required packages which should be installed on ALL nodes
 # install.packages(c(''), repos="http://cran.rstudio.com", INSTALL_opts=c('--byte-compile') )
