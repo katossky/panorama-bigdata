@@ -4,11 +4,9 @@
 
 Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. Vous trouverez sur Moodle une archive TP4 qui contient l'intégralité des fichiers utiles pour le TP. Téléchargez et décompressez la. Vous allez obtenir 3 dossiers
 
-- server-python qui contient le code qui va créer un flux de données
-- sparkqui contient les fichiers nécessaires à faire fonctionner spark en local
-- data qui va contenir des données utilisées au cours du TP
-
-
+- `server-python`,  qui contient le code qui va créer un flux de données
+- `spark`, qui contient les fichiers nécessaires à faire fonctionner spark en local
+- `data`, qui va contenir des données utilisées au cours du TP
 
 > :coffee: Aide pyspark en console :
 >
@@ -71,12 +69,14 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       .load()
   ````
 
-  - *format("socket")* : spécifie que le flux proviendra d'une socket TCP (pour faire très simple on récupéré des données produites par un serveur). Ce format de fichier est déconseillé pour des applications en production (comme une application utilisée par une entreprise pour traiter des données) car elle n'est pas tolérante à la faute. Préférez comme source des fichiers qui arrivent continuellement dans un dossier (dans ce cas la Spark ne se connecte pas à internet) ou une source Kafka ([plus d'info](https://kafka.apache.org/))
-  - *option("host", "127.0.0.1")* : la source des données se trouve sur le serveur appelé "127.0.0.1". Dans le cas présent cela signifie que c'est sur votre machine, mais pour ce connecter à une source distante il faut juste spécifier une autre adresse IP
-  - *option("port", "9999")*  : la source se trouve sur le port 9999.
+  - *format("socket")* : spécifie que le flux proviendra d'une socket TCP (pour faire très simple on récupéré des données produites par un serveur). Ce format de fichier est déconseillé pour des applications _en production_[^1] car elle n'est pas tolérante à la faute, dans le sens où... [compléter]. _Une façon plus sûre de transmettre un flux de donnée serait d'ajouter des fichiers continuellement dans un dossier (dans ce cas la Spark ne se connecte pas à internet) ou d'utiliser un service dédié comme Kafka ([plus d'info](https://kafka.apache.org/))._
+  - *option("host", "127.0.0.1")* : votre ordinateur, vu depuis votre ordinateur, possède l'adresse IP `127.0.0.1`. _Pour se connecter à une source distante, il suffirait de remplacer cette adresse IP par celle de la source._
+  - *option("port", "9999")*  : la source utilise le port 9999. _Ce choix est purement conventionnel mais (1) il doit être le même pour l'émetteur et le récepteur et (2) il est déconseillé d'utiliser des ports "connus" (comme les ports 20 et 21 utilisé pour les transferts de fichier FTP, 80 et 443 pour HTTP et HTTPS respectivement, etc. — voir [ici](https://fr.wikipedia.org/wiki/Liste_de_ports_logiciels) pour une liste exhaustive) pour éviter tout usage conflictuel du même port._
   - *load()* : on ouvre le flux
+  
+[^1]: En production = en utilisation permanente, active. La production s'oppose au développement (la phase de construction d'un programme ou d'une application.)
 
-  >:thinking: Actuellement ce code ne va rien faire car n'oubliez pas spark est "lazy". Actuellement comme on n'utilise pas la source de données il ne s'y connecte pas
+  > :thinking: Ce code ne va rien faire car n'oubliez pas car Spark est paresseux (_lazy evaluation_): comme on n'utilise pas la source de données il ne s'y connecte pas.
 
 - :printer: Afficher quelques données
 
@@ -110,12 +110,22 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   Voilà la sortie que vous devez obtenir (en moins claire) :
 
   ````
-  StructType(List( # Liste de vos colones
-  	StructField(value,StringType,true) # Une seule colonne de type string
-  ))
+  StructType(List(StructField(value,StringType,true)))
+  ````
+  
+  Qu'est-ce que cela veut dire?
+  ````
+  StructType(
+  
+    List( # Liste de vos colones
+  
+      StructField(value, StringType, true) # Une seule colonne de type string
+    
+    )
+  )
   ````
 
-  Actuellement les données sont traitées comme une seule est même colonnes "value" de type string. Pour bien les traiter , nous allons appliquer le bon schéma dessus
+  Autrement dit, les données ne sont pas correctement lues. Chaque ligne est lue comme une seule grande chaîne de caractères. Pour bien les traiter, nous devons appliquer le bon "schéma".
 
 - :arrow_forward: Définir le schéma de nos données
 
@@ -133,7 +143,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       .add('z',DoubleType(),True)
   ````
 
-  Comme les données proviennent d'un flux on ne peut pas inférer le schéma, donc on le définit à la main. Le True à la fin de chaque ligne spécifie que l'on accepte les valeurs null.
+  Comme les données proviennent d'un flux on ne peut pas inférer le schéma, donc on le définit à la main. Le True à la fin de chaque ligne spécifie que l'on accepte les valeurs null (plus de détails [dans la documentation](https://spark.apache.org/docs/2.3.0/api/python/pyspark.sql.html#pyspark.sql.types.StructType)).
 
 - :point_down: Appliquer le schéma
 
@@ -145,9 +155,9 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 
   Pour appliquer le schéma on va appliquer une transformation à nos données.
 
-  - *selectExpr('CAST(value AS STRING)')* : on cast la colonne value en string. C'est théoriquement déjà le cas, mais l'expliciter limite les erreurs.
-  - *select(from_json('value', schema).alias('json'))* : on applique notre schéma à la colonne value, et on appelle cette nouvelle colonne 'json'
-  - *select('json.*')* : on récupère uniquement les données de la colonne json
+  - `selectExpr('CAST(value AS STRING)')` : convertir la colonne value en chaîne de caractères. C'est théoriquement déjà le cas, mais l'expliciter limite les erreurs.
+  - `select(from_json('value', schema).alias('json'))` : on applique notre schéma à la colonne `value`, et on appelle cette nouvelle colonne `json`.
+  - `select('json.*')` : on récupère uniquement les données de la colonne `json`.
 
 - ✅ Tester cela
 
@@ -158,12 +168,15 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   	.start()
   
   sleep(10)
-  json_data_console.stop()
+  json_data_console.stop() # copier aussi la ligne vide en-dessous!
+  
   ````
 
-  Ces commandes affichent dans la console le flux toutes les 5 secondes pendant 10 sec
+  Ces commandes affichent dans la console le flux toutes les 5 secondes pendant 10 sec. (Comme précédemment, si le flux continue, c'est que vous n'avez pas tapé `Entrée` après la dernière instruction. Par ailleurs, si les données sont toujours illisibles, élargissez la console Python!)
 
-  > :sparkles: Il existe d'autres format d'output que la console pour les streams. Actuellement les données ne peuvent pas être utilisées par d'autres processus, ce qui est un problème pour la création d'une vraie application. A partir de maintenant nous allons enregistrer nos données en mémoire. Cela nous permettra d'utiliser nos données plus tard.
+  > :sparkles: Il existe d'autres format d'output que la console pour les flux de données, comme les formats fichiers (`csv`, `json`, etc.), le format mémoire ou le format Kafka. Dans la console, les données ne peuvent pas être utilisées par d'autres processus, ce qui est un problème pour la création d'une vraie application. À la place, nous allons enregistrer nos données en mémoire, ce qui nous permet d'utiliser nos données plus tard.
+  > 
+  > **Remarque:** le format mémoire est utiliser ici par soucis de facilité. En pratique, il n'est utilisé que pour le déboggage. En effet, une telle façon de procéder n'est possible que tant que les données n'excèdent pas les capacités physiques de l'ordinateur, puisque les données doivent tenir en mémoire! Mais alors pourquoi utiliser Spark dans ce cas?
 
   ````python
   # La même chose mais ou on garde les données en mémoire pour les requêter plus tard.
@@ -178,7 +191,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       sleep(1)
   
   
-  raw_data_memory.stop()
+  json_data_memory.stop()
   
   ````
 
@@ -208,20 +221,16 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   - *groupBy("error")* : on fait un groupe by sur la colonne error
   - *count()* : on compte le nombre de ligne groupées
 
-- :hocho: Filtrer les lignes en erreur. Une ligne est en erreur si une de ces valeurs vaut null
+- :hocho: Filtrer les lignes avec erreur. Ici, on considèrera qu'une ligne doit être écartée si une des variables n'est pas renseignée.
 
   ````python
   filterdDf = df\
       .na.drop("any")
   ````
 
-  - na.drop("any") : on filtre toutes les lignes qui on une valeur null dans n'importe quelle colonne. Il est possible de filtrer les lignes qui ont uniquement des valeurs null avec all à la place d'any, ou de spécifier une liste à tester en faisant
+  - na.drop("any") : on filtre toutes les lignes qui on une valeur manquante (`null` en SQL) dans n'importe quelle colonne. Cela peut par exemple résultater d'une erreur de conversion. Il aurait été possible de ne supprimer les observations avec _uniquement_ des valeurs manquantes (`na.drop("all")`) ou de spécifier un ensemble de colonnes à considérer dans l'opération de filtrage (`na.drop("<any or all>", subset=["col1", "col2"])`.
 
-    ````python
-    .na.drop("all", subset=["col1", "col2"])
-    ````
-
-  - A partir de maintenant on va utiliser filterDf comme objet en entrée de nos streams.
+  - A partir de maintenant nous utiliserons `filterDf` en entrée de tous nos traitements.
 
 - :ok:Tester que les erreurs sont bien filtrées
 
@@ -254,13 +263,17 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       .trigger(processingTime='2 seconds')\
       .start()
   
-  # On attend 6 sec
+  # Toutes les secondes pendant 10 secondes
+  # Remarquez que rien ne se passe, une fois sur deux. En effet
+  # nous venons de spécifier une exécution toutes les 2 secondes
+  # (processingTime='2 seconds' ci dessus).
   for x in range(10):
       spark.sql("SELECT * FROM activityCount_stream").show()
       sleep(1)
   
   
-  activityCount_stream.stop()
+  activityCount_stream.stop() # copier aussi la ligne suivante!
+  
      ````
 
   - *format("memory")* : on écrit le résultat en mémoire
@@ -285,8 +298,8 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 - :small_red_triangle_down: Filtrer et sélectionner certaines infos
 
   ````python
-  simpleTransformAndFilter = filterdDf.withColumn("stairs", expr("gt like '%stairs%'"))\
-      .where("stairs")\
+  simpleTransformAndFilter = filterdDf.withColumn("contains_stairs", expr("gt like '%stairs%'"))\
+      .where("contains_stairs")\
       .select("gt", "model", "arrival_time", "creation_time")\
       .writeStream\
       .queryName("simple_transform")\
@@ -297,21 +310,20 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       spark.sql("SELECT * FROM simple_transform").show()
       sleep(1)
   
-  simple_transform.stop()
+  simpleTransformAndFilter.stop()
   ````
 
-  - *withColumn("stairs", expr("gt like '%stairs%'"))* : on crée un colonne stairs qui vaut TRUE si la colonne gt contient la chaîne de caractère "stairs" et FALSE sinon
-  - *where("stairs")* : on garde que les lignes aves stairs == TRUE
+  - *withColumn("contains_stairs", expr("gt like '%stairs%'"))* : on crée un colonne stairs qui vaut TRUE si la colonne gt contient la chaîne de caractère "stairs" et FALSE sinon
+  - *where("contains_stairs")* : on garde que les lignes aves stairs == TRUE
   - *select("gt", "model", "arrival_time", "creation_time")* : on garde que les colonnes gt, model, arrival_time et creation_time
 
 - :bar_chart: Quelques stats
 
   ````python
-  deviceMobileStats = filterdDf.cube("gt", "model")\
+  deviceMobileStats = filterdDf\
+      .select("x", "y", "z", "gt", "model")\
+      .cube("gt", "model")\
       .avg()\
-      .drop("avg(Arrival_time)")\
-      .drop("avg(Creation_time)")\
-      .drop("avg(Index)")\
       .writeStream\
       .queryName("deviceMobileStats")\
       .format("memory")\
@@ -326,7 +338,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   
   ````
 
-  La fonction cube prend une liste de colonnes en entrée (ici gt et model) et va faire tous les croisements possibles de ces variables et calculer les statistiques demandées (ici la moyenne) sur toutes les autres dimensions. Comme seules celles sur x, y et z nous intéresse on supprime les autres colonnes. Dans le tableau en sortie vous allez voir des valeurs "null" pour gt et model. Cela signifie que les moyennes ont était calculé sans prendre en compte cette dimension.
+  La fonction cube prend une liste de colonnes en entrée (ici `gt` et `model`) et va faire tous les croisements possibles de ces variables et calculer les statistiques demandées (ici la moyenne) sur toutes les autres dimensions. Dans le tableau en sortie vous allez voir des valeurs `null` pour `gt` et `model`. Cela signifie que les moyennes ont été calculées sans prendre en compte cette dimension.
 
 - :hourglass: Utiliser les timestamps pour traiter les données en série temporelle
 
