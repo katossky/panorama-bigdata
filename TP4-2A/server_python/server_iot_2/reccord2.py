@@ -1,14 +1,14 @@
 import json
 from random import randint, choice, triangular
-from time import time_ns
+from time import time
 
 
 class Reccord2():
     index = 0
 
     def __init__(self):
-        self.Creation_Time = time_ns() - randint(0, 10**-9)
-        self.Arrival_Time = time_ns()
+        self.Creation_Time = int(time()*10**9) - randint(0, 10**9)
+        self.Arrival_Time = int(time()*10**9)
         self.Device = None
         self.Index = None
         self.Model = None
@@ -25,8 +25,6 @@ class Reccord2():
 
 
     def normal_reccord(self):
-        self.Creation_Time = time_ns()
-        self.Arrival_Time = time_ns() + randint(0, 1000000000)
         self.Device = "smartWatchX%s" % randint(1, 12)
         Reccord2.index += 1
         self.Index = Reccord2.index

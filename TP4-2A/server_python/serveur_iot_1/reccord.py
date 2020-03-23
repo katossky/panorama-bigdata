@@ -7,8 +7,8 @@ class Reccord():
     index = 0
 
     def __init__(self):
-        self.Creation_Time = time_ns() - randint(0, 10**-9)
-        self.Arrival_Time = time_ns()
+        self.Creation_Time = int(time()*10**9) - randint(0, 10**9)
+        self.Arrival_Time = int(time()*10**9)
         self.Device = None
         self.Index = None
         self.Model = None
@@ -25,15 +25,13 @@ class Reccord():
 
 
     def normal_reccord(self):
-        self.Creation_Time = time_ns()
-        self.Arrival_Time = time_ns() + randint(0, 1000000000)
         self.Device = "nexus4_%s" % randint(1, 2)
         Reccord.index += 1
         self.Index = Reccord.index
         self.Model = "nexus4"
         self.User = choice(list(map(chr, range(97, 123))))
         self.gt = choice(
-            ["stand", "sit", "walk", "stairsdown", "null", "stairsup",
+            ["stand", "sit", "walk", "stairsdown", "unknown", "stairsup",
              "bike", "run"])
         self.x = triangular(-1, 1, 0.5)
         self.y = triangular(-0.3, 0.2, 0)

@@ -14,7 +14,8 @@ urls = {"Arthur " : 'https://fr.wikiquote.org/wiki/Kaamelott/Arthur',
         "Lancelot":'https://fr.wikiquote.org/wiki/Kaamelott/Lancelot',
         "Léodagan":'https://fr.wikiquote.org/wiki/Kaamelott/L%C3%A9odagan',
         "Loth":'https://fr.wikiquote.org/wiki/Kaamelott/Loth',
-        "Maitre d'arme":'https://fr.wikiquote.org/wiki/Kaamelott/Le_ma%C3%AEtre_d%E2%80%99armes',
+        "Maitre d'arme":'https://fr.wikiquote.org/wiki/Kaamelott/Le_ma%C3'
+                        '%AEtre_d%E2%80%99armes',
         "Mélagant":'https://fr.wikiquote.org/wiki/Kaamelott/M%C3%A9l%C3'
                    '%A9agant'
         }
