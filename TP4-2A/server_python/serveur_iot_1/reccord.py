@@ -7,8 +7,8 @@ class Reccord():
     index = 0
 
     def __init__(self):
-        self.Creation_Time = time_ns()
-        self.Arrival_Time = time_ns() + randint(0, 1000000000)
+        self.Creation_Time = time_ns() - randint(0, 10**-9)
+        self.Arrival_Time = time_ns()
         self.Device = None
         self.Index = None
         self.Model = None

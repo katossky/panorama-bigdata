@@ -38,7 +38,7 @@ schema = StructType()\
 # Sans le champ est un simple string
 
 # On applique le schéma
-df = lines.selectExpr('CAST(value AS STRING)')\
+df = tcp_stream.selectExpr('CAST(value AS STRING)')\
     .select(from_json('value', schema).alias('json'))\
     .select('json.*')
 

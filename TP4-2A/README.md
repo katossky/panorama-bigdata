@@ -8,12 +8,30 @@ Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. V
 - `spark`, qui contient les fichiers nécessaires à faire fonctionner spark en local
 - `data`, qui va contenir des données utilisées au cours du TP
 
+%SPARK_HOME%/bin/pyspark --master local[4]
 > :coffee: Aide pyspark en console :
 >
 > - Pour coller utilisez maj+insert
 > - Pour vider la console ctrl+l
 
-## 1. Traiter des données depuis un flux TCP
+## 1. Spark et les flux de données
+
+En 2012, Spark Streaming est l'API DStreams est ajouté à Spark, et rend possible le traitement de flux de données avec des fonctions hauts niveaux (comme map et reduce). En 2016 une nouvelle API est ajoutée, Structured Streaming, qui se base sur les DataFrames Spark. À partir de là, un flux de données peut se manipuler comme un data frame classique. C'est l'API que nous allons utiliser pour ce TP. Vous allez voir les codes présentaient sont très proche de code pour traiter des données statiques.
+
+![data stream](https://databricks.com/wp-content/uploads/2016/07/image01-1.png)
+
+Pour rappel, traiter des données en flux consiste à les traiter au fil de l'eau. Quand une données (ou un groupe) est disponible il est traité, ce qui fait que le traitement n'a pas réellement de fin, et qu'il va produire plusieurs versions des données finale. Par exemple si vous comptez le nombre de tweets produit par heure avec un système de stream, tant qu'une heure n'est pas terminée vous allez avoir un nombre de tweets produit pour l'heure en cours qui augmente. Pire que ça, on peut partir du principe que certaines données vont arriver en retard, et peut-être que vous allez devoir mettre à jour une données passées. Voici quelques cas d'utilisation de traitement de flux de données :
+
+- Alerte et notification : par exemple la détection de fraude bancaire en temps réel, une surcharge dans un réseau électrique grâce à des compteurs intelligents, l'état de santé qui se dégrade d'une personne aux données de sa montre connectée.
+- Rapport en temp réel : nombre d'utilisateur par minute d'un site, porté d'une nouvelle campagne de publicité, gestion automatique d'un portefeuille d'actions
+- ELT (extract transform load) incrémental : des données non structurées arrivent en permanence et il faut les traiter (filtrer, mettre en forme) avant de les intégrer dans le système d'information de l'entreprise
+- Online machine learning : des données sont transmises en permanence à un algorithme de machine learning pour ce mettre à jour dynamiquement.
+
+Si traiter des données en flux à des avantages, il vient aussi avec un lot de défis. En effet comme le traitement n'a pas de fin, si on stocke les données infiniment un problème de mémoire va arriver. De même traiter un évènement spécifique est simple, mais comment traiter une chaîne d'évènement ? Par exemple déclencher une alerte si on reçoit les valeurs 5, puis 6, puis 3 à la suite. Dans un traitement classique il suffit ordonner temporellement les données, mais en flux à cause de la latence dans les transfert il est possible de recevoir un 3 puis un 5 et enfin le 6 alors que l'ordre d'envoi était 5, 6 et 3. Ces problèmes sont résolues dans Spark, mais il faut garder en tête que traiter un flux n'est pas aussi simple que traiter des données en batch. D'ailleurs Spark offre deux manière de traiter un flux de données, enregistrement par enregistrement (*one record at a time*) ou par ensemble d'enregistrements arrivés dans une fenêtre de temps (*micro batching*). Le *one record at a time* assure une latence faible entre l'arrivé d'un enregistrement et son traitement, mais le débit maximal est souvent faible. En d'autres terme, tant que la quantité de données est assez faible elles sont traiter en temps réel, mais si trop de données arrivent le système sera incapable de les gérer et le temps réel sera perdu. Le *micro batch*ing  quant à lui attend un temps t avant de traiter les données, ce qui fait qu'au pire une donnée devra attendre t avant d'être traiter. Mais le débit de ces systèmes est beaucoup plus grand c'est pourquoi il est préféré.
+
+> Pour avoir le meilleur arbitrage latence/débit le mieux à faire est de diminuer la taille des micro batch jusqu'à arrivé jusqu'au moment où traiter un micro batch prend plus temps que le générer. À partir de là, remontez la taille des micro batch et vous serez à un point "optimal" entre débit et latence.
+
+## 2. Traiter des données depuis un flux TCP
 
 Dans cette partie du TP vous allez traiter des données type IoT (*Internet of Things*).  Imaginez qu'elle proviennent de montres connectées qui vont vous fournir diverses données sur des utilisateurs. Voici un exemple de données que vous pouvez récupérer :
 
@@ -55,10 +73,10 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   ````python
   from time import sleep
   from pyspark.sql.functions import from_json, window, col, expr
-  from pyspark.sql.types import StructType, StringType, LongType, DoubleType
+  from pyspark.sql.types import StructType, StringType, LongType, DoubleType, ShortType
   ````
 
-- :signal_strength: Ouvrir le flux TCP
+- :signal_strength: Ouvrir le flux TCP ([pour plus d'info sur les sources possibles](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources))
 
   ````python
   tcp_stream = spark\
@@ -159,7 +177,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   - `select(from_json('value', schema).alias('json'))` : on applique notre schéma à la colonne `value`, et on appelle cette nouvelle colonne `json`.
   - `select('json.*')` : on récupère uniquement les données de la colonne `json`.
 
-- ✅ Tester cela
+- ✅ Tester
 
   ````python
   json_data_console = df.writeStream\
@@ -272,9 +290,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       sleep(1)
   
   
-  activityCount_stream.stop() # copier aussi la ligne suivante!
-  
-     ````
+  ````
 
   - *format("memory")* : on écrit le résultat en mémoire
   - *outputMode("complete")* : à chaque étape on met à jour intégralité des données en mémoire. Cela est utile quand on s'attend à ce que les données évolues au file du temps (comme lors d'un comptage). Il existe deux autres mode :
@@ -317,7 +333,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   - *where("contains_stairs")* : on garde que les lignes aves stairs == TRUE
   - *select("gt", "model", "arrival_time", "creation_time")* : on garde que les colonnes gt, model, arrival_time et creation_time
 
-- :bar_chart: Quelques stats
+- :bar_chart: Quelques stats ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#handling-late-data-and-watermarking))
 
   ````python
   deviceMobileStats = filterdDf\
@@ -340,7 +356,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 
   La fonction cube prend une liste de colonnes en entrée (ici `gt` et `model`) et va faire tous les croisements possibles de ces variables et calculer les statistiques demandées (ici la moyenne) sur toutes les autres dimensions. Dans le tableau en sortie vous allez voir des valeurs `null` pour `gt` et `model`. Cela signifie que les moyennes ont été calculées sans prendre en compte cette dimension.
 
-- :hourglass: Utiliser les timestamps pour traiter les données en série temporelle
+- :hourglass: Utiliser les timestamps pour traiter les données en série temporelle ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#handling-late-data-and-watermarking))
 
   - Conversion en timestamp
 
@@ -388,5 +404,148 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
     
     ````
 
-    
+- :crossed_flags: Spark propose la possibilité de joindre un flux de données avec des données statiques
 
+     ````python
+     #Code pour charger un fichier csv
+     userData = spark.read.format("csv")\
+         .option("header", "true")\
+         .option("sep", ";")\
+         .option("inferSchema", "true")\
+         .load("chemain/de/mon/fichier/données utilisateurs.csv")
+     
+     # On fait la jointure sur la colonne data, on ne souhaite pas avoir les colonnes "Arrival_Time", "Creation_Time", "Index", "x", "y", "z"
+     streamWithUserData = filterdDf\
+         .drop("Arrival_Time", "Creation_Time", "Index", "x", "y", "z")\
+         .join(userData, ["User"])\
+         .writeStream\
+         .queryName("streamWithUserData")\
+         .format("memory")\
+         .start()
+     
+     
+     for x in range(20):
+         spark.sql("SELECT * FROM streamWithUserData").show(50,False)
+         sleep(1)
+     
+     streamWithUserData.stop()
+     ````
+     
+     Une jointure avec une fonction agrégation
+     
+     ````python
+     deviceMobileStatsUser = filterdDf\
+         .join(userData, ["User"])\
+         .groupBy("User", "FirstName","LastName")\
+    .count()\
+         .writeStream\
+         .queryName("stat_user")\
+         .format("memory")\
+         .outputMode("complete")\
+         .start()
+     
+     # Le code suivant donne le même résultat (mais le plan d'exécution est différent)
+     deviceMobileStatsUser = filterdDf\
+         .groupBy("User")\
+         .count()\
+         .join(userData, ["User"])\
+         .writeStream\
+         .queryName("stat_user")\
+         .format("memory")\
+         .outputMode("complete")\
+         .start()
+     
+         
+     for x in range(5):
+         spark.sql("SELECT * FROM stat_user").show(50,False)
+         sleep(1)
+     
+     deviceMobileStatsUser.stop()
+     ````
+     
+     
+     
+- :crossed_swords: Il est également de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
+
+     ````python
+     # Définition d'un nouveau stream
+     tcp_stream2 = spark\
+     	.readStream\
+         .format("socket")\
+         .option("host", "127.0.0.1")\
+         .option("port", "10000")\
+         .load()
+     
+     # Schema
+     schema2 = StructType()\
+         .add('Arrival_Time',LongType(),True)\
+         .add('Creation_Time',LongType(),True)\
+         .add('Device',StringType(),True)\
+         .add('Index',LongType(),True)\
+         .add('Model',StringType(),True)\
+         .add('User',StringType(),True)\
+         .add('bpm',ShortType(),True)\
+     
+     # Mise au format plus filtrage
+     df2 = tcp_stream2.selectExpr('CAST(value AS STRING)')\
+         .select(from_json('value', schema2).alias('json'))\
+         .select('json.*')\
+         .na.drop("any")
+     
+     # Jointure des deux flux selon la variable User
+     join = filterdDf.join(df2, "User").writeStream\
+         .format("console")\
+         .trigger(processingTime='10 seconds')\
+         .start()
+     ````
+
+- :european_castle: Compter des mots de citations
+
+     Lancer le fichier server_kaamelott.py. Ce serveur envoie des citations de kaamelott aux clients qui s'y connectent (il communique sur l'host 127.0.0.1 et le port 10001). Voici un exemple de donné qu'il envoie :
+
+     ````js
+     {"character": "Karadoc", "quote": "Quand je pense à la chance que vous avez de faire partie d'un clan dirigé par des cerveaux du combat psychologique, qui se saignent... aux quatre parfums du matin au soir ! !"}
+     ````
+
+     Et voici la requête pour obtenir le nombre de mot reçus par personnage
+
+     ````python
+     #Connextion au stream
+     kaamelott_stream = spark.readStream.format("socket").option("host", "127.0.0.1").option("port", "10001").load()
+     
+     #Schéma
+     schema_kaamelott = StructType()\
+         .add('character',StringType(),True)\
+         .add('quote',StringType(),True)\
+     
+     #Application du schéma
+     kaamelott_df = kaamelott_stream.selectExpr('CAST(value AS STRING)')\
+         .select(from_json('value', schema_kaamelott).alias('json'))\
+         .select('json.*')
+     
+     # Le comptage de mots
+     # explode/split -> créent plusieurs lignes à partir d'une ligne (ici on coupe les mots avec split et on fait une ligne par mot de la citation)
+     # groupBy/count : on compte
+     words = kaamelott_df.select(kaamelott_df.character,
+         explode(
+             split(kaamelott_df.quote, ' ')
+            ).alias('word')
+          )\
+         .groupBy(kaamelott_df.character)\
+         .count()\
+         .writeStream\
+         .format("console")\
+         .outputMode("complete")\
+         .trigger(processingTime='5 seconds')\
+         .start()
+     ````
+
+     
+
+## Pour plus d'information :
+
+- [La doc spark officielle](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources)
+- ZAHARIA, B. C. M. (2018). *Spark: the Definitive Guide*. , O'Reilly Media, Inc. https://proquest.safaribooksonline.com/9781491912201
+- https://databricks.com/blog/2018/03/13/introducing-stream-stream-joins-in-apache-spark-2-3.html
+- https://databricks.com/blog/2016/07/28/structured-streaming-in-apache-spark.html
+- https://databricks.com/blog/2015/07/30/diving-into-apache-spark-streamings-execution-model.html
