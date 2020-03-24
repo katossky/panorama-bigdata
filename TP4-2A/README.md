@@ -8,56 +8,80 @@ Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. V
 - `données utilisateur`, qui contient des données statiques utiles dans le TP
 - `README.md`, qui est le sujet du TP au format markdown
 
-1. Aller dans le dossier `serveurs_pythons` et tapez cmd dans la barre d'adresse. Cela va vous ouvrir un invite de commande windows
+1. Allez dans le dossier `serveurs_pythons` et tapez `cmd` dans la barre d'adresse. Cela va vous ouvrir un invite de commande windows.
 
-![ouvrir un terminal](../img/ouvrir_terminal.png)
+![ouvrir un terminal](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/ouvrir_terminal.png)
 
-2. Installer les packages python nécessaire au fonctionnement des serveurs
+2. Installez les packages python nécessaire au fonctionnement des serveurs
 
    ````
    pip install -r requirements.txt --user --proxy http://pxcache-02.ensai.fr:3128
    ````
 
-3. Lancer le serveur1
+3. Lancez le serveur `server1`:
 
    ````
    python serveur_iot_1\server1.py
    ````
 
-   Gardez ce terminal ouvert ! Vous allez y voir apparaître les données envoyées
+   Gardez ce terminal ouvert ! Vous allez y voir apparaître les données au fur et à mesure qu'elles sont générées. Ce script python envoie des données sur le port `9999` de votre ordinateur.
 
-4. Ouvrir un autre terminal et lancer pyspark dans un autre terminal (il vous faut les 2 !)
+4. Ouvrez un second terminal, depuis lequel vous lancez pyspark. Tout au long du TP vous garderez les terminaux ouverts, l'un qui génère les données, l'un qui réalise les traitements.
 
    ````
    %SPARK_HOME%/bin/pyspark --master local[4]
    ````
 
-   - %SPARK_HOME%/bin/pyspark : on exécute le fichier pyspark
+**Explications:**
+   - `%SPARK_HOME%/bin/pyspark` : on exécute le programme `pyspark`
+   - `--master local[4]` : on spécifie l'adresse du master ; `local` signifie que l'on va créer un cluster local ; `[4]` qu'on va demander 4 fils d'exécution distincts (qui pourront s'exécuter sur 4 processeurs distincts). Pour se connecter à un cluster existant, il suffirait de remplacer `local[4]` par l'adresse IP du master du cluster.
 
-   - --master local[4] : on spécifie l'adresse du master. "local" signifie que l'on va créer un cluster local et  [4] qu'on va demander 4 threads. Pour se connecter à une cluster existant il suffirait de remplacer local[4] par l'adresse IP du master du cluster
+- :construction: **Fixation du nombre de partitions pour la phase de _shuffle_** Une _partition_ est, en Spark, le nom d'un bloc de données. Par défaut, Spark utilise 200 partitions (200 blocs) lors d'une phase de _shuffle_. Nos mini-batchs de données seront tellement petits que cela n'a pas grand sens ici, et cela risque au contraire de ralentir les traitements.
+
+  ````
+spark.conf.set("spark.sql.shuffle.partitions", 5)
+  ````
+
+  > :thinking: La phase de _shuffle_ consiste à ré-ordonner les données selon leur clef, entre une étape _map_ et une étape _reduce_. Par exemple, si vous comptez le nombre d'observations dans le groupe dans chaque groupe `g`, l'étape _map_ consiste à compter le nombre de membres du groupe dans un bloc: `{g1:5, g2:10, g4:1, g5:3}` pour un bloc, `{g1:1, g2:2, g3:23, g5:12}` pour un autre. L'étape _shuffle_ consiste à réorganiser les résultats intermédiaires en de nouveaux blocs, avec les mêmes clés au même endroit: `{g1:5, g1:1, g2:10, g2:2}` pour un bloc, `{g4:1, g5:3, g3:23, g5:12}.` pour un autre. De cette façon, l'étape _reduce_ est considérablement accélérée.
+
+- :package: Importer les fonctions nécessaires pour la suite du TP
+
+  ````python
+  from time import sleep
+  from pyspark.sql.functions import from_json, window, col, expr
+  from pyspark.sql.types import StructType, StringType, LongType, DoubleType, ShortType
+  ````
+
+
+
 
 ## 1. Spark et les flux de données
 
-En 2012, Spark Streaming est l'API DStreams est ajouté à Spark, et rend possible le traitement de flux de données avec des fonctions hauts niveaux (comme map et reduce). En 2016 une nouvelle API est ajoutée, Structured Streaming, qui se base sur les DataFrames Spark. À partir de là, un flux de données peut se manipuler comme un data frame classique. C'est l'API que nous allons utiliser pour ce TP. Vous allez voir les codes présentaient sont très proche de code pour traiter des données statiques.
+**Les flux de données sont arrivés progressivement dans Spark.** En 2012, la fonctionalité de traitement de flux de données (Spark Streaming, ou encore DStreams) est ajoutée à Spark, et rend possible le traitement de flux de données avec des fonctions hauts niveaux (comme _map_ et _reduce_). En 2016 une nouvelle interface (ou API) est ajoutée, Structured Streaming, qui se base sur les DataFrames Spark et permet de manipuler des flux de données comme si des tableaux de données classiques.
 
 ![data stream](https://databricks.com/wp-content/uploads/2016/07/image01-1.png)
 
-Pour rappel, traiter des données en flux consiste à les traiter au fil de l'eau. Quand une données (ou un groupe) est disponible il est traité, donc le traitement n'a pas réellement de fin, et il va produire plusieurs versions des données. Par exemple si vous comptez le nombre de tweets produit par heure avec un système de stream, tant qu'une heure n'est pas terminée vous allez avoir un nombre de tweets produit pour l'heure en cours qui augmente. Pire que ça, on peut partir du principe que certaines données vont arriver en retard, et peut-être que vous allez devoir mettre à jour une données passées. Voici quelques cas d'utilisation de traitement de flux de données :
+Traiter des données en flux oblige à les traiter au fil de l'eau. Quand une nouvelle observation est disponible, elle est traitée. Le traitement n'a donc pas réellement de fin, et la notion de "résultat" n'a pas grande sens: le résultat est mis à jour en permanence. Par exemple si vous comptez le nombre de tweets produits par heure avec un système de stream, tant qu'une heure n'est pas terminée vous allez avoir un nombre de tweets produit pour l'heure en cours qui augmente. Mais même à la fin de l'heure en question, certains tweets qui n'auront pas eu le temps de vous parvenir vont continuer à arriver, en retard. Peut-être que tel serveur a temporairement retenu une partie du traffic pendant qu'il redémarait?
 
-- Alerte et notification : par exemple la détection de fraude bancaire en temps réel, détecter une surcharge dans un réseau électrique grâce à des compteurs intelligents, détecter l'état de santé d'une personne  qui se dégrade grâce aux données de sa montre connectée.
-- Rapport en temp réel : nombre d'utilisateur par minute d'un site, portée d'une nouvelle campagne de publicité, gestion automatique d'un portefeuille d'actions
-- ELT (extract transform load) incrémental : des données non structurées arrivent en permanence et il faut les traiter (filtrer, mettre en forme) avant de les intégrer dans le système d'information de l'entreprise
-- Online machine learning : des données sont transmises en permanence à un algorithme de machine learning pour ce mettre à jour dynamiquement.
+Les flux de données, ou _streams_, sont très utilisés. Voici quelques cas d'utilisation :
 
-Si traiter des données en flux à des avantages, il a aussi avec un lot de défis. En effet comme le traitement n'a pas de fin, si on stocke les données infiniment un problème de mémoire va arriver. De même traiter un évènement spécifique est simple, mais comment traiter une chaîne d'évènement ? Par exemple déclencher une alerte si on reçoit les valeurs 5, puis 6, puis 3 à la suite. Dans un traitement classique il suffit ordonner temporellement les données, mais en flux à cause de la latence dans les transfert il est possible de recevoir un 3 puis un 5 et enfin le 6 alors que l'ordre d'envoi était 5, 6 et 3. Ces problèmes sont résolues dans Spark, mais il faut garder en tête que traiter un flux n'est pas aussi simple que traiter des données en batch. 
+- **Alertes et notifications :** détection de fraude bancaire en temps réel ; suivi d'un réseau électrique grâce à des compteurs intelligents ; accompagnement médical d'une personne via des appareils de mesure connectés, etc.
+- **Rapports en temp réel :** nombre d'utilisateur par minute d'un site ; portée d'une nouvelle campagne de publicité ; gestion automatique d'un portefeuille d'actions, etc.
+- **ELT (extract transform load) incrémental :** des données non structurées arrivent en permanence et il faut les traiter (filtrer, mettre en forme) avant de les intégrer dans le système d'information de l'entreprise
+- **Online machine learning :** des données sont transmises en permanence à un algorithme de machine learning qui améliore ses performences dynamiquement.
 
-Spark offre deux manière de traiter un flux de données, enregistrement par enregistrement (*one record at a time*) ou par ensemble d'enregistrements arrivés dans une fenêtre de temps (*micro batching*). Le *one record at a time* assure une latence faible entre l'arrivé d'un enregistrement et son traitement, mais le débit maximal est souvent faible. En d'autres terme, tant que la quantité de données est assez faible elles sont traiter en temps réel, mais si trop de données arrivent le système sera incapable de les gérer et le temps réel sera perdu. Le *micro batch*ing  quant à lui attend un temps t avant de traiter les données, ce qui fait qu'au pire une donnée devra attendre t avant d'être traitée. Le débit de ces systèmes est beaucoup plus grand c'est pourquoi il est préféré.
+Traiter des données en flux présente malheureusement de nombreuses difficultés. En effet puisque le traitement n'a pas de fin, stocker les données indéfiniment génère nécessairement un problème de mémoire à terme. De même, traiter un évènement unique est simple, mais comment traiter une chaîne d'évènements ? (Ex: comment déclencher une alerte si on reçoit les valeurs 5, puis 6, puis 3 à la suite.) Dans un traitement classique, il suffirait de classer les données en fonction d'une variable temporelle mais, à cause la latence dans les transferts, il est possible de recevoir les données dans un ordre différent de l'émission!
 
-> Pour avoir le meilleur arbitrage latence/débit le mieux à faire est de diminuer la taille des micro batch jusqu'à arrivé jusqu'au moment où traiter un micro batch prend plus temps que le générer. À partir de là, remontez la taille des micro batch et vous serez à un point "optimal" entre débit et latence.
+Spark offre deux manière de traiter un flux de données: soit enregistrement par enregistrement (_**one record at a time**_), soit par ensemble d'enregistrements arrivés dans une fenêtre de temps (_**micro batching**_).
+
+- Le _**one record at a time**_ assure un faible délai entre l'arrivée d'un enregistrement et son traitement (**faible latence**), au prix d'une limite dans le débit maximal de données à traiter. Autrement dit, ce type de traitement est tout-ou-rien: tant que la quantité de données est faible, les données sont traitées en temps réel ; si le débit excède les capacités de traitement, le système sera incapable de les gérer et le temps réel sera perdu.
+- Le _**micro batching**_, quant à lui, traite les données toutes les `t` secondes. Cela veut dire que certaines données ne seront pas traitées immédiatement, mais avec le bénéfice de pouvoir affronter des débits beaucoup plus élevés. C'est le traitement généralement privilégié.
+
+> Pour avoir le meilleur arbitrage latence / débit, le mieux est de diminuer la taille des micro-batchs jusqu'au moment où traiter un batch prend exactement le même temps que les données pour arriver. À partir de là, on remote légèrement la taille des micro-batchs pour atteindre à un point "optimal" entre débit et latence.
 
 ## 2. Traiter des données depuis un flux TCP
 
-Dans cette partie du TP vous allez traiter des données type IoT (*Internet of Things*).  Imaginez qu'elle proviennent de montres connectées qui vont vous fournir diverses données sur des utilisateurs. Voici un exemple de données que vous pouvez récupérer :
+Dans cette partie du TP vous allez traiter des données type IoT (*Internet of Things*). Les données sont simulées par le serveur `server1`, et essaie d'imiter les données produites par une série de montres connectées. Les données, au format JSON, contiennent diverses données sur les propritétaires des montres :
 
 ````js
 {
@@ -74,41 +98,9 @@ Dans cette partie du TP vous allez traiter des données type IoT (*Internet of T
 }
 ````
 
-Bien sûr ces données sont générées aléatoirement et ne proviennent pas de vraies montres.
+- :computer: Vérifiez que votre serveur `server1` est toujours en activité. Si ce n'est pas le cas, retournez à la mise en place. Ce script python envie des données sur le port `9999` de votre ordinateur. Même si les données sont générées sur votre ordinateur, Spark va s'y connecter comme si elles étaient produite par un service distant.
 
-- :computer: Exécuter le fichier server1.py  si ce n'est pas déjà fait
-
-  Pour cela allez dans le dossier server_python\serveur_iot_1puis taper "cmd" dans la barre d'adresse. Cela vous ouvrira l'invite de commande windows. Puis faites
-
-  ````shell
-  python server1.py
-  ````
-
-  Garde ce terminal toujours ouvert.
-
-  Ce script python va envoyer des données sur le port 9999 de votre ordinateur. Même si les données sont générées sur votre ordinateur, Spark va s'y connecter comme si elles étaient produite par un service distant.
-
-- :sparkles: Exécuter pyspark si ce n'est pas déjà fait
-
-  ````shell
-  %SPARK_HOME%/bin/pyspark --master local[4] 
-  ````
-
-- :construction: Fixer le nombre de partition lors de la phase de shuffle à 5 pour spark SQL. Sans cela, Spark va générer 200 partitions pour vos données et ralentir fortement les traitements en local. (Pour ceux qui veulent se rafraichir les idées sur la phase de _shuffle_ dans Spark, voir par exemple [ici](https://www.quora.com/What-is-a-Shuffle-operation-in-Spark)).
-
-  > :thinking: La phase de shuffle consiste à mélanger les données selon leur clef et recréer des partition après chaque traitement. Cela permet, théoriquement, d'avoir un nombre de données similaire dans toutes les partitions et d'éviter un déséquilibre dans les tailles. Nous allons manipuler tellement peu de données que 200 partitions est beaucoup trop et va ralentir les trainements.
-
-  ````
-spark.conf.set("spark.sql.shuffle.partitions", 5)
-  ````
-
-- :package: Importer les fonctions nécessaires pour la suite du TP
-
-  ````python
-  from time import sleep
-  from pyspark.sql.functions import from_json, window, col, expr
-  from pyspark.sql.types import StructType, StringType, LongType, DoubleType, ShortType
-  ````
+- :sparkles: Vérifiez que votre autre terminal, qui exécute Spark, est toujours actif. Si ce n'est pas le cas, retournez à la mise en place.
 
 - :signal_strength: Ouvrir le flux TCP ([pour plus d'info sur les sources possibles](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources))
 
@@ -121,14 +113,14 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
       .load()
   ````
 
-  - *format("socket")* : spécifie que le flux proviendra d'une socket TCP (pour faire très simple on récupéré des données produites par un serveur). Ce format de fichier est déconseillé pour des applications _en production_[^1] car toute données perdues le sera définitivement. Il n'est pas possible de en cas de redémarrage suite à une erreur de demander les messages des X dernières  minutes. _Une façon plus sûre de transmettre un flux de donnée serait d'ajouter des fichiers continuellement dans un dossier (dans ce cas la Spark ne se connecte pas à internet) ou d'utiliser un service dédié comme Kafka ([plus d'info](https://kafka.apache.org/))._
-  - *option("host", "127.0.0.1")* : votre ordinateur, vu depuis votre ordinateur, possède l'adresse IP `127.0.0.1`. _Pour se connecter à une source distante, il suffirait de remplacer cette adresse IP par celle de la source._
-  - *option("port", "9999")*  : la source utilise le port 9999. _Ce choix est purement conventionnel mais (1) il doit être le même pour l'émetteur et le récepteur et (2) il est déconseillé d'utiliser des ports "connus" (comme les ports 20 et 21 utilisé pour les transferts de fichier FTP, 80 et 443 pour HTTP et HTTPS respectivement, etc. — voir [ici](https://fr.wikipedia.org/wiki/Liste_de_ports_logiciels) pour une liste exhaustive) pour éviter tout usage conflictuel du même port._
-  - *load()* : on ouvre le flux
+  - `format("socket")` : spécifie que le flux proviendra d'une socket TCP (pour faire très simple on récupéré des données produites par un serveur). Ce format de fichier est déconseillé pour des applications _en production_[^1] car toute données perdues le sera définitivement. Il n'est pas possible de en cas de redémarrage suite à une erreur de demander les messages des X dernières  minutes. Une façon plus sûre de transmettre un flux de donnée serait d'ajouter des fichiers continuellement dans un dossier (dans ce cas la Spark ne se connecte pas à internet) ou d'utiliser un service dédié comme Kafka ([plus d'info](https://kafka.apache.org/)).
+  - `option("host", "127.0.0.1")` : votre ordinateur, vu depuis votre ordinateur, possède l'adresse IP `127.0.0.1`. Pour se connecter à une source distante, il suffirait de remplacer cette adresse IP par celle de la source.
+  - `option("port", "9999")`  : la source utilise le port 9999. Ce choix est purement conventionnel mais (1) il doit être le même pour l'émetteur et le récepteur et (2) il est déconseillé d'utiliser des ports "connus" pour éviter tout usage conflictuel du même port. Des exemples de ports connus sont les ports 20 et 21 utilisé pour les transferts de fichier FTP, 80 et 443 pour HTTP et HTTPS respectivement — voir [ici](https://fr.wikipedia.org/wiki/Liste_de_ports_logiciels) pour une liste exhaustive.
+  - `load()` : on ouvre le flux
   
 [^1]: En production = en utilisation permanente, active. La production s'oppose au développement (la phase de construction d'un programme ou d'une application.)
 
-  > :thinking: Ce code ne va rien faire car n'oubliez pas car Spark est paresseux (_lazy evaluation_): comme on n'utilise pas la source de données il ne s'y connecte pas.
+  > :thinking: Il ne se passe rien!? C'est normal! N'oubliez pas que Spark pratique l'évaluation paresseusex (_lazy evaluation_) : comme on n'utilise pas la source de données, il ne s'y connecte pas.
 
 - :printer: Afficher quelques données
 
@@ -140,11 +132,11 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
       .trigger(processingTime='3 seconds')\
       .start()
   
-  spark.streams.active #Voir la liste des streams en cours (c'est assez moche)
-      
-  sleep(10) # on attend 10 seconde pour voir la console évoluer
-  raw_data_console.stop() # on ferme le stream. Si le stream continue après 10 secondes, c'est que vous n'avez pas validé la commande alors faite un "entrée"
-  
+  sleep(10)               # attendre 10 seconde pour voir la console évoluer
+  raw_data_console.stop() # fermer le stream.
+  # Si le stream continue après 10 secondes,
+  # c'est que vous n'avez pas validé la commande!
+  # Appuyez sur la touche "entrée".
   ````
 
   - *writeStream* : on va produire un stream
@@ -159,7 +151,7 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   tcp_stream.schema
   ````
 
-  Voilà la sortie que vous devez obtenir (en moins claire) :
+  Voilà la sortie que vous devez obtenir :
 
   ````
   StructType(List(StructField(value,StringType,true)))
@@ -177,25 +169,25 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   )
   ````
 
-  Autrement dit, les données ne sont pas correctement lues. Chaque ligne est lue comme une seule grande chaîne de caractères. Pour bien les traiter, nous devons appliquer le bon "schéma".
+  Autrement dit, **les données ne sont pas correctement lues**. Chaque ligne est lue comme une seule grande chaîne de caractères. Pour bien les traiter, nous devons appliquer le bon **schéma**.
 
 - :arrow_forward: Définir le schéma de nos données
 
   ````python
   schema_iot = StructType()\
-      .add('Arrival_Time',LongType(),True)\
-      .add('Creation_Time',LongType(),True)\
-      .add('Device',StringType(),True)\
-      .add('Index',LongType(),True)\
-      .add('Model',StringType(),True)\
-      .add('User',StringType(),True)\
-      .add('gt',StringType(),True)\
-      .add('x',DoubleType(),True)\
-      .add('y',DoubleType(),True)\
-      .add('z',DoubleType(),True)
+      .add('Arrival_Time',  LongType(),   True)\
+      .add('Creation_Time', LongType(),   True)\
+      .add('Device',        StringType(), True)\
+      .add('Index',         LongType(),   True)\
+      .add('Model',         StringType(), True)\
+      .add('User',          StringType(), True)\
+      .add('gt',            StringType(), True)\
+      .add('x',             DoubleType(), True)\
+      .add('y',             DoubleType(), True)\
+      .add('z',             DoubleType(), True)
   ````
 
-  Comme les données proviennent d'un flux on ne peut pas inférer le schéma, donc on le définit à la main. Le True à la fin de chaque ligne spécifie que l'on accepte les valeurs null (plus de détails [dans la documentation](https://spark.apache.org/docs/2.3.0/api/python/pyspark.sql.html#pyspark.sql.types.StructType)).
+  Comme les données proviennent d'un flux on ne peut pas inférer le schéma, donc on le définit à la main. Le `True` à la fin de chaque ligne spécifie que l'on accepte les valeurs `null` (plus de détails [dans la documentation](https://spark.apache.org/docs/2.3.0/api/python/pyspark.sql.html#pyspark.sql.types.StructType)).
 
 - :point_down: Appliquer le schéma
 
@@ -207,14 +199,15 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
 
   Pour appliquer le schéma on va appliquer une transformation à nos données.
 
-  - `selectExpr('CAST(value AS STRING)')` : convertir la colonne value en chaîne de caractères. C'est théoriquement déjà le cas, mais l'expliciter limite les erreurs.
+  - `selectExpr('CAST(value AS STRING)')` : convertir la colonne `value` en chaîne de caractères. C'est théoriquement déjà le cas, mais l'expliciter limite les erreurs.
   - `select(from_json('value', schema).alias('json'))` : on applique notre schéma à la colonne `value`, et on appelle cette nouvelle colonne `json`.
   - `select('json.*')` : on récupère uniquement les données de la colonne `json`.
 
 - ✅ Tester
 
   ````python
-  iot_data_console = iot_data.writeStream\
+  iot_data_console = iot_data\
+    .writeStream\
   	.format('console')\
   	.trigger(processingTime='5 seconds')\
   	.start()
@@ -226,13 +219,14 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
 
   Ces commandes affichent dans la console le flux toutes les 5 secondes pendant 10 sec. (Comme précédemment, si le flux continue, c'est que vous n'avez pas tapé `Entrée` après la dernière instruction. Par ailleurs, si les données sont toujours illisibles, élargissez la console Python!)
 
-  > :sparkles: Il existe d'autres format d'output que la console pour les flux de données, comme les formats fichiers (`csv`, `json`, etc.), le format mémoire ou le format Kafka. Dans la console, les données ne peuvent pas être utilisées par d'autres processus, ce qui est un problème pour la création d'une vraie application. À la place, nous allons enregistrer nos données en mémoire, ce qui nous permet d'utiliser nos données plus tard.
-  > 
+- :sparkles: Il existe d'autres format d'output que la console pour les flux de données, comme les formats fichiers (`csv`, `json`, etc.), le format mémoire ou le format Kafka. Dans la console, les données ne peuvent pas être utilisées par d'autres processus, ce qui est un problème pour la création d'une vraie application. À la place, nous allons enregistrer nos données en mémoire, ce qui nous permet d'utiliser nos données plus tard.
+  
   > **Remarque:** le format mémoire est utiliser ici par soucis de facilité. En pratique, il n'est utilisé que pour le déboggage. En effet, une telle façon de procéder n'est possible que tant que les données n'excèdent pas les capacités physiques de l'ordinateur, puisque les données doivent tenir en mémoire! Mais alors pourquoi utiliser Spark dans ce cas?
 
   ````python
   # La même chose mais ou on garde les données en mémoire pour les requêter plus tard.
-  iot_data_memory = iot_data.writeStream\
+  iot_data_memory = iot_data\
+      .writeStream\
       .format("memory")\
       .queryName("iot_data")\
       .start()
@@ -247,12 +241,12 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   
   ````
 
-  - *format("memory"*) : on stocke les données en mémoire dans un DataSet
-  - *queryName("iot_data")* : on donne un nom à la requête pour la réutiliser par la suite.
+  - `format("memory")` : on stocke les données en mémoire dans un DataSet
+  - `queryName("iot_data")` : on donne un nom à la requête pour la réutiliser par la suite.
 
-- :x: Compter le nombre de ligne en erreur.
+- :x: Compter le nombre de ligne avec des erreurs.
 
-  Notre source de données peut rencontrer des erreurs, et envoyer des données malgré une erreur dans le création. Nous allons les compter le nombre de ligne en erreur.
+  Notre chaîne de traitement peut rencontrer des erreurs (caractères spéciaux ou autres problèmes de conversion...). Nous allons les compter le nombre de ligne avec une erreur, c'est-à-dire les variables qui ne sont pas renseignées à l'issu du traitement (`null` en SQL).
 
   ````python
   # On compte les input en erreur (tous les champs  sont null sauf arrival et creation time). On affiche directement le résultat en console
@@ -269,18 +263,18 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   errorCount.stop()
   ````
 
-  - *withColumn(...)* : on crée une colonnes error à partir d'une requête SQL
+  - `withColumn(...)` : on crée une colonnes error à partir d'une requête SQL
 
-  - *groupBy("error")* : on fait un groupe by sur la colonne error
+  - `groupBy("error")` : on fait un groupe by sur la colonne error
 
-  - *count()* : on compte le nombre de ligne groupées
+  - `count()` : on compte le nombre de ligne groupées
 
-  - *outputMode("complete")* : à chaque étape on met à jour intégralité des données en mémoire. Cela est utile quand on s'attend à ce que les données évolues au file du temps (comme lors d'un comptage). Il existe deux autres mode :
+  - `outputMode("complete")` : à chaque nouveau mini-batch on met à jour l'intégralité des données en mémoire. Cela est utile quand on s'attend à ce que les données évolue au fil du temps (comme lors d'un comptage). Il existe deux autres mode :
 
-    - update : seule les lignes modifiées sont mises à jour. Mais la sortie doit supporter les opération de mise à jour de ligne (ce qui n'est pas le cas de la mémoire car spark stocke l'objet comme un dataset, et que les dataset ne peuvent pas être mise à jour, on peut seulement ajouter des lignes). La console par contre peut utiliser le mode update.
-    - append : on ajoute les données au fur et à mesure à la sortie. Cela assure que les données sont traitées une seule fois (comportement par défaut)
+    - `"update"` : seule les lignes modifiées sont mises à jour. Cependant, la sortie choisie doit supporter les opération de mise à jour de ligne (ce qui n'est pas le cas de la mémoire car spark stocke l'objet comme un DataSet, et que les dataSets sont *immuables*). La console, par contre, peut utiliser le mode _update_.
+    - `"append"` : on ajoute les résultats comme de nouvelles lignes ; les résultats précédents ne sont pas supprimés (comportement par défaut)
 
-    Vous trouverais plus d'informations ici : [documentation spark](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#output-modes). Dans votre cas très précis, vous pouvez vous limiter à ce tableau : 
+    Les choses se compliquent puisque certaines sorties autorisent certaines méthodes ou non en fonction des opérations effectuées. Avec le cas des méthodes d'aggrégation (compter, faire une moyenne par groupe, etc.) on a par exemple le tableau suivant[^12]:
 
     | Format  | Agrégation | Mode             |
     | ------- | ---------- | ---------------- |
@@ -288,6 +282,8 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
     | Console | Non        | complete, append |
     | Memory  | Oui        | complete         |
     | Memory  | Non        | append, complete |
+    
+[^12]: Plus d'informations [dans la documentation spark](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#output-modes).
 
 - :hocho: Filtrer les lignes avec erreur. Ici, on considèrera qu'une ligne doit être écartée si une des variables n'est pas renseignée.
 
@@ -296,11 +292,11 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
       .na.drop("any")
   ````
 
-  - na.drop("any") : on filtre toutes les lignes qui on une valeur manquante (`null` en SQL) dans n'importe quelle colonne. Cela peut par exemple résultater d'une erreur de conversion. Il aurait été possible de ne supprimer les observations avec _uniquement_ des valeurs manquantes (`na.drop("all")`) ou de spécifier un ensemble de colonnes à considérer dans l'opération de filtrage (`na.drop("<any or all>", subset=["col1", "col2"])`.
+  - `na.drop("any")` : on filtre toutes les lignes qui on une valeur manquante (`null` en SQL) dans n'importe quelle colonne. Il aurait été possible de ne supprimer les observations avec _uniquement_ des valeurs manquantes avec `na.drop("all")` ou de spécifier un ensemble de colonnes à considérer dans l'opération de filtrage avec `na.drop("<any or all>", subset=["col1", "col2"])`.
 
-  - A partir de maintenant nous utiliserons `filterDf` en entrée de tous nos traitements.
-
-- :ok:Tester que les erreurs sont bien filtrées
+- :ok: Tester que les erreurs sont bien filtrées
+  
+  A partir de maintenant nous utiliserons `iot_filtered` en entrée de tous nos traitements.
 
   ````python
   errorCount = iot_filtered \
@@ -332,7 +328,7 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
       .start()
   
   # Toutes les secondes pendant 10 secondes
-  # Remarquez que rien ne se passe, une fois sur deux. En effet
+  # Remarquez qu'une fois sur deux rien ne se passe. En effet
   # nous venons de spécifier une exécution toutes les 2 secondes
   # (processingTime='2 seconds' ci dessus).
   for x in range(10):
@@ -341,8 +337,6 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   
   activityCount_stream.stop()
   ````
-
-  - *format("memory")* : on écrit le résultat en mémoire
 
   ````python
   # Le même conde avec une écriture dans la console et une format d'output update.
@@ -356,12 +350,11 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
   activityCount_stream.stop()
   ````
 
-  > :thinking: Vous allez normalement voir apparaitre une ligne avec comme activité "null". Cela provient du fait que cette activité a pour nom la chaîne de caractère "null" et pas la valeur null
-
 - :small_red_triangle_down: Filtrer et sélectionner certaines infos
 
   ````python
-  only_stairs_activity = iot_filtered.withColumn("is_stair_activity", expr("gt like '%stairs%'"))\
+  only_stairs_activity = iot_filtered\
+      .withColumn("is_stair_activity", expr("gt like '%stairs%'"))\
       .where("is_stair_activity")\
       .select("gt", "model", "arrival_time", "creation_time")\
       .writeStream\
@@ -414,24 +407,25 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
     )
     ````
 
-    Zoom sur le double cast 
-
-    ````
-    cast(
-    	cast(
-    		Creation_Time as double <- on dit spécifiquement que Creation_time est un double
-    	)/1000000000 as timestamp <- on le divice par 10^9 pour avoir le temps en seconde et ensuite on dit que c'est un timestamp
-    ) as event_time
-    ````
-
-    
-
-  - On compte les évènements qui arrivent dans une fenêtre de 5 secondes. Sauf que comme un reçoit un flux de données le temps qui nous importe n'est pas le temps d'arrivé mais le temps de création de la données (ici event_time). En effet les données n'arrivent pas forcément dans leur ordre de création à cause du temps de transmission.
-
-    
+    Mais que se passes-t-il ici?
 
     ````python
-    event_time = iot_filtered_withEventTime.groupBy(window(col("event_time"), "5 seconds")).count()\
+    # DO NOT COPY ! THIS IS ONLY PEDAGOGICAL !
+    
+    # 1. creation_time est de type "double"
+    creation_time_as_double = cast(Creation_Time as double)
+    
+    # 2. diviser par 10^9 pour avoir le temps en seconde
+    # puis convertir au format "timestamp"
+    cast(creation_time_as_double/1000000000 as timestamp)
+    ````
+
+  - On compte les évènements qui arrivent dans une fenêtre de 5 secondes. Sauf que comme un reçoit un flux de données le temps qui nous importe n'est pas le temps d'arrivé mais le temps de création de la données (ici `event_time`). En effet les données n'arrivent pas forcément dans leur ordre de création à cause du temps de transmission.
+
+    ````python
+    event_time = iot_filtered_withEventTime\
+        .groupBy(window(col("event_time"), "5 seconds"))\
+        .count()\
         .writeStream\
         .queryName("event_per_window")\
         .format("memory")\
@@ -451,7 +445,9 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
     ![siding windows](https://spark.apache.org/docs/latest/img/structured-streaming-window.png)
     
     ````python
-    event_sliding_windows = iot_filtered_withEventTime.groupBy(window(col("event_time"), "10 seconds", "5 seconds")).count()\
+    event_sliding_windows = iot_filtered_withEventTime\
+        .groupBy(window(col("event_time"), "10 seconds", "5 seconds"))\
+        .count()\
         .writeStream\
         .queryName("event_per_window")\
         .format("memory")\
@@ -526,8 +522,8 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
     ````
     
      
-    
-- :crossed_swords: Il est également de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
+<!--
+- :crossed_swords: Il est également possible de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
 
      Pensez à lancer le server2 dans serveurs_python/serveur_iot_2
 
@@ -609,6 +605,8 @@ spark.conf.set("spark.sql.shuffle.partitions", 5)
          .trigger(processingTime='5 seconds')\
     .start()
     ````
+    
+-->
 
 ## À vous de jouer!
 
