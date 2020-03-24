@@ -592,8 +592,61 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .trigger(processingTime='5 seconds')\
     .start()
      ````
-     
-     
+
+## À vous de jouer!
+
+Votre but est de construire la première brique dans un tableau de bord pour Wikimédia, la maison mère de Wikipédia, afin de surveiller les articles de l'encyclopédie et de la défendre contre les pillages.
+
+Wikimédia publie un flux de tous les changements qui ont lieu sur l'ensemble des plate-formes à l'adresse suivante: `https://stream.wikimedia.org/v2/stream/recentchange`. Le format n'est pas adapté à Spark alors, comme précédemment, vous devez lancer un serveur qui lit, convertit et transfère le flux vers un port local auquel Spark peut s'abonner:
+
+Chaque changement est un object JSON de la forme suivante:
+
+```json
+{
+  "$schema": "/mediawiki/recentchange/1.0.0",
+  "meta": {
+    "uri": "https://pt.wikipedia.org/wiki/Lista_de_epis%C3%B3dios_de_Bunk%27d",
+    "request_id": "XnnLvwpAIDEAAA2ihIoAAACI",
+    "id": "f0a0022e-9ee9-44f4-9631-1f7e8987215b",
+    "dt": "2020-03-24T08:58:39Z",
+    "domain": "pt.wikipedia.org",
+    "stream": "mediawiki.recentchange",
+    "topic": "eqiad.mediawiki.recentchange",
+    "partition": 0,
+    "offset": 2267529842
+  },
+  "id": 96360896,
+  "type": "edit",
+  "namespace": 0,
+  "title": "Lista de episódios de Bunk'd",
+  "comment": "",
+  "timestamp": 1585040319,
+  "user": "Mirela63",
+  "bot": false,
+  "minor": false,
+  "patrolled": false,
+  "length": {
+    "old": 88404,
+    "new": 88725
+  },
+  "revision": {
+    "old": 57852423,
+    "new": 57876625
+  },
+  "server_url": "https://pt.wikipedia.org",
+  "server_name": "pt.wikipedia.org",
+  "server_script_path": "/w",
+  "wiki": "ptwiki",
+  "parsedcomment": ""
+}
+```
+
+Les variables qui nous intéressent sont: `title` (nom de la page), `user` (nom de l'utilisateur), `bot` (est-ce un robot qui a produit le changement), `timestamp` (à quel moment le changement a-t-il été produit), `wiki` (quel site de l'écosystème Wikimédia a été modifié).
+
+1. Stockez ces informations (et uniquement celles-ci) dans un fichier CSV grace à Spark.
+2. Combien de changements sont advenus depuis le début de notre abonnement, sur chaque site de Wikimédia? (vous afficherez le résultat dans la console)
+3. Restreignez vous aux données de Wikipédiat en français (`wiki=="frwiki"`). Maintenez à jour un fichier CSV, qui donne le nombre d'édition (`type=="edit"`) dans une fenêtre glissante d'une heure calculée toutes les 5 minutes
+4. Voici une liste de pages sensibles. Combien de modifications ont été effectuées sur l'une de ces pages depuis le début de l'abonnement?
 
 ## Pour plus d'information :
 
