@@ -1,0 +1,586 @@
+commune,communeLabel,articleName
+http://www.wikidata.org/entity/Q17173,Le Fousseret,Le Fousseret
+http://www.wikidata.org/entity/Q524043,Launaguet,Launaguet
+http://www.wikidata.org/entity/Q524478,Puysségur,Puysségur
+http://www.wikidata.org/entity/Q533399,La Salvetat-Lauragais,La Salvetat-Lauragais
+http://www.wikidata.org/entity/Q543253,Francon,Francon (Haute-Garonne)
+http://www.wikidata.org/entity/Q591100,Garidech,Garidech
+http://www.wikidata.org/entity/Q616818,Clermont-le-Fort,Clermont-le-Fort
+http://www.wikidata.org/entity/Q632081,Saint-Bertrand-de-Comminges,Saint-Bertrand-de-Comminges
+http://www.wikidata.org/entity/Q639577,Ardiège,Ardiège
+http://www.wikidata.org/entity/Q641626,Renneville,Renneville (Haute-Garonne)
+http://www.wikidata.org/entity/Q648547,Bagiry,Bagiry
+http://www.wikidata.org/entity/Q670998,Rieux-Volvestre,Rieux-Volvestre
+http://www.wikidata.org/entity/Q680325,Castagnac,Castagnac
+http://www.wikidata.org/entity/Q691211,Saint-Julien-sur-Garonne,Saint-Julien-sur-Garonne
+http://www.wikidata.org/entity/Q741216,Castillon-de-Saint-Martory,Castillon-de-Saint-Martory
+http://www.wikidata.org/entity/Q772844,Bondigoux,Bondigoux
+http://www.wikidata.org/entity/Q816906,Saint-Martory,Saint-Martory
+http://www.wikidata.org/entity/Q831032,Frouzins,Frouzins
+http://www.wikidata.org/entity/Q835578,Saint-Pé-d'Ardet,Saint-Pé-d'Ardet
+http://www.wikidata.org/entity/Q844996,Vieille-Toulouse,Vieille-Toulouse
+http://www.wikidata.org/entity/Q924844,Mauzac,Mauzac (Haute-Garonne)
+http://www.wikidata.org/entity/Q946810,Lux,Lux (Haute-Garonne)
+http://www.wikidata.org/entity/Q966619,Vacquiers,Vacquiers
+http://www.wikidata.org/entity/Q1081880,Agassac,Agassac
+http://www.wikidata.org/entity/Q1088667,Roquefort-sur-Garonne,Roquefort-sur-Garonne
+http://www.wikidata.org/entity/Q1143447,Urau,Urau
+http://www.wikidata.org/entity/Q1143767,Touille,Touille
+http://www.wikidata.org/entity/Q1143780,Sénarens,Sénarens
+http://www.wikidata.org/entity/Q1143799,Saint-Rustice,Saint-Rustice
+http://www.wikidata.org/entity/Q1143815,Saint-Pierre-de-Lages,Saint-Pierre-de-Lages
+http://www.wikidata.org/entity/Q1143823,Peyrouzet,Peyrouzet
+http://www.wikidata.org/entity/Q1143851,Encausse-les-Thermes,Encausse-les-Thermes
+http://www.wikidata.org/entity/Q1143879,Saleich,Saleich
+http://www.wikidata.org/entity/Q1144164,Razecueillé,Razecueillé
+http://www.wikidata.org/entity/Q1144351,Pin-Balma,Pin-Balma
+http://www.wikidata.org/entity/Q1144532,Benque-Dessous-et-Dessus,Benque-Dessous-et-Dessus
+http://www.wikidata.org/entity/Q1148490,Beaumont-sur-Lèze,Beaumont-sur-Lèze
+http://www.wikidata.org/entity/Q1153097,Portet-de-Luchon,Portet-de-Luchon
+http://www.wikidata.org/entity/Q1153151,Pins-Justaret,Pins-Justaret
+http://www.wikidata.org/entity/Q1163094,Le Faget,Le Faget
+http://www.wikidata.org/entity/Q1342917,Caignac,Caignac
+http://www.wikidata.org/entity/Q1344709,Cornebarrieu,Cornebarrieu
+http://www.wikidata.org/entity/Q1349256,Bouzin,Bouzin
+http://www.wikidata.org/entity/Q1361257,Lavernose-Lacasse,Lavernose-Lacasse
+http://www.wikidata.org/entity/Q1418996,L'Union,L'Union (Haute-Garonne)
+http://www.wikidata.org/entity/Q1419188,Le Castéra,Le Castéra
+http://www.wikidata.org/entity/Q1428313,Mirepoix-sur-Tarn,Mirepoix-sur-Tarn
+http://www.wikidata.org/entity/Q1428363,Lège,Lège (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428414,Juzes,Juzes
+http://www.wikidata.org/entity/Q1428463,Saint-Marcel-Paulel,Saint-Marcel-Paulel
+http://www.wikidata.org/entity/Q1428657,Montrabé,Montrabé
+http://www.wikidata.org/entity/Q1428747,Sauveterre-de-Comminges,Sauveterre-de-Comminges
+http://www.wikidata.org/entity/Q1428890,Gensac-sur-Garonne,Gensac-sur-Garonne
+http://www.wikidata.org/entity/Q1429142,Menville,Menville
+http://www.wikidata.org/entity/Q1429203,Saint-Alban,Saint-Alban (Haute-Garonne)
+http://www.wikidata.org/entity/Q1429971,Valentine,Valentine (Haute-Garonne)
+http://www.wikidata.org/entity/Q1430037,Lapeyrouse-Fossat,Lapeyrouse-Fossat
+http://www.wikidata.org/entity/Q1430060,Molas,Molas
+http://www.wikidata.org/entity/Q1431525,Peyssies,Peyssies
+http://www.wikidata.org/entity/Q1431629,Montgaillard-de-Salies,Montgaillard-de-Salies
+http://www.wikidata.org/entity/Q1432850,Montgaillard-Lauragais,Montgaillard-Lauragais
+http://www.wikidata.org/entity/Q1432870,Gratentour,Gratentour
+http://www.wikidata.org/entity/Q1432889,Pechbonnieu,Pechbonnieu
+http://www.wikidata.org/entity/Q1432909,Montclar-de-Comminges,Montclar-de-Comminges
+http://www.wikidata.org/entity/Q1440966,Mirambeau,Mirambeau (Haute-Garonne)
+http://www.wikidata.org/entity/Q1441037,Montsaunès,Montsaunès
+http://www.wikidata.org/entity/Q1467072,Boutx,Boutx
+http://www.wikidata.org/entity/Q1467235,Escoulis,Escoulis
+http://www.wikidata.org/entity/Q1616267,Villenouvelle,Villenouvelle (Haute-Garonne)
+http://www.wikidata.org/entity/Q1616421,Melles,Melles (Haute-Garonne)
+http://www.wikidata.org/entity/Q1650853,Lieoux,Lieoux
+http://www.wikidata.org/entity/Q271068,Blagnac,Blagnac
+http://www.wikidata.org/entity/Q304967,Estadens,Estadens
+http://www.wikidata.org/entity/Q508546,Montréjeau,Montréjeau
+http://www.wikidata.org/entity/Q530326,Samouillan,Samouillan
+http://www.wikidata.org/entity/Q537818,Arnaud-Guilhem,Arnaud-Guilhem
+http://www.wikidata.org/entity/Q583594,Flourens,Flourens (Haute-Garonne)
+http://www.wikidata.org/entity/Q602764,Bellegarde-Sainte-Marie,Bellegarde-Sainte-Marie
+http://www.wikidata.org/entity/Q634738,Aussonne,Aussonne
+http://www.wikidata.org/entity/Q671059,Villefranche-de-Lauragais,Villefranche-de-Lauragais
+http://www.wikidata.org/entity/Q686452,Gourdan-Polignan,Gourdan-Polignan
+http://www.wikidata.org/entity/Q734441,Sarrecave,Sarrecave
+http://www.wikidata.org/entity/Q736117,Baziège,Baziège
+http://www.wikidata.org/entity/Q751440,Franquevielle,Franquevielle
+http://www.wikidata.org/entity/Q779616,Beauteville,Beauteville
+http://www.wikidata.org/entity/Q784661,Merville,Merville (Haute-Garonne)
+http://www.wikidata.org/entity/Q817108,Bonrepos-Riquet,Bonrepos-Riquet
+http://www.wikidata.org/entity/Q831052,Martres-Tolosane,Martres-Tolosane
+http://www.wikidata.org/entity/Q835546,Boussens,Boussens (Haute-Garonne)
+http://www.wikidata.org/entity/Q920558,Cazaril-Tambourès,Cazaril-Tambourès
+http://www.wikidata.org/entity/Q921702,Villaudric,Villaudric
+http://www.wikidata.org/entity/Q925701,Saint-Aventin,Saint-Aventin
+http://www.wikidata.org/entity/Q940112,Thil,Thil (Haute-Garonne)
+http://www.wikidata.org/entity/Q951586,Mascarville,Mascarville
+http://www.wikidata.org/entity/Q976735,Herran,Herran (Haute-Garonne)
+http://www.wikidata.org/entity/Q1088660,Antignac,Antignac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143733,Saux-et-Pomarède,Saux-et-Pomarède
+http://www.wikidata.org/entity/Q1143740,Soueich,Soueich
+http://www.wikidata.org/entity/Q1143886,Saint-Frajou,Saint-Frajou
+http://www.wikidata.org/entity/Q1144169,Saint-Loup-en-Comminges,Saint-Loup-en-Comminges
+http://www.wikidata.org/entity/Q1144320,Saint-Paul-d'Oueil,Saint-Paul-d'Oueil
+http://www.wikidata.org/entity/Q1144344,Plagne,Plagne (Haute-Garonne)
+http://www.wikidata.org/entity/Q1148538,Alan,Alan (Haute-Garonne)
+http://www.wikidata.org/entity/Q1153078,Saint-Lys,Saint-Lys
+http://www.wikidata.org/entity/Q1153118,Saman,Saman (Haute-Garonne)
+http://www.wikidata.org/entity/Q1153123,Saint-Araille,Saint-Araille
+http://www.wikidata.org/entity/Q1153137,Pouze,Pouze
+http://www.wikidata.org/entity/Q1341025,Cier-de-Luchon,Cier-de-Luchon
+http://www.wikidata.org/entity/Q1341215,Mailholas,Mailholas
+http://www.wikidata.org/entity/Q1344792,Castelnau-Picampeau,Castelnau-Picampeau
+http://www.wikidata.org/entity/Q1344807,Esparron,Esparron (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345703,Deyme,Deyme
+http://www.wikidata.org/entity/Q1345760,Francazal,Francazal (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345800,Belberaud,Belberaud
+http://www.wikidata.org/entity/Q1345959,Bezins-Garraux,Bezins-Garraux
+http://www.wikidata.org/entity/Q1349057,Castéra-Vignoles,Castéra-Vignoles
+http://www.wikidata.org/entity/Q1349183,Fougaron,Fougaron
+http://www.wikidata.org/entity/Q1349273,Caubous,Caubous (Haute-Garonne)
+http://www.wikidata.org/entity/Q1354642,Tarabel,Tarabel
+http://www.wikidata.org/entity/Q1362134,Saint-Michel,Saint-Michel (Haute-Garonne)
+http://www.wikidata.org/entity/Q1418957,Le Grès,Le Grès
+http://www.wikidata.org/entity/Q1418971,La Magdelaine-sur-Tarn,La Magdelaine-sur-Tarn
+http://www.wikidata.org/entity/Q1419071,Les Tourreilles,Les Tourreilles
+http://www.wikidata.org/entity/Q1419129,Le Fauga,Le Fauga
+http://www.wikidata.org/entity/Q1419173,Canens,Canens
+http://www.wikidata.org/entity/Q1428267,Paulhac,Paulhac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428279,Montjoire,Montjoire
+http://www.wikidata.org/entity/Q1428352,Montbrun-Bocage,Montbrun-Bocage
+http://www.wikidata.org/entity/Q1428439,Mauressac,Mauressac
+http://www.wikidata.org/entity/Q1428495,Larcan,Larcan
+http://www.wikidata.org/entity/Q1428595,Montpitol,Montpitol
+http://www.wikidata.org/entity/Q1428684,Rouffiac-Tolosan,Rouffiac-Tolosan
+http://www.wikidata.org/entity/Q1428734,Galié,Galié
+http://www.wikidata.org/entity/Q1428926,Monestrol,Monestrol
+http://www.wikidata.org/entity/Q1429007,Saint-Loup-Cammas,Saint-Loup-Cammas
+http://www.wikidata.org/entity/Q1429166,Seilh,Seilh
+http://www.wikidata.org/entity/Q1430091,Montbernard,Montbernard
+http://www.wikidata.org/entity/Q1431509,Gragnague,Gragnague
+http://www.wikidata.org/entity/Q1431557,Laffite-Toupière,Laffite-Toupière
+http://www.wikidata.org/entity/Q1432210,Daux,Daux
+http://www.wikidata.org/entity/Q1433144,Labarthe-sur-Lèze,Labarthe-sur-Lèze
+http://www.wikidata.org/entity/Q1433291,Saint-Jean-Lherm,Saint-Jean-Lherm
+http://www.wikidata.org/entity/Q1440913,Escanecrabe,Escanecrabe
+http://www.wikidata.org/entity/Q1467168,Lavalette,Lavalette (Haute-Garonne)
+http://www.wikidata.org/entity/Q1467338,Caubiac,Caubiac
+http://www.wikidata.org/entity/Q1611343,Montbrun-Lauragais,Montbrun-Lauragais
+http://www.wikidata.org/entity/Q1616439,Laréole,Laréole
+http://www.wikidata.org/entity/Q277988,Ciadoux,Ciadoux
+http://www.wikidata.org/entity/Q368169,Mons,Mons (Haute-Garonne)
+http://www.wikidata.org/entity/Q388313,Castillon-de-Larboust,Castillon-de-Larboust
+http://www.wikidata.org/entity/Q390828,Aigrefeuille,Aigrefeuille (Haute-Garonne)
+http://www.wikidata.org/entity/Q428053,Ségreville,Ségreville
+http://www.wikidata.org/entity/Q518291,Falga,Falga
+http://www.wikidata.org/entity/Q533224,Luscan,Luscan
+http://www.wikidata.org/entity/Q550439,Bachas,Bachas
+http://www.wikidata.org/entity/Q585649,Montaigut-sur-Save,Montaigut-sur-Save
+http://www.wikidata.org/entity/Q611593,Aulon,Aulon (Haute-Garonne)
+http://www.wikidata.org/entity/Q617681,Caujac,Caujac
+http://www.wikidata.org/entity/Q642705,Montgazin,Montgazin
+http://www.wikidata.org/entity/Q643588,Auzielle,Auzielle
+http://www.wikidata.org/entity/Q683868,Aspret-Sarrat,Aspret-Sarrat
+http://www.wikidata.org/entity/Q691595,Baren,Baren (Haute-Garonne)
+http://www.wikidata.org/entity/Q732659,Auzas,Auzas
+http://www.wikidata.org/entity/Q777811,Beaupuy,Beaupuy (Haute-Garonne)
+http://www.wikidata.org/entity/Q782286,Castelgaillard,Castelgaillard
+http://www.wikidata.org/entity/Q817066,Gratens,Gratens
+http://www.wikidata.org/entity/Q835541,Marignac-Lasclares,Marignac-Lasclares
+http://www.wikidata.org/entity/Q835588,Mancioux,Mancioux
+http://www.wikidata.org/entity/Q835592,Montberon,Montberon
+http://www.wikidata.org/entity/Q845022,Miremont,Miremont (Haute-Garonne)
+http://www.wikidata.org/entity/Q955242,Mérenvielle,Mérenvielle
+http://www.wikidata.org/entity/Q976263,Loudet,Loudet
+http://www.wikidata.org/entity/Q1072344,Arbas,Arbas (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143399,Vendine,Vendine
+http://www.wikidata.org/entity/Q1143525,Villeneuve-de-Rivière,Villeneuve-de-Rivière
+http://www.wikidata.org/entity/Q1143774,Seilhan,Seilhan
+http://www.wikidata.org/entity/Q1143792,Savères,Savères
+http://www.wikidata.org/entity/Q1143828,Saint-Germier,Saint-Germier (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143865,Saint-Mamet,Saint-Mamet
+http://www.wikidata.org/entity/Q1143873,Prunet,Prunet (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143923,Salles-et-Pratviel,Salles-et-Pratviel
+http://www.wikidata.org/entity/Q1144336,Peyrissas,Peyrissas
+http://www.wikidata.org/entity/Q1152936,Castanet-Tolosan,Castanet-Tolosan
+http://www.wikidata.org/entity/Q1153084,Rouède,Rouède
+http://www.wikidata.org/entity/Q1153090,Proupiary,Proupiary
+http://www.wikidata.org/entity/Q1153130,Saint-André,Saint-André (Haute-Garonne)
+http://www.wikidata.org/entity/Q1158235,Saint-Hilaire,Saint-Hilaire (Haute-Garonne)
+http://www.wikidata.org/entity/Q1341621,Goudex,Goudex
+http://www.wikidata.org/entity/Q1343863,Gouaux-de-Larboust,Gouaux-de-Larboust
+http://www.wikidata.org/entity/Q1344959,Cox,Cox (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345048,Quint-Fonsegrives,Quint-Fonsegrives
+http://www.wikidata.org/entity/Q1345723,Esténos,Esténos
+http://www.wikidata.org/entity/Q1349163,Capens,Capens
+http://www.wikidata.org/entity/Q1362159,Boussan,Boussan
+http://www.wikidata.org/entity/Q1362230,Bessières,Bessières (Haute-Garonne)
+http://www.wikidata.org/entity/Q1371233,Cadours,Cadours
+http://www.wikidata.org/entity/Q1419137,La Salvetat-Saint-Gilles,La Salvetat-Saint-Gilles
+http://www.wikidata.org/entity/Q1428296,Vaux,Vaux (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428373,Labastide-Clermont,Labastide-Clermont
+http://www.wikidata.org/entity/Q1428447,Lahage,Lahage (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428710,Mervilla,Mervilla
+http://www.wikidata.org/entity/Q1428774,Saint-Vincent,Saint-Vincent (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428900,Lahitère,Lahitère
+http://www.wikidata.org/entity/Q1429069,Lagardelle-sur-Lèze,Lagardelle-sur-Lèze
+http://www.wikidata.org/entity/Q1429082,Saint-Orens-de-Gameville,Saint-Orens-de-Gameville
+http://www.wikidata.org/entity/Q1429909,Monès,Monès
+http://www.wikidata.org/entity/Q1430124,Saint-Pierre,Saint-Pierre (Haute-Garonne)
+http://www.wikidata.org/entity/Q1431491,His,His (Haute-Garonne)
+http://www.wikidata.org/entity/Q1431563,Lagarde,Lagarde (Haute-Garonne)
+http://www.wikidata.org/entity/Q1431568,Empeaux,Empeaux
+http://www.wikidata.org/entity/Q1431614,Montoussin,Montoussin
+http://www.wikidata.org/entity/Q1431643,Goyrans,Goyrans
+http://www.wikidata.org/entity/Q1432779,Palaminy,Palaminy
+http://www.wikidata.org/entity/Q1433324,Gibel,Gibel
+http://www.wikidata.org/entity/Q1440931,Mazères-sur-Salat,Mazères-sur-Salat
+http://www.wikidata.org/entity/Q1441003,Brignemont,Brignemont
+http://www.wikidata.org/entity/Q1467095,Cépet,Cépet (Haute-Garonne)
+http://www.wikidata.org/entity/Q1467107,Bérat,Bérat (Haute-Garonne)
+http://www.wikidata.org/entity/Q1467407,Lourde,Lourde (Haute-Garonne)
+http://www.wikidata.org/entity/Q1616354,Gargas,Gargas (Haute-Garonne)
+http://www.wikidata.org/entity/Q1616371,Garac,Garac
+http://www.wikidata.org/entity/Q1616466,Maurens,Maurens (Haute-Garonne)
+http://www.wikidata.org/entity/Q267464,Auzeville-Tolosane,Auzeville-Tolosane
+http://www.wikidata.org/entity/Q496066,Revel,Revel (Haute-Garonne)
+http://www.wikidata.org/entity/Q527582,Mondouzil,Mondouzil
+http://www.wikidata.org/entity/Q581875,Nailloux,Nailloux
+http://www.wikidata.org/entity/Q585931,Bonrepos-sur-Aussonnelle,Bonrepos-sur-Aussonnelle
+http://www.wikidata.org/entity/Q591034,Péchabou,Péchabou
+http://www.wikidata.org/entity/Q615677,Montesquieu-Lauragais,Montesquieu-Lauragais
+http://www.wikidata.org/entity/Q632072,Barbazan,Barbazan
+http://www.wikidata.org/entity/Q671069,Grenade,Grenade (Haute-Garonne)
+http://www.wikidata.org/entity/Q679894,Aurignac,Aurignac
+http://www.wikidata.org/entity/Q687226,Valcabrère,Valcabrère
+http://www.wikidata.org/entity/Q689528,Montastruc-la-Conseillère,Montastruc-la-Conseillère
+http://www.wikidata.org/entity/Q733833,Pibrac,Pibrac
+http://www.wikidata.org/entity/Q739080,Cabanac-Séguenville,Cabanac-Séguenville
+http://www.wikidata.org/entity/Q742841,Issus,Issus
+http://www.wikidata.org/entity/Q763263,Nénigan,Nénigan
+http://www.wikidata.org/entity/Q763791,Bazus,Bazus
+http://www.wikidata.org/entity/Q770307,Beauzelle,Beauzelle
+http://www.wikidata.org/entity/Q771265,Salerm,Salerm
+http://www.wikidata.org/entity/Q817305,Bourg-d'Oueil,Bourg-d'Oueil
+http://www.wikidata.org/entity/Q820244,Verfeil,Verfeil (Haute-Garonne)
+http://www.wikidata.org/entity/Q835564,Saint-Félix-Lauragais,Saint-Félix-Lauragais
+http://www.wikidata.org/entity/Q844983,Noé,Noé (Haute-Garonne)
+http://www.wikidata.org/entity/Q938467,Fronsac,Fronsac (Haute-Garonne)
+http://www.wikidata.org/entity/Q949221,Puymaurin,Puymaurin (Haute-Garonne)
+http://www.wikidata.org/entity/Q952968,Montlaur,Montlaur (Haute-Garonne)
+http://www.wikidata.org/entity/Q955437,Saint-Julia,Saint-Julia
+http://www.wikidata.org/entity/Q969192,Sode,Sode
+http://www.wikidata.org/entity/Q976315,Pointis-Inard,Pointis-Inard
+http://www.wikidata.org/entity/Q996900,Aignes,Aignes
+http://www.wikidata.org/entity/Q1047171,Balma,Balma
+http://www.wikidata.org/entity/Q1079725,Cazères,Cazères
+http://www.wikidata.org/entity/Q1088648,Latrape,Latrape
+http://www.wikidata.org/entity/Q1088672,Saint-Laurent,Saint-Laurent (Haute-Garonne)
+http://www.wikidata.org/entity/Q1088723,Caraman,Caraman
+http://www.wikidata.org/entity/Q1111289,Léguevin,Léguevin
+http://www.wikidata.org/entity/Q1143425,Trébons-sur-la-Grasse,Trébons-sur-la-Grasse
+http://www.wikidata.org/entity/Q1143542,Vignaux,Vignaux (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143749,Signac,Signac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143755,Saussens,Saussens
+http://www.wikidata.org/entity/Q1143804,Plagnole,Plagnole
+http://www.wikidata.org/entity/Q1143819,Polastron,Polastron (Haute-Garonne)
+http://www.wikidata.org/entity/Q1143858,Saccourvielle,Saccourvielle
+http://www.wikidata.org/entity/Q1152867,Montesquieu-Volvestre,Montesquieu-Volvestre
+http://www.wikidata.org/entity/Q1153073,Portet-d'Aspet,Portet-d'Aspet
+http://www.wikidata.org/entity/Q1153111,Saiguède,Saiguède
+http://www.wikidata.org/entity/Q1153144,Roquettes,Roquettes
+http://www.wikidata.org/entity/Q1163147,Le Cuing,Le Cuing
+http://www.wikidata.org/entity/Q1163241,Le Burgaud,Le Burgaud
+http://www.wikidata.org/entity/Q1340927,Cierp-Gaud,Cierp-Gaud
+http://www.wikidata.org/entity/Q1343851,Cassagnabère-Tournas,Cassagnabère-Tournas
+http://www.wikidata.org/entity/Q1344829,Cirès,Cirès
+http://www.wikidata.org/entity/Q1345064,Casties-Labrande,Casties-Labrande
+http://www.wikidata.org/entity/Q1345813,Bélesta-en-Lauragais,Bélesta-en-Lauragais
+http://www.wikidata.org/entity/Q1345939,Cazarilh-Laspènes,Cazarilh-Laspènes
+http://www.wikidata.org/entity/Q1349035,Bordes-de-Rivière,Bordes-de-Rivière
+http://www.wikidata.org/entity/Q1349287,Beauville,Beauville (Haute-Garonne)
+http://www.wikidata.org/entity/Q1371184,Lanta,Lanta
+http://www.wikidata.org/entity/Q1428306,Pechbusque,Pechbusque
+http://www.wikidata.org/entity/Q1428516,Latour,Latour (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428539,Saint-Jean,Saint-Jean (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428561,Saint-Geniès-Bellevue,Saint-Geniès-Bellevue
+http://www.wikidata.org/entity/Q1428571,Massabrac,Massabrac
+http://www.wikidata.org/entity/Q1428949,Jurvielle,Jurvielle
+http://www.wikidata.org/entity/Q1428970,Lagraulet-Saint-Nicolas,Lagraulet-Saint-Nicolas
+http://www.wikidata.org/entity/Q1429035,Eoux,Eoux
+http://www.wikidata.org/entity/Q1429812,Gaillac-Toulza,Gaillac-Toulza
+http://www.wikidata.org/entity/Q1429844,Montauban-de-Luchon,Montauban-de-Luchon
+http://www.wikidata.org/entity/Q1429884,Toutens,Toutens
+http://www.wikidata.org/entity/Q1430111,Rebigue,Rebigue
+http://www.wikidata.org/entity/Q1431517,Montesquieu-Guittaut,Montesquieu-Guittaut
+http://www.wikidata.org/entity/Q1431530,Mondilhan,Mondilhan
+http://www.wikidata.org/entity/Q1431574,Roumens,Roumens
+http://www.wikidata.org/entity/Q1431584,Lagrâce-Dieu,Lagrâce-Dieu
+http://www.wikidata.org/entity/Q1431608,Montespan,Montespan (Haute-Garonne)
+http://www.wikidata.org/entity/Q1432327,Binos,Binos
+http://www.wikidata.org/entity/Q1432878,Montégut-Lauragais,Montégut-Lauragais
+http://www.wikidata.org/entity/Q1432957,Mont-de-Galié,Mont-de-Galié
+http://www.wikidata.org/entity/Q1440921,Maureville,Maureville
+http://www.wikidata.org/entity/Q1467222,Lespinasse,Lespinasse (Haute-Garonne)
+http://www.wikidata.org/entity/Q1467363,Bourg-Saint-Bernard,Bourg-Saint-Bernard
+http://www.wikidata.org/entity/Q1616330,Launac,Launac
+http://www.wikidata.org/entity/Q304866,Labruyère-Dorsa,Labruyère-Dorsa
+http://www.wikidata.org/entity/Q387734,Lestelle-de-Saint-Martory,Lestelle-de-Saint-Martory
+http://www.wikidata.org/entity/Q513618,Pelleport,Pelleport (Haute-Garonne)
+http://www.wikidata.org/entity/Q533440,Arbon,Arbon (Haute-Garonne)
+http://www.wikidata.org/entity/Q548143,Castelbiague,Castelbiague
+http://www.wikidata.org/entity/Q591244,Saint-Élix-le-Château,Saint-Élix-le-Château
+http://www.wikidata.org/entity/Q602349,Salles-sur-Garonne,Salles-sur-Garonne
+http://www.wikidata.org/entity/Q614967,Villeneuve-lès-Bouloc,Villeneuve-lès-Bouloc
+http://www.wikidata.org/entity/Q628313,Auragne,Auragne
+http://www.wikidata.org/entity/Q672391,Lescuns,Lescuns
+http://www.wikidata.org/entity/Q739919,Saint-Médard,Saint-Médard (Haute-Garonne)
+http://www.wikidata.org/entity/Q744342,Fronton,Fronton (Haute-Garonne)
+http://www.wikidata.org/entity/Q782273,Labarthe-Inard,Labarthe-Inard
+http://www.wikidata.org/entity/Q828696,Oô,Oô
+http://www.wikidata.org/entity/Q835602,Fonsorbes,Fonsorbes
+http://www.wikidata.org/entity/Q900890,Roques,Roques (Haute-Garonne)
+http://www.wikidata.org/entity/Q967725,Forgues,Forgues (Haute-Garonne)
+http://www.wikidata.org/entity/Q978973,Labroquère,Labroquère
+http://www.wikidata.org/entity/Q1143496,Trébons-de-Luchon,Trébons-de-Luchon
+http://www.wikidata.org/entity/Q1143562,Villematier,Villematier
+http://www.wikidata.org/entity/Q1143721,Sepx,Sepx
+http://www.wikidata.org/entity/Q1143759,Savarthès,Savarthès
+http://www.wikidata.org/entity/Q1144156,Saint-Marcet,Saint-Marcet
+http://www.wikidata.org/entity/Q1144477,Auribail,Auribail
+http://www.wikidata.org/entity/Q1148496,Aureville,Aureville
+http://www.wikidata.org/entity/Q1153058,Poubeau,Poubeau
+http://www.wikidata.org/entity/Q1153160,Saint-Rome,Saint-Rome
+http://www.wikidata.org/entity/Q1163124,Le Cabanial,Le Cabanial
+http://www.wikidata.org/entity/Q1341085,Boissède,Boissède
+http://www.wikidata.org/entity/Q1342031,Fabas,Fabas (Haute-Garonne)
+http://www.wikidata.org/entity/Q1342233,Bruguières,Bruguières
+http://www.wikidata.org/entity/Q1344726,Donneville,Donneville
+http://www.wikidata.org/entity/Q1344858,Francarville,Francarville
+http://www.wikidata.org/entity/Q1344874,Cazeaux-de-Larboust,Cazeaux-de-Larboust
+http://www.wikidata.org/entity/Q1344983,Aucamville,Aucamville (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345008,Fourquevaux,Fourquevaux
+http://www.wikidata.org/entity/Q1345031,Cambiac,Cambiac
+http://www.wikidata.org/entity/Q1419031,Cabanac-Cazaux,Cabanac-Cazaux
+http://www.wikidata.org/entity/Q1419149,Le Fréchet,Le Fréchet
+http://www.wikidata.org/entity/Q1419234,Cassagne,Cassagne (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428258,Mourvilles-Basses,Mourvilles-Basses
+http://www.wikidata.org/entity/Q1428454,Mauvaisin,Mauvaisin
+http://www.wikidata.org/entity/Q1428480,Ganties,Ganties
+http://www.wikidata.org/entity/Q1428525,Montgeard,Montgeard
+http://www.wikidata.org/entity/Q1428553,Mourvilles-Hautes,Mourvilles-Hautes
+http://www.wikidata.org/entity/Q1428762,Lodes,Lodes
+http://www.wikidata.org/entity/Q1428824,Escalquens,Escalquens
+http://www.wikidata.org/entity/Q1428838,Ondes,Ondes
+http://www.wikidata.org/entity/Q1428874,Mane,Mane (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428916,Rieumajou,Rieumajou
+http://www.wikidata.org/entity/Q1429053,Lherm,Lherm (Haute-Garonne)
+http://www.wikidata.org/entity/Q1429096,Saint-Jory,Saint-Jory
+http://www.wikidata.org/entity/Q1429949,Lapeyrère,Lapeyrère
+http://www.wikidata.org/entity/Q1430026,Grazac,Grazac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1432916,Marsoulas,Marsoulas
+http://www.wikidata.org/entity/Q1432924,Grépiac,Grépiac
+http://www.wikidata.org/entity/Q1440950,Venerque,Venerque
+http://www.wikidata.org/entity/Q1440973,Vallègue,Vallègue
+http://www.wikidata.org/entity/Q1467509,Saint-Sauveur,Saint-Sauveur (Haute-Garonne)
+http://www.wikidata.org/entity/Q7880,Toulouse,Toulouse
+http://www.wikidata.org/entity/Q318071,Colomiers,Colomiers
+http://www.wikidata.org/entity/Q390964,Auterive,Auterive (Haute-Garonne)
+http://www.wikidata.org/entity/Q530864,Riolas,Riolas
+http://www.wikidata.org/entity/Q543979,Saint-Lary-Boujean,Saint-Lary-Boujean
+http://www.wikidata.org/entity/Q568516,Marignac-Laspeyres,Marignac-Laspeyres
+http://www.wikidata.org/entity/Q576288,Milhas,Milhas (Haute-Garonne)
+http://www.wikidata.org/entity/Q584534,Loubens-Lauragais,Loubens-Lauragais
+http://www.wikidata.org/entity/Q642808,Aspet,Aspet
+http://www.wikidata.org/entity/Q651227,Ayguesvives,Ayguesvives
+http://www.wikidata.org/entity/Q671046,Avignonet-Lauragais,Avignonet-Lauragais
+http://www.wikidata.org/entity/Q744328,Aurin,Aurin
+http://www.wikidata.org/entity/Q816994,Bois-de-la-Pierre,Bois-de-la-Pierre
+http://www.wikidata.org/entity/Q835532,Pointis-de-Rivière,Pointis-de-Rivière
+http://www.wikidata.org/entity/Q835552,Garin,Garin (Haute-Garonne)
+http://www.wikidata.org/entity/Q835573,Saint-Plancard,Saint-Plancard
+http://www.wikidata.org/entity/Q949419,Vieillevigne,Vieillevigne (Haute-Garonne)
+http://www.wikidata.org/entity/Q954064,Montgaillard-sur-Save,Montgaillard-sur-Save
+http://www.wikidata.org/entity/Q967480,Lamasquère,Lamasquère
+http://www.wikidata.org/entity/Q1088678,Balesta,Balesta
+http://www.wikidata.org/entity/Q1088688,Arguenos,Arguenos
+http://www.wikidata.org/entity/Q1143411,Villate,Villate
+http://www.wikidata.org/entity/Q1143784,Sengouagnet,Sengouagnet
+http://www.wikidata.org/entity/Q1143788,Sarremezan,Sarremezan
+http://www.wikidata.org/entity/Q1143831,Saint-Ignan,Saint-Ignan
+http://www.wikidata.org/entity/Q1143835,Saint-Cézert,Saint-Cézert
+http://www.wikidata.org/entity/Q1143893,Ponlat-Taillebourg,Ponlat-Taillebourg
+http://www.wikidata.org/entity/Q1144160,Sajas,Sajas
+http://www.wikidata.org/entity/Q1152930,Cintegabelle,Cintegabelle
+http://www.wikidata.org/entity/Q1153157,Terrebasse,Terrebasse
+http://www.wikidata.org/entity/Q1163111,Le Born,Le Born (Haute-Garonne)
+http://www.wikidata.org/entity/Q1163737,L'Isle-en-Dodon,L'Isle-en-Dodon
+http://www.wikidata.org/entity/Q1340853,Salies-du-Salat,Salies-du-Salat
+http://www.wikidata.org/entity/Q1340971,Caragoudes,Caragoudes
+http://www.wikidata.org/entity/Q1341141,Burgalays,Burgalays
+http://www.wikidata.org/entity/Q1341610,Calmont,Calmont (Haute-Garonne)
+http://www.wikidata.org/entity/Q1344844,Benque,Benque
+http://www.wikidata.org/entity/Q1345781,Cambernard,Cambernard
+http://www.wikidata.org/entity/Q1349126,Belbèze-de-Lauragais,Belbèze-de-Lauragais
+http://www.wikidata.org/entity/Q1349138,Beaufort,Beaufort (Haute-Garonne)
+http://www.wikidata.org/entity/Q1349148,Cathervielle,Cathervielle
+http://www.wikidata.org/entity/Q1362113,Sainte-Livrade,Sainte-Livrade (Haute-Garonne)
+http://www.wikidata.org/entity/Q1362289,Estancarbon,Estancarbon
+http://www.wikidata.org/entity/Q1371171,Portet-sur-Garonne,Portet-sur-Garonne
+http://www.wikidata.org/entity/Q1371216,Villemur-sur-Tarn,Villemur-sur-Tarn
+http://www.wikidata.org/entity/Q1428235,Noueilles,Noueilles
+http://www.wikidata.org/entity/Q1428245,Montaut,Montaut (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428322,Marquefave,Marquefave
+http://www.wikidata.org/entity/Q1428386,Labarthe-Rivière,Labarthe-Rivière
+http://www.wikidata.org/entity/Q1428398,Miramont-de-Comminges,Miramont-de-Comminges
+http://www.wikidata.org/entity/Q1428408,Martisserre,Martisserre
+http://www.wikidata.org/entity/Q1428631,Sainte-Foy-de-Peyrolières,Sainte-Foy-de-Peyrolières
+http://www.wikidata.org/entity/Q1428672,Lévignac,Lévignac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428789,Mondonville,Mondonville
+http://www.wikidata.org/entity/Q1428805,Payssous,Payssous
+http://www.wikidata.org/entity/Q1428847,Lafitte-Vigordane,Lafitte-Vigordane
+http://www.wikidata.org/entity/Q1428858,Montberaud,Montberaud
+http://www.wikidata.org/entity/Q1428939,Montastruc-Savès,Montastruc-Savès
+http://www.wikidata.org/entity/Q1429797,Lauzerville,Lauzerville
+http://www.wikidata.org/entity/Q1429929,Lespiteau,Lespiteau
+http://www.wikidata.org/entity/Q1431501,Longages,Longages
+http://www.wikidata.org/entity/Q1431594,Figarol,Figarol
+http://www.wikidata.org/entity/Q1431622,Gouzens,Gouzens
+http://www.wikidata.org/entity/Q1432799,Poucharramet,Poucharramet
+http://www.wikidata.org/entity/Q1432816,Lacaugne,Lacaugne
+http://www.wikidata.org/entity/Q1432831,Malvezie,Malvezie
+http://www.wikidata.org/entity/Q1433299,Drémil-Lafage,Drémil-Lafage
+http://www.wikidata.org/entity/Q1440958,Izaut-de-l'Hôtel,Izaut-de-l'Hôtel
+http://www.wikidata.org/entity/Q1440993,Montclar-Lauragais,Montclar-Lauragais
+http://www.wikidata.org/entity/Q1467084,Bouloc,Bouloc (Haute-Garonne)
+http://www.wikidata.org/entity/Q1467149,Labège,Labège
+http://www.wikidata.org/entity/Q1467285,Castelginest,Castelginest
+http://www.wikidata.org/entity/Q1467470,Coueilles,Coueilles
+http://www.wikidata.org/entity/Q1616379,Fonbeauzard,Fonbeauzard
+http://www.wikidata.org/entity/Q1616456,Bellesserre,Bellesserre
+http://www.wikidata.org/entity/Q204937,Fenouillet,Fenouillet (Haute-Garonne)
+http://www.wikidata.org/entity/Q207593,Muret,Muret (Haute-Garonne)
+http://www.wikidata.org/entity/Q386502,Labastide-Saint-Sernin,Labastide-Saint-Sernin
+http://www.wikidata.org/entity/Q520304,Fontenilles,Fontenilles
+http://www.wikidata.org/entity/Q548034,Esperce,Esperce
+http://www.wikidata.org/entity/Q608231,Plaisance-du-Touch,Plaisance-du-Touch
+http://www.wikidata.org/entity/Q608587,Régades,Régades
+http://www.wikidata.org/entity/Q611380,Argut-Dessous,Argut-Dessous
+http://www.wikidata.org/entity/Q629912,Castelmaurou,Castelmaurou
+http://www.wikidata.org/entity/Q632107,Cugnaux,Cugnaux
+http://www.wikidata.org/entity/Q650901,Mondavezan,Mondavezan
+http://www.wikidata.org/entity/Q653229,Lécussan,Lécussan
+http://www.wikidata.org/entity/Q668268,Labastide-Beauvoir,Labastide-Beauvoir
+http://www.wikidata.org/entity/Q738767,Saint-Thomas,Saint-Thomas (Haute-Garonne)
+http://www.wikidata.org/entity/Q744624,Cier-de-Rivière,Cier-de-Rivière
+http://www.wikidata.org/entity/Q751326,Boudrac,Boudrac
+http://www.wikidata.org/entity/Q764981,Cessales,Cessales
+http://www.wikidata.org/entity/Q766675,Ausseing,Ausseing
+http://www.wikidata.org/entity/Q835536,Villeneuve-Tolosane,Villeneuve-Tolosane
+http://www.wikidata.org/entity/Q835597,Labastidette,Labastidette
+http://www.wikidata.org/entity/Q859455,Albiac,Albiac (Haute-Garonne)
+http://www.wikidata.org/entity/Q1058584,Ambax,Ambax
+http://www.wikidata.org/entity/Q1081886,Bachos,Bachos
+http://www.wikidata.org/entity/Q1088699,Antichan-de-Frontignes,Antichan-de-Frontignes
+http://www.wikidata.org/entity/Q1088702,Arlos,Arlos
+http://www.wikidata.org/entity/Q1088726,Beauchalot,Beauchalot
+http://www.wikidata.org/entity/Q1088729,Artigue,Artigue
+http://www.wikidata.org/entity/Q1088735,Carbonne,Carbonne
+http://www.wikidata.org/entity/Q1110924,Saint-Élix-Séglan,Saint-Élix-Séglan
+http://www.wikidata.org/entity/Q1143429,Vaudreuille,Vaudreuille
+http://www.wikidata.org/entity/Q1143485,Villeneuve-Lécussan,Villeneuve-Lécussan
+http://www.wikidata.org/entity/Q1143728,Sédeilhac,Sédeilhac
+http://www.wikidata.org/entity/Q1143901,Sana,Sana (Haute-Garonne)
+http://www.wikidata.org/entity/Q1144325,Rieucazé,Rieucazé
+http://www.wikidata.org/entity/Q1148562,Auriac-sur-Vendinelle,Auriac-sur-Vendinelle
+http://www.wikidata.org/entity/Q1153064,Roquesérière,Roquesérière
+http://www.wikidata.org/entity/Q1340884,Cazaunous,Cazaunous
+http://www.wikidata.org/entity/Q1340945,Cardeilhac,Cardeilhac
+http://www.wikidata.org/entity/Q1342046,Blajan,Blajan
+http://www.wikidata.org/entity/Q1343840,Seyre,Seyre
+http://www.wikidata.org/entity/Q1344773,Cazaux-Layrisse,Cazaux-Layrisse
+http://www.wikidata.org/entity/Q1345085,Eup,Eup (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345862,Couret,Couret
+http://www.wikidata.org/entity/Q1345882,Billière,Billière (Haute-Garonne)
+http://www.wikidata.org/entity/Q1349047,Chein-Dessus,Chein-Dessus
+http://www.wikidata.org/entity/Q1361284,Lautignac,Lautignac
+http://www.wikidata.org/entity/Q1362215,Espanès,Espanès
+http://www.wikidata.org/entity/Q1362300,Saint-Christaud,Saint-Christaud (Haute-Garonne)
+http://www.wikidata.org/entity/Q1428160,Ore,Ore
+http://www.wikidata.org/entity/Q1428287,Saint-Paul-sur-Save,Saint-Paul-sur-Save
+http://www.wikidata.org/entity/Q1428505,Villariès,Villariès
+http://www.wikidata.org/entity/Q1428583,Fustignac,Fustignac
+http://www.wikidata.org/entity/Q1428645,Pompertuzat,Pompertuzat
+http://www.wikidata.org/entity/Q1428694,Marliac,Marliac
+http://www.wikidata.org/entity/Q1428722,Pinsaguel,Pinsaguel
+http://www.wikidata.org/entity/Q1429112,Le Pin-Murelet,Le Pin-Murelet
+http://www.wikidata.org/entity/Q1429155,Vernet,Vernet (Haute-Garonne)
+http://www.wikidata.org/entity/Q1429181,Frontignan-de-Comminges,Frontignan-de-Comminges
+http://www.wikidata.org/entity/Q1429779,Moustajon,Moustajon
+http://www.wikidata.org/entity/Q1429861,Lavelanet-de-Comminges,Lavelanet-de-Comminges
+http://www.wikidata.org/entity/Q1431636,Juzet-d'Izaut,Juzet-d'Izaut
+http://www.wikidata.org/entity/Q1432774,Gardouch,Gardouch
+http://www.wikidata.org/entity/Q1432844,Lilhac,Lilhac
+http://www.wikidata.org/entity/Q1432902,Lespugue,Lespugue
+http://www.wikidata.org/entity/Q1433147,Lacroix-Falgarde,Lacroix-Falgarde
+http://www.wikidata.org/entity/Q1440896,Latoue,Latoue
+http://www.wikidata.org/entity/Q1467390,Chaum,Chaum
+http://www.wikidata.org/entity/Q1611329,Landorthe,Landorthe
+http://www.wikidata.org/entity/Q1616314,Drudas,Drudas
+http://www.wikidata.org/entity/Q1616394,Brax,Brax (Haute-Garonne)
+http://www.wikidata.org/entity/Q1631595,Larra,Larra (Haute-Garonne)
+http://www.wikidata.org/entity/Q209777,Saint-Gaudens,Saint-Gaudens
+http://www.wikidata.org/entity/Q238393,Bagnères-de-Luchon,Bagnères-de-Luchon
+http://www.wikidata.org/entity/Q328022,Tournefeuille,Tournefeuille
+http://www.wikidata.org/entity/Q376027,Puydaniel,Puydaniel
+http://www.wikidata.org/entity/Q385786,Mauvezin,Mauvezin (Haute-Garonne)
+http://www.wikidata.org/entity/Q429465,Odars,Odars
+http://www.wikidata.org/entity/Q572414,Marignac,Marignac (Haute-Garonne)
+http://www.wikidata.org/entity/Q583240,Vallesvilles,Vallesvilles
+http://www.wikidata.org/entity/Q586078,Montégut-Bourjac,Montégut-Bourjac
+http://www.wikidata.org/entity/Q641190,Larroque,Larroque (Haute-Garonne)
+http://www.wikidata.org/entity/Q643943,Nogaret,Nogaret
+http://www.wikidata.org/entity/Q689480,Boulogne-sur-Gesse,Boulogne-sur-Gesse
+http://www.wikidata.org/entity/Q732698,Sabonnères,Sabonnères
+http://www.wikidata.org/entity/Q746377,Juzet-de-Luchon,Juzet-de-Luchon
+http://www.wikidata.org/entity/Q781891,Eaunes,Eaunes
+http://www.wikidata.org/entity/Q835608,Seysses,Seysses
+http://www.wikidata.org/entity/Q859587,Bax,Bax (Haute-Garonne)
+http://www.wikidata.org/entity/Q937485,Cazeneuve-Montaut,Cazeneuve-Montaut
+http://www.wikidata.org/entity/Q951319,Cazac,Cazac
+http://www.wikidata.org/entity/Q953240,Saubens,Saubens
+http://www.wikidata.org/entity/Q960997,Clarac,Clarac (Haute-Garonne)
+http://www.wikidata.org/entity/Q977184,Le Plan,Le Plan (Haute-Garonne)
+http://www.wikidata.org/entity/Q1046999,Azas,Azas
+http://www.wikidata.org/entity/Q1072269,Rieumes,Rieumes
+http://www.wikidata.org/entity/Q1088695,Génos,Génos (Haute-Garonne)
+http://www.wikidata.org/entity/Q1088740,Anan,Anan (Haute-Garonne)
+http://www.wikidata.org/entity/Q1101865,Saint-Ferréol-de-Comminges,Saint-Ferréol-de-Comminges
+http://www.wikidata.org/entity/Q1143796,Pouy-de-Touges,Pouy-de-Touges
+http://www.wikidata.org/entity/Q1143808,Saint-Pé-Delbosc,Saint-Pé-Delbosc
+http://www.wikidata.org/entity/Q1143907,Saint-Clar-de-Rivière,Saint-Clar-de-Rivière
+http://www.wikidata.org/entity/Q1144332,Sainte-Foy-d'Aigrefeuille,Sainte-Foy-d'Aigrefeuille
+http://www.wikidata.org/entity/Q1148546,Ausson,Ausson
+http://www.wikidata.org/entity/Q1153067,Montgiscard,Montgiscard
+http://www.wikidata.org/entity/Q1153104,Préserville,Préserville
+http://www.wikidata.org/entity/Q1340899,Gouaux-de-Luchon,Gouaux-de-Luchon
+http://www.wikidata.org/entity/Q1344749,Belbèze-en-Comminges,Belbèze-en-Comminges
+http://www.wikidata.org/entity/Q1344893,Buzet-sur-Tarn,Buzet-sur-Tarn
+http://www.wikidata.org/entity/Q1344915,Gémil,Gémil
+http://www.wikidata.org/entity/Q1344935,Charlas,Charlas
+http://www.wikidata.org/entity/Q1345742,Castelnau-d'Estrétefonds,Castelnau-d'Estrétefonds
+http://www.wikidata.org/entity/Q1345902,Castagnède,Castagnède (Haute-Garonne)
+http://www.wikidata.org/entity/Q1345921,Bretx,Bretx
+http://www.wikidata.org/entity/Q1349025,Fos,Fos (Haute-Garonne)
+http://www.wikidata.org/entity/Q1349078,Bragayrac,Bragayrac
+http://www.wikidata.org/entity/Q1349097,Corronsac,Corronsac
+http://www.wikidata.org/entity/Q1362198,Saint-Léon,Saint-Léon (Haute-Garonne)
+http://www.wikidata.org/entity/Q1362207,Cuguron,Cuguron
+http://www.wikidata.org/entity/Q1428332,Nizan-Gesse,Nizan-Gesse
+http://www.wikidata.org/entity/Q1428344,Labastide-Paumès,Labastide-Paumès
+http://www.wikidata.org/entity/Q1428425,Gensac-de-Boulogne,Gensac-de-Boulogne
+http://www.wikidata.org/entity/Q1428471,Mauran,Mauran
+http://www.wikidata.org/entity/Q1428607,Layrac-sur-Tarn,Layrac-sur-Tarn
+http://www.wikidata.org/entity/Q1428663,Goutevernisse,Goutevernisse
+http://www.wikidata.org/entity/Q1428989,Martres-de-Rivière,Martres-de-Rivière
+http://www.wikidata.org/entity/Q1429127,Lalouret-Laffiteau,Lalouret-Laffiteau
+http://www.wikidata.org/entity/Q1429828,Mayrègne,Mayrègne
+http://www.wikidata.org/entity/Q1430012,Montmaurin,Montmaurin
+http://www.wikidata.org/entity/Q1430051,Folcarde,Folcarde
+http://www.wikidata.org/entity/Q1430076,Frontignan-Savès,Frontignan-Savès
+http://www.wikidata.org/entity/Q1430141,Mauremont,Mauremont
+http://www.wikidata.org/entity/Q1432785,Montastruc-de-Salies,Montastruc-de-Salies
+http://www.wikidata.org/entity/Q1432792,Saint-Sulpice-sur-Lèze,Saint-Sulpice-sur-Lèze
+http://www.wikidata.org/entity/Q1432807,Vigoulet-Auzil,Vigoulet-Auzil
+http://www.wikidata.org/entity/Q1432838,Montgras,Montgras
+http://www.wikidata.org/entity/Q1432858,Lussan-Adeilhac,Lussan-Adeilhac
+http://www.wikidata.org/entity/Q1432940,Huos,Huos
+http://www.wikidata.org/entity/Q1433283,Moncaup,Moncaup (Haute-Garonne)
+http://www.wikidata.org/entity/Q1440905,Ramonville-Saint-Agne,Ramonville-Saint-Agne
+http://www.wikidata.org/entity/Q1440983,Montoulieu-Saint-Bernard,Montoulieu-Saint-Bernard
+http://www.wikidata.org/entity/Q1467123,Couladère,Couladère
+http://www.wikidata.org/entity/Q1616303,Gauré,Gauré
+http://www.wikidata.org/entity/Q1616409,Guran,Guran
+http://www.wikidata.org/entity/Q1616431,Gagnac-sur-Garonne,Gagnac-sur-Garonne
+http://www.wikidata.org/entity/Q1688716,Varennes,Varennes (Haute-Garonne)
+http://www.wikidata.org/entity/Q47088191,Lasserre-Pradère,Lasserre-Pradère
+http://www.wikidata.org/entity/Q55444966,Saint-Béat-Lez,Saint-Béat-Lez
