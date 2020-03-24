@@ -1,14 +1,14 @@
 import json
 from random import randint, choice, triangular
-from time import time_ns
+from time import time
 
 
-class Reccord():
+class Reccord2():
     index = 0
 
     def __init__(self):
-        self.Creation_Time = time_ns()
-        self.Arrival_Time = time_ns() + randint(0, 1000000000)
+        self.Creation_Time = int(time()*10**9) - randint(0, 10**9)
+        self.Arrival_Time = int(time()*10**9)
         self.Device = None
         self.Index = None
         self.Model = None
@@ -25,20 +25,12 @@ class Reccord():
 
 
     def normal_reccord(self):
-        self.Creation_Time = time_ns()
-        self.Arrival_Time = time_ns() + randint(0, 1000000000)
-        self.Device = "nexus4_%s" % randint(1, 2)
-        Reccord.index += 1
-        self.Index = Reccord.index
-        self.Model = "nexus4"
+        self.Device = "smartWatchX%s" % randint(1, 12)
+        Reccord2.index += 1
+        self.Index = Reccord2.index
+        self.Model = "smartWatch"
         self.User = choice(list(map(chr, range(97, 123))))
-        self.gt = choice(
-            ["stand", "sit", "walk", "stairsdown", "null", "stairsup",
-             "bike", "run"])
-        self.x = triangular(-1, 1, 0.5)
-        self.y = triangular(-0.3, 0.2, 0)
-        self.z = triangular(1, 3, 1.1)
-
+        self.bpm = randint(60, 200)
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -46,5 +38,5 @@ class Reccord():
 
 
 if __name__ == '__main__':
-    reccord = Reccord()
+    reccord = Reccord2()
     print(reccord.toJSON())
