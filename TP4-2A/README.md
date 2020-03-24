@@ -2,25 +2,39 @@
 
 ## 0. Mise en place
 
-Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. Vous trouverez sur Moodle une archive TP4 qui contient l'intégralité des fichiers utiles pour le TP. Téléchargez et décompressez la. Vous allez obtenir 3 dossiers
+Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. Vous trouverez sur Moodle une archive TP4 qui contient l'intégralité des fichiers utiles pour le TP. Téléchargez et décompressez la. Vous allez obtenir les fichiers suivants
 
-- `server-python`,  qui contient les codes qui vont créer des flux de données
-- `spark`, qui contient les fichiers nécessaires à faire fonctionner spark en local
-- `data`, qui va contenir des données utilisées au cours du TP
+- `serveurs_pythons`,  qui contient les codes qui vont créer des flux de données
+- `données utilisateur`, qui contient des données statiques utiles dans le TP
+- `README.md`, qui est le sujet du TP au format markdown
 
-Pour lancer spark 
+1. Aller dans le dossier `serveurs_pythons` et tapez cmd dans la barre d'adresse. Cela va vous ouvrir un invite de commande windows
 
-````shell
-%SPARK_HOME%/bin/pyspark --master local[4]
-````
+![ouvrir un terminal](../img/ouvrir_terminal.png)
 
-* %SPARK_HOME%/bin/pyspark : on exécute le fichier pyspark
-* --master local[4] : on spécifie l'adresse du master. "local" signifie que l'on va créer un cluster local et  [4] qu'on va demander 4 threads. Pour se connecter à une cluster existant il suffirait de remplacer local[4] par l'adresse IP du master du cluster
+2. Installer les packages python nécessaire au fonctionnement des serveurs
 
-> :coffee: Aide pyspark en console :
->
-> - Pour coller utilisez maj+insert
-> - Pour vider la console ctrl+l
+   ````
+   pip install -r requirements.txt --user --proxy http://pxcache-02.ensai.fr:3128
+   ````
+
+3. Lancer le serveur1
+
+   ````
+   python serveur_iot_1\server1.py
+   ````
+
+   Gardez ce terminal ouvert ! Vous allez y voir apparaître les données envoyées
+
+4. Ouvrir un autre terminal et lancer pyspark dans un autre terminal (il vous faut les 2 !)
+
+   ````
+   %SPARK_HOME%/bin/pyspark --master local[4]
+   ````
+
+   - %SPARK_HOME%/bin/pyspark : on exécute le fichier pyspark
+
+   - --master local[4] : on spécifie l'adresse du master. "local" signifie que l'on va créer un cluster local et  [4] qu'on va demander 4 threads. Pour se connecter à une cluster existant il suffirait de remplacer local[4] par l'adresse IP du master du cluster
 
 ## 1. Spark et les flux de données
 
@@ -62,7 +76,7 @@ Dans cette partie du TP vous allez traiter des données type IoT (*Internet of T
 
 Bien sûr ces données sont générées aléatoirement et ne proviennent pas de vraies montres.
 
-- :computer: Exécuter le fichier server1.py. 
+- :computer: Exécuter le fichier server1.py  si ce n'est pas déjà fait
 
   Pour cela allez dans le dossier server_python\serveur_iot_1puis taper "cmd" dans la barre d'adresse. Cela vous ouvrira l'invite de commande windows. Puis faites
 
@@ -82,11 +96,10 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 
 - :construction: Fixer le nombre de partition lors de la phase de shuffle à 5 pour spark SQL. Sans cela, Spark va générer 200 partitions pour vos données et ralentir fortement les traitements en local. (Pour ceux qui veulent se rafraichir les idées sur la phase de _shuffle_ dans Spark, voir par exemple [ici](https://www.quora.com/What-is-a-Shuffle-operation-in-Spark)).
 
-
   > :thinking: La phase de shuffle consiste à mélanger les données selon leur clef et recréer des partition après chaque traitement. Cela permet, théoriquement, d'avoir un nombre de données similaire dans toutes les partitions et d'éviter un déséquilibre dans les tailles. Nous allons manipuler tellement peu de données que 200 partitions est beaucoup trop et va ralentir les trainements.
 
   ````
-  spark.conf.set("spark.sql.shuffle.partitions", 5)
+spark.conf.set("spark.sql.shuffle.partitions", 5)
   ````
 
 - :package: Importer les fonctions nécessaires pour la suite du TP
@@ -169,7 +182,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 - :arrow_forward: Définir le schéma de nos données
 
   ````python
-  schema = StructType()\
+  schema_iot = StructType()\
       .add('Arrival_Time',LongType(),True)\
       .add('Creation_Time',LongType(),True)\
       .add('Device',StringType(),True)\
@@ -188,7 +201,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 
   ````python
   iot_data = tcp_stream.selectExpr('CAST(value AS STRING)')\
-      .select(from_json('value', schema).alias('json'))\
+      .select(from_json('value', schema_iot).alias('json'))\
       .select('json.*')
   ````
 
@@ -234,8 +247,8 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   
   ````
 
-  - *format("memory"*) : on stocke les données en mémoire
-  - *queryName("stream")* : on donne un nom à la requête pour la réutiliser par la suite.
+  - *format("memory"*) : on stocke les données en mémoire dans un DataSet
+  - *queryName("iot_data")* : on donne un nom à la requête pour la réutiliser par la suite.
 
 - :x: Compter le nombre de ligne en erreur.
 
@@ -300,7 +313,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       .start()
      
   sleep(10)
-  filterdDf_test.stop()
+  errorCount.stop()
   ````
 
   Remarquez que la seule différence avec le comptage précédent est les données en entrée.
@@ -326,7 +339,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
       spark.sql("SELECT * FROM activityCount_stream").show()
       sleep(1)
   
-  
+  activityCount_stream.stop()
   ````
 
   - *format("memory")* : on écrit le résultat en mémoire
@@ -348,19 +361,19 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 - :small_red_triangle_down: Filtrer et sélectionner certaines infos
 
   ````python
-  simpleTransformAndFilter = filterdDf.withColumn("is_stair_activity", expr("gt like '%stairs%'"))\
+  only_stairs_activity = iot_filtered.withColumn("is_stair_activity", expr("gt like '%stairs%'"))\
       .where("is_stair_activity")\
       .select("gt", "model", "arrival_time", "creation_time")\
       .writeStream\
-      .queryName("simple_transform")\
+      .queryName("only_stairs_activity")\
       .format("memory")\
       .start()
   
   for x in range(5):
-      spark.sql("SELECT * FROM simple_transform").show()
+      spark.sql("SELECT * FROM only_stairs_activity").show()
       sleep(1)
   
-  simpleTransformAndFilter.stop()
+  only_stairs_activity.stop()
   ````
 
   - *withColumn("contains_stairs", expr("gt like '%stairs%'"))* : on crée un colonne stairs qui vaut TRUE si la colonne gt contient la chaîne de caractère "stairs" et FALSE sinon
@@ -370,7 +383,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
 - :bar_chart: Quelques stats ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#handling-late-data-and-watermarking))
 
   ````python
-  deviceMobileStats = filterdDf\
+  deviceMobileStats = iot_filtered\
       .select("x", "y", "z", "gt", "model")\
       .cube("gt", "model")\
       .avg()\
@@ -395,7 +408,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   - Conversion en timestamp
 
     ````python
-    withEventTime = filterdDf.selectExpr(
+    iot_filtered_withEventTime = iot_filtered.selectExpr(
         "*",
         "cast(cast(Creation_Time as double)/1000000000 as timestamp) as event_time"
     )
@@ -418,7 +431,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
     
 
     ````python
-    event_time = withEventTime.groupBy(window(col("event_time"), "5 seconds")).count()\
+    event_time = iot_filtered_withEventTime.groupBy(window(col("event_time"), "5 seconds")).count()\
         .writeStream\
         .queryName("event_per_window")\
         .format("memory")\
@@ -438,7 +451,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
     ![siding windows](https://spark.apache.org/docs/latest/img/structured-streaming-window.png)
     
     ````python
-    sliding_windows = withEventTime.groupBy(window(col("event_time"), "10 seconds", "5 seconds")).count()\
+    event_sliding_windows = iot_filtered_withEventTime.groupBy(window(col("event_time"), "10 seconds", "5 seconds")).count()\
         .writeStream\
         .queryName("event_per_window")\
         .format("memory")\
@@ -449,7 +462,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
         spark.sql("SELECT * FROM event_per_window").show(50,False)
         sleep(1)
     
-    sliding_windows.stop()
+    event_sliding_windows.stop()
     
     ````
 
@@ -461,10 +474,10 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .option("header", "true")\
          .option("sep", ";")\
          .option("inferSchema", "true")\
-         .load("chemain/de/mon/fichier/données utilisateurs.csv")
+         .load("chemin/de/mon/fichier/données utilisateurs.csv")
      
      # On fait la jointure sur la colonne data, on ne souhaite pas avoir les colonnes "Arrival_Time", "Creation_Time", "Index", "x", "y", "z"
-     streamWithUserData = filterdDf\
+     streamWithUserData = iot_filtered\
          .drop("Arrival_Time", "Creation_Time", "Index", "x", "y", "z")\
          .join(userData, ["User"])\
          .writeStream\
@@ -473,7 +486,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .start()
      
      
-     for x in range(20):
+     for x in range(10):
          spark.sql("SELECT * FROM streamWithUserData").show(50,False)
          sleep(1)
      
@@ -483,38 +496,40 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
      Une jointure avec une fonction agrégation
      
      ````python
-     deviceMobileStatsUser = filterdDf\
+     deviceMobileStatsUser = iot_filtered\
          .join(userData, ["User"])\
          .groupBy("User", "FirstName","LastName")\
-    .count()\
-         .writeStream\
-         .queryName("stat_user")\
-         .format("memory")\
-         .outputMode("complete")\
-         .start()
+    	.count()\
+        .writeStream\
+        .queryName("stat_user")\
+        .format("memory")\
+        .outputMode("complete")\
+        .start()
      
      # Le code suivant donne le même résultat (mais le plan d'exécution est différent)
-     deviceMobileStatsUser = filterdDf\
-         .groupBy("User")\
-         .count()\
-         .join(userData, ["User"])\
-         .writeStream\
-         .queryName("stat_user")\
-         .format("memory")\
-         .outputMode("complete")\
-         .start()
+    deviceMobileStatsUser = iot_filtered\
+    	.groupBy("User")\
+        .count()\
+        .join(userData, ["User"])\
+        .writeStream\
+        .queryName("stat_user")\
+        .format("memory")\
+        .outputMode("complete")\
+        .start()
      
          
-     for x in range(5):
-         spark.sql("SELECT * FROM stat_user").show(50,False)
-         sleep(1)
+    for x in range(5):
+    	spark.sql("SELECT * FROM stat_user").show(50,False)
+    	sleep(1)
      
-     deviceMobileStatsUser.stop()
+    deviceMobileStatsUser.stop()
     ````
     
      
     
 - :crossed_swords: Il est également de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
+
+     Pensez à lancer le server2 dans serveurs_python/serveur_iot_2
 
      ````python
      # Définition d'un nouveau stream
@@ -526,7 +541,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .load()
      
      # Schema
-     schema2 = StructType()\
+     schema_iot_2 = StructType()\
          .add('Arrival_Time',LongType(),True)\
          .add('Creation_Time',LongType(),True)\
          .add('Device',StringType(),True)\
@@ -536,16 +551,18 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .add('bpm',ShortType(),True)\
      
      # Mise au format plus filtrage
-     df2 = tcp_stream2.selectExpr('CAST(value AS STRING)')\
-         .select(from_json('value', schema2).alias('json'))\
+     filtered_iot_2 = tcp_stream2.selectExpr('CAST(value AS STRING)')\
+         .select(from_json('value', schema_iot_2).alias('json'))\
          .select('json.*')\
          .na.drop("any")
      
      # Jointure des deux flux selon la variable User
-     join = filterdDf.join(df2, "User").writeStream\
+     join_iot = iot_filtered.join(filtered_iot_2, "User").writeStream\
          .format("console")\
          .trigger(processingTime='10 seconds')\
          .start()
+         
+     join_iot.stop()
      ````
 
      > :thinking: Si vous faite bien attention joindre un flux avec un flux et joindre un flux avec des données statiques se font de la même façon car Spark manipule des DataFrame dans les deux cas.
@@ -591,7 +608,7 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
          .outputMode("complete")\
          .trigger(processingTime='5 seconds')\
     .start()
-     ````
+    ````
 
 ## À vous de jouer!
 
@@ -603,49 +620,28 @@ Chaque changement est un object JSON de la forme suivante:
 
 ```json
 {
-  "$schema": "/mediawiki/recentchange/1.0.0",
-  "meta": {
-    "uri": "https://pt.wikipedia.org/wiki/Lista_de_epis%C3%B3dios_de_Bunk%27d",
-    "request_id": "XnnLvwpAIDEAAA2ihIoAAACI",
-    "id": "f0a0022e-9ee9-44f4-9631-1f7e8987215b",
-    "dt": "2020-03-24T08:58:39Z",
-    "domain": "pt.wikipedia.org",
-    "stream": "mediawiki.recentchange",
-    "topic": "eqiad.mediawiki.recentchange",
-    "partition": 0,
-    "offset": 2267529842
-  },
-  "id": 96360896,
-  "type": "edit",
-  "namespace": 0,
-  "title": "Lista de episódios de Bunk'd",
-  "comment": "",
-  "timestamp": 1585040319,
-  "user": "Mirela63",
-  "bot": false,
-  "minor": false,
-  "patrolled": false,
-  "length": {
-    "old": 88404,
-    "new": 88725
-  },
-  "revision": {
-    "old": 57852423,
-    "new": 57876625
-  },
-  "server_url": "https://pt.wikipedia.org",
-  "server_name": "pt.wikipedia.org",
-  "server_script_path": "/w",
-  "wiki": "ptwiki",
-  "parsedcomment": ""
+   "$schema":"/mediawiki/recentchange/1.0.0",
+   "id":1243377776,
+   "type":"categorize",
+   "namespace":14,
+   "title":"Category:NA-importance India articles",
+   "comment":"[[:Category talk:1990s in Goa]] added to category",
+   "timestamp":1585047749,
+   "user":"Jevansen",
+   "bot":false,
+   "server_url":"https://en.wikipedia.org",
+   "server_name":"en.wikipedia.org",
+   "server_script_path":"/w",
+   "wiki":"enwiki",
+   "parsedcomment":"<a href=\"/wiki/Category_talk:1990s_in_Goa\" title=\"Category talk:1990s in Goa\">Category talk:1990s in Goa</a> added to category"
 }
 ```
 
 Les variables qui nous intéressent sont: `title` (nom de la page), `user` (nom de l'utilisateur), `bot` (est-ce un robot qui a produit le changement), `timestamp` (à quel moment le changement a-t-il été produit), `wiki` (quel site de l'écosystème Wikimédia a été modifié).
 
-1. Stockez ces informations (et uniquement celles-ci) dans un fichier CSV grace à Spark.
+1. Stockez ces informations (et uniquement celles-ci) dans un DataSet qui se mettra à jour toutes les 5 secondes
 2. Combien de changements sont advenus depuis le début de notre abonnement, sur chaque site de Wikimédia? (vous afficherez le résultat dans la console)
-3. Restreignez vous aux données de Wikipédiat en français (`wiki=="frwiki"`). Maintenez à jour un fichier CSV, qui donne le nombre d'édition (`type=="edit"`) dans une fenêtre glissante d'une heure calculée toutes les 5 minutes
+3. Restreignez vous aux données de Wikipédia en français (`wiki=="frwiki"`). Maintenez à jour un DataSet qui donne le nombre d'édition (`type=="edit"`) dans une fenêtre glissante d'une heure calculée toutes les 5 minutes
 4. Voici une liste de pages sensibles. Combien de modifications ont été effectuées sur l'une de ces pages depuis le début de l'abonnement?
 
 ## Pour plus d'information :
