@@ -44,7 +44,8 @@ Bien sûr ces données sont générées aléatoirement et ne proviennent pas de 
   %SPARK_HOME%/bin/pyspark --master local[4]  --driver-memory 2g
   ````
 
-- :construction: Fixer le nombre de partition lors de la phase de shuffle à 5 pour spark SQL. Sans cela, Spark va générer 200 partitions pour vos données et ralentir fortement les traitements en local.
+- :construction: Fixer le nombre de partition lors de la phase de shuffle à 5 pour spark SQL. Sans cela, Spark va générer 200 partitions pour vos données et ralentir fortement les traitements en local. (Pour ceux qui veulent se rafraichir les idées sur la phase de _shuffle_ dans Spark, voir par exemple [ici](https://www.quora.com/What-is-a-Shuffle-operation-in-Spark)).
+
 
   ````
   spark.conf.set("spark.sql.shuffle.partitions", 5)
