@@ -6,9 +6,11 @@ Pour ce dernier TP, vous allez utiliser Spark en local sur **votre VM ensai**. V
 
 - `serveurs_pythons`,  qui contient les codes qui vont créer des flux de données
 - `données utilisateur`, qui contient des données statiques utiles dans le TP
+- `hte-garonne`, qui contient des données statistiques utiles pour la partie notée
 - `README.md`, qui est le sujet du TP au format markdown
+- `raw_code.py`, qui contient les codes pour faire des copiés/collés
 
-1. Allez dans le dossier `serveurs_pythons` et tapez `cmd` dans la barre d'adresse. Cela va vous ouvrir un invite de commande windows.
+1. Allez dans le dossier `serveurs_pythons` (PASSEZ PAR VOTRE P:, sinon vous allez avoir des erreurs) et tapez `cmd` dans la barre d'adresse. Cela va vous ouvrir un invite de commande windows.
 
 ![ouvrir un terminal](https://raw.githubusercontent.com/katossky/panorama-bigdata/master/img/ouvrir_terminal.png)
 
@@ -495,7 +497,7 @@ Dans cette partie du TP vous allez traiter des données type IoT (*Internet of T
      deviceMobileStatsUser = iot_filtered\
          .join(userData, ["User"])\
          .groupBy("User", "FirstName","LastName")\
-    	.count()\
+        	.count()\
         .writeStream\
         .queryName("stat_user")\
         .format("memory")\
@@ -521,100 +523,14 @@ Dans cette partie du TP vous allez traiter des données type IoT (*Internet of T
     deviceMobileStatsUser.stop()
     ````
     
-     
-<!--
-- :crossed_swords: Il est également possible de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
 
-     Pensez à lancer le server2 dans serveurs_python/serveur_iot_2
-
-     ````python
-     # Définition d'un nouveau stream
-     tcp_stream2 = spark\
-     	.readStream\
-         .format("socket")\
-         .option("host", "127.0.0.1")\
-         .option("port", "10000")\
-         .load()
-     
-     # Schema
-     schema_iot_2 = StructType()\
-         .add('Arrival_Time',LongType(),True)\
-         .add('Creation_Time',LongType(),True)\
-         .add('Device',StringType(),True)\
-         .add('Index',LongType(),True)\
-         .add('Model',StringType(),True)\
-         .add('User',StringType(),True)\
-         .add('bpm',ShortType(),True)\
-     
-     # Mise au format plus filtrage
-     filtered_iot_2 = tcp_stream2.selectExpr('CAST(value AS STRING)')\
-         .select(from_json('value', schema_iot_2).alias('json'))\
-         .select('json.*')\
-         .na.drop("any")
-     
-     # Jointure des deux flux selon la variable User
-     join_iot = iot_filtered.join(filtered_iot_2, "User").writeStream\
-         .format("console")\
-         .trigger(processingTime='10 seconds')\
-         .start()
-         
-     join_iot.stop()
-     ````
-
-     > :thinking: Si vous faite bien attention joindre un flux avec un flux et joindre un flux avec des données statiques se font de la même façon car Spark manipule des DataFrame dans les deux cas.
-
-- :european_castle: Compter des mots de citations (Pour le fun)
-
-     > :exclamation: On rentre dans les requêtes vraiment complexes donc ne passez pas beaucoup de temps sur cette partie
-
-     Lancer le fichier server_kaamelott.py. Ce serveur envoie des citations de kaamelott aux clients qui s'y connectent (il communique sur l'host 127.0.0.1 et le port 10001). Voici un exemple de donnée qu'il envoie :
-     
-     ````js
-{"character": "Karadoc", "quote": "Quand je pense à la chance que vous avez de faire partie d'un clan dirigé par des cerveaux du combat psychologique, qui se saignent... aux quatre parfums du matin au soir ! !"}
-     ````
-
-     Et voici la requête pour obtenir le nombre de mot reçus par personnage
-     
-     ````python
-     #Connextion au stream
-     kaamelott_stream = spark.readStream.format("socket").option("host", "127.0.0.1").option("port", "10001").load()
-     
-     #Schéma
-     schema_kaamelott = StructType()\
-         .add('character',StringType(),True)\
-         .add('quote',StringType(),True)\
-     
-     #Application du schéma
-     kaamelott_df = kaamelott_stream.selectExpr('CAST(value AS STRING)')\
-         .select(from_json('value', schema_kaamelott).alias('json'))\
-         .select('json.*')
-     
-     # Le comptage de mots
-     # explode/split -> créent plusieurs lignes à partir d'une ligne (ici on coupe les mots avec split et on fait une ligne par mot de la citation)
-     # groupBy/count : on compte
-     words = kaamelott_df.select(kaamelott_df.character,
-         explode(
-             split(kaamelott_df.quote, ' ')
-            ).alias('word')
-          )\
-         .groupBy(kaamelott_df.character)\
-         .count()\
-         .writeStream\
-         .format("console")\
-         .outputMode("complete")\
-         .trigger(processingTime='5 seconds')\
-    .start()
-    ````
-    
--->
-
-## À vous de jouer!
+## 3. À vous de jouer!
 
 Votre but est de construire la première brique dans un tableau de bord pour Wikimédia, la maison mère de Wikipédia, afin de surveiller les articles de l'encyclopédie et de la défendre contre les pillages.
 
-Wikimédia publie un flux de tous les changements qui ont lieu sur l'ensemble des plate-formes à l'adresse suivante: `https://stream.wikimedia.org/v2/stream/recentchange`. Le format n'est pas adapté à Spark alors, comme précédemment, vous devez lancer un serveur qui lit, convertit et transfère le flux vers un port local auquel Spark peut s'abonner:
+Wikimédia publie un flux de tous les changements qui ont lieu sur l'ensemble des plate-formes à l'adresse suivante: `https://stream.wikimedia.org/v2/stream/recentchange`. Le format n'est pas adapté à Spark alors, comme précédemment, **vous devez lancer un serveur qui lit, convertit et transfère le flux vers un port local auquel Spark peut s'abonner ** (c'est le serveur serveur_wikipedia.py, il communique sur le port 10003!) :
 
-Chaque changement est un object JSON de la forme suivante:
+Chaque changement est un objet JSON de la forme suivante:
 
 ```json
 {
@@ -639,28 +555,96 @@ Les variables qui nous intéressent sont: `title` (nom de la page), `user` (nom 
 
 1. Stockez ces informations (et uniquement celles-ci) dans un DataSet qui se mettra à jour toutes les 5 secondes
 2. Combien de changements sont advenus depuis le début de notre abonnement, sur chaque site de Wikimédia? (vous afficherez le résultat dans la console)
-4. En raison d'un risque élévé de pillage des pages suite à un événement majeur en Haute-Garonne, Wikimédia souhaite mettre en place un suivi des modifications des pages Wikipédia sur ce département. Le fichier `hte-garonne.csv` contient la liste des communes de Haute-Garonne (`communeLabel`), ainsi que le nom de la page Wikipédia correspondante (`articleName`) telle que figurant sur la base de données Wikidata[^3]. Combien de modifications ont été effectuées sur l'une de ces pages depuis le début de l'abonnement?
+3. Restreignez vous aux données de Wikipédia en français (`wiki=="frwiki"`). Maintenez à jour un DataSet qui donne le nombre d'édition (`type=="edit"`) dans une fenêtre glissante d'une heure calculée toutes les 5 minutes
+4. Voici une liste de pages sensibles. Combien de modifications ont été effectuées sur l'une de ces pages depuis le début de l'abonnement?
 
-**Vous rendrez votre code au format `.py` sous Moodle.**
+## 4. Expert mode :sparkler:
 
-[^3]: La requête pour obtenir ces données depuis `https://query.wikidata.org` est la suivante:
+:crossed_swords: En plus des jointure stream x statique, il est également possible de faire des jointures entre streams ([pour plus d'info](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#stream-stream-joins))
 
-```sparql
-SELECT ?commune ?communeLabel ?articleName WHERE {
-  
-  ?commune p:P31 ?estCommune.    # P31 = est une instance de
-  ?estCommune ps:P31 wd:Q484170. # Q484170 = commune de France
-  ?commune wdt:P131 wd:Q12538.   # P131 = est situé dans ; Q12538 = Haute-Garonne
-  MINUS{?estCommune pq:P582 ?dateDeFinCommune.} # P582 = a pour date de fin (cas des anciennes communes)
-  
-  ?article schema:about ?commune.
-  ?article schema:isPartOf <https://fr.wikipedia.org/>.
-  ?article schema:name ?articleName.
-  
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
-  
-}
-```
+Pensez à lancer le server2 dans serveurs_python/serveur_iot_2 (python serveur_iot_2/server2.py)
+
+````python
+# Définition d'un nouveau stream
+tcp_stream2 = spark\
+	.readStream\
+    .format("socket")\
+    .option("host", "127.0.0.1")\
+    .option("port", "10000")\
+    .load()
+
+# Schema
+schema_iot_2 = StructType()\
+    .add('Arrival_Time',LongType(),True)\
+    .add('Creation_Time',LongType(),True)\
+    .add('Device',StringType(),True)\
+    .add('Index',LongType(),True)\
+    .add('Model',StringType(),True)\
+    .add('User',StringType(),True)\
+    .add('bpm',ShortType(),True)\
+
+# Mise au format plus filtrage
+filtered_iot_2 = tcp_stream2.selectExpr('CAST(value AS STRING)')\
+    .select(from_json('value', schema_iot_2).alias('json'))\
+    .select('json.*')\
+    .na.drop("any")
+
+# Jointure des deux flux selon la variable User
+join_iot = iot_filtered.join(filtered_iot_2, "User").writeStream\
+    .format("console")\
+    .trigger(processingTime='10 seconds')\
+    .start()
+    
+join_iot.stop()
+````
+
+> :thinking: Si vous faite bien attention joindre un flux avec un flux et joindre un flux avec des données statiques se font de la même façon car Spark manipule des DataFrame dans les deux cas.
+
+:european_castle: Compter des mots de citations
+
+> :exclamation: On rentre dans les requêtes vraiment complexes donc ne passez pas beaucoup de temps sur cette partie
+
+Lancer le fichier `server_kaamelott.py` (en vous plaçant dans le dossier `serveur_quote`). Ce serveur envoie des citations de kaamelott aux clients qui s'y connectent (il communique sur l'host 127.0.0.1 et le port 10001). Voici un exemple de donnée qu'il envoie :
+
+````js
+{"character": "Karadoc", "quote": "Quand je pense à la chance que vous avez de faire partie d'un clan dirigé par des cerveaux du combat psychologique, qui se saignent... aux quatre parfums du matin au soir ! !"}
+````
+
+Et voici la requête pour obtenir le nombre de mot reçus par personnage
+
+````python
+#Connextion au stream
+kaamelott_stream = spark\
+    .readStream.format("socket")\
+    .option("host", "127.0.0.1")\
+    .option("port", "10001").load()
+
+#Schéma
+schema_kaamelott = StructType()\
+    .add('character',StringType(),True)\
+    .add('quote',StringType(),True)
+
+#Application du schéma
+kaamelott_df = kaamelott_stream.selectExpr('CAST(value AS STRING)')\
+    .select(from_json('value', schema_kaamelott).alias('json'))\
+    .select('json.*')
+
+# Le comptage de mots
+# explode/split -> créent plusieurs lignes à partir d'une ligne (ici on coupe les mots avec split et on fait une ligne par mot de la citation)
+# groupBy/count : on compte
+words = kaamelott_df.select(kaamelott_df.character,
+    explode(
+        split(kaamelott_df.quote, ' ')
+       ).alias('word')
+     )\
+    .groupBy(kaamelott_df.character)\
+    .count()\
+    .writeStream\
+    .format("console")\
+    .outputMode("complete")\
+    .trigger(processingTime='5 seconds')\
+.start()
+````
 
 ## Pour plus d'information :
 

@@ -10,7 +10,7 @@ while True:
     s.listen(1)
     conn, addr = s.accept()
     print('Connected by', addr)
-    with codecs.open("../scraper/quote.json", "r", "utf-8") as file:
+    with codecs.open("quote.json", "r", "utf-8") as file:
         while True:
             try:
                 json = file.readline()

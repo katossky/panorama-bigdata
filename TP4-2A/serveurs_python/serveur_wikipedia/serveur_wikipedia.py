@@ -1,9 +1,19 @@
 import json
-from sseclient import SSEClient as EventSource
+import sseclient
 import socket
+import requests
+    
+proxies = {
+ "http": "http://pxcache-02.ensai.fr:3128",
+ "https": "http://pxcache-02.ensai.fr:3128",
+}
+
+def with_requests(url):
+    """Get a streaming response for the given event feed using requests."""
+    return requests.get(url, stream=True)
 
 host = 'localhost'        # Symbolic name meaning all available interfaces
-port = 9999     # Arbitrary non-privileged port
+port = 10003     # Arbitrary non-privileged port
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
 while True:
@@ -11,7 +21,9 @@ while True:
     conn, addr = s.accept()
     print('Connected by', addr)
     url = 'https://stream.wikimedia.org/v2/stream/recentchange'
-    for event in EventSource(url):
+    response = with_requests(url)  # or with_requests(url)
+    client = sseclient.SSEClient(response)
+    for event in client.events():
         if event.event == 'message':
             try:
                 change = json.loads(event.data)
